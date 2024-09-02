@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "removeComments": false,
+    "sourceMap": true,
+
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+
+    "declaration": true,
+    "declarationMap": false,
+
+    "importHelpers": true,
+
+    "pretty": true,
+
+    "outDir": "lib"
+  },
+  "include": ["src/**/*.ts"]
+}
