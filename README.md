@@ -6,15 +6,32 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 TODO
 
-## Build
-
-Each of the directories in `custom-series/` is a custom series. You can `cd` to that path and build them by running:
+## Create A New Custom Series
 
 ```bash
-npm install
+npm run create <series-name>
+```
+
+The generated files are in `custom-series/<series-name>`.
+
+## Build
+
+Each of the directories in `custom-series/` is a custom series.
+
+### Build All
+
+```bash
 npm run build
 ```
 
-The built files will be in the `lib/` directory.
+### Build One
 
-> Note: There is no bundling step for now.
+```bash
+npm run build <series-name>
+```
+
+For example, to build `custom-series/violin`, run:
+
+```bash
+npm run build violin
+```

@@ -18,7 +18,10 @@
  */
 
 import echarts, { CustomSeriesRenderItem } from 'echarts';
-import type { CustomPathOption } from 'echarts/types/src/chart/custom/CustomSeries';
+import type {
+  CustomPathOption,
+  CustomRootElementOption,
+} from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 
 function epanechnikovKernel(u: number) {
   return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
@@ -42,7 +45,8 @@ const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
   api: echarts.CustomSeriesRenderItemAPI
 ) => {
-  let violins: { [key: number]: { firstDataIndex: number; data: number[] } };
+  let violins: { [key: number]: { firstDataIndex: number; data: number[] } } =
+    {};
   if (params.context.violins == null) {
     params.context.violins = [];
     violins = params.context.violins as any;
@@ -68,14 +72,14 @@ const renderItem = (
     (bandWidthScale == null ? 1 : bandWidthScale);
 
   const violin = violins[xValue];
-  let violinPath = null;
+  let violinPath: CustomRootElementOption | null = null;
   if (violin && violin.firstDataIndex === params.dataIndex) {
     const kde = kernelDensityEstimator(epanechnikovKernel, 1, violin.data);
     const binCount = (params.itemPayload.binCount as number) || 100;
-    const xRange = Array.from(
-      { length: binCount },
-      (_, i) => i * (10 / (binCount - 1))
-    );
+    const xRange: number[] = [];
+    for (var i = 0; i < binCount; i++) {
+      xRange.push(i * (10 / (binCount - 1)));
+    }
     const density = xRange.map((x) => [x, kde(x)]);
     const epsilonDensity = 0.001;
     const polylines: CustomPathOption[] = [];
@@ -100,7 +104,6 @@ const renderItem = (
       }
       points.length = 0;
     };
-    const x = coord[0];
     for (let i = 0; i < density.length; ++i) {
       const coord = api.coord([xValue, density[i][0]]);
       if (density[i][1] < epsilonDensity) {
@@ -114,7 +117,7 @@ const renderItem = (
     violinPath = {
       type: 'group',
       children: polylines,
-      // silent: true // 因为这里实际是用该 x 对应的第一个数据显示的，如果不 silent，tooltip 里会显示第一个数据的值
+      silent: true,
     };
   }
 

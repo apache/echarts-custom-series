@@ -1,0 +1,22 @@
+{
+  "name": "echarts-custom-series",
+  "version": "1.0.0",
+  "description": "Custom Series for Apache ECharts",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "create": "node scripts/create.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/echarts-custom-series.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/apache/echarts/issues"
+  },
+  "homepage": "https://github.com/apache/echarts-custom-series#readme",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
