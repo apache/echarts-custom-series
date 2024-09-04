@@ -50,7 +50,18 @@ function buildCustomSeries(dirName) {
         --declarationMap false \
         --importHelpers \
         --pretty \
-        --ignoreDeprecations 5.0`
+        --ignoreDeprecations 5.0 \
+        --module umd`
+  );
+
+  // Minify using terser
+  const terserPath = path.join(__dirname, '../node_modules/.bin/terser');
+  execSync(
+    `${terserPath} ${seriesPath}/dist/index.js \
+        --compress \
+        --mangle \
+        --ecma 3 \
+        --output ${seriesPath}/dist/index.min.js`
   );
 }
 

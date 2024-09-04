@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache ECharts Custom Series Test</title>
+</head>
+
+<body>
+    <div id="main" style="width: 1000px;height:400px;border:1px solid #ccc"></div>
+
+    <script src="../node_modules/echarts/dist/echarts.js"></script>
+    <script src="../dist/index.js"></script>
+    <script>
+        const chart = echarts.init(document.getElementById('main'));
+
+        const xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const dataSource = [['Day', 'value']];
+        for (let i = 0; i < xData.length; ++i) {
+            const dataCount = 10 * Math.round(Math.random() * 5) + 5;
+            for (let j = 0; j < dataCount; ++j) {
+                const value = Math.tan(i) / 2 + 3 * Math.random() + 2;
+                dataSource.push([xData[i], value]);
+            }
+        }
+
+        option = {
+            tooltip: {
+                show: true
+            },
+            xAxis: {
+                data: xData
+            },
+            yAxis: {},
+            dataset: {
+                source: dataSource
+            },
+            series: {
+                type: 'custom',
+                renderItem: 'violin',
+                colorBy: 'item',
+                itemPayload: {
+                    symbolSize: 4,
+                    areaOpacity: 0.6,
+                    bandWidthScale: 1.5
+                    // binCount: 20
+                }
+            }
+        };
+
+        chart.setOption(option);
+    </script>
+</body>
+
+</html>

@@ -6,6 +6,22 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 TODO
 
+## Setup
+
+```bash
+npm install
+```
+
+Note: Building requires the lib files of ECharts v6. So before ECharts v6 is released, you need to clone `apache/echarts` locally and use `npm link` to link it.
+
+```bash
+# Under the directory of echarts
+npm link
+
+# Under the directory of echarts-custom-series/custom-series/<series-name>
+npm link echarts
+```
+
 ## Create A New Custom Series
 
 ```bash
