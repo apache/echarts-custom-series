@@ -1,34 +1,27 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tslib", "echarts"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var tslib_1 = require("tslib");
-    var echarts_1 = tslib_1.__importDefault(require("echarts"));
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.violinCustomSeriesInstaller = factory());
+})(this, (function () { 'use strict';
+
     function epanechnikovKernel(u) {
         return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
     }
@@ -57,6 +50,9 @@
                 }
                 violins[xIndex].data.push(api.value(1, i_1));
             }
+        }
+        else {
+            violins = params.context.violins;
         }
         var symbolSize = params.itemPayload.symbolSize;
         var xValue = api.value(0);
@@ -130,6 +126,15 @@
             }
             : scatter;
     };
-    echarts_1.default.registerCustomSeries('violin', renderItem);
-});
-//# sourceMappingURL=index.js.map
+    var index = {
+        install: function (registers) {
+            registers.registerCustomSeries('violin', renderItem);
+        },
+    };
+
+    return index;
+
+}));
+if (typeof window !== 'undefined') {
+  window.violinCustomSeriesInstaller = violinCustomSeriesInstaller;
+}

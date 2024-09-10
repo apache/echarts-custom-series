@@ -139,7 +139,7 @@ function minifyWithTerser(seriesPath, dirName) {
       `${terserPath} ${seriesPath}/dist/index.js \
           --compress \
           --mangle \
-          --ecma 5 \
+          --ecma 3 \
           --comments all \
           --source-map \
           --output ${seriesPath}/dist/index.min.js`

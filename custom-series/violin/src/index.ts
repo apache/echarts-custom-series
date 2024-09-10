@@ -17,11 +17,13 @@
  * under the License.
  */
 
-import echarts, { CustomSeriesRenderItem } from 'echarts';
+import echarts from 'echarts';
 import type {
   CustomPathOption,
   CustomRootElementOption,
+  CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
+import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
 
 function epanechnikovKernel(u: number) {
   return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
@@ -61,6 +63,8 @@ const renderItem = (
       }
       violins[xIndex].data.push(api.value(1, i) as number);
     }
+  } else {
+    violins = params.context.violins as any;
   }
   const symbolSize = params.itemPayload.symbolSize;
   const xValue = api.value(0) as number;
@@ -140,7 +144,12 @@ const renderItem = (
       }
     : scatter;
 };
-echarts.registerCustomSeries(
-  'violin',
-  renderItem as unknown as CustomSeriesRenderItem
-);
+
+export default {
+  install(registers: EChartsExtensionInstallRegisters) {
+    registers.registerCustomSeries(
+      'violin',
+      renderItem as unknown as CustomSeriesRenderItem
+    );
+  },
+};

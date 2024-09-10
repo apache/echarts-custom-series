@@ -13,6 +13,7 @@
     <script src="../node_modules/echarts/dist/echarts.js"></script>
     <script src="../dist/index.js"></script>
     <script>
+        echarts.use(window.violinCustomSeriesInstaller);
         const chart = echarts.init(document.getElementById('main'));
 
         const xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
