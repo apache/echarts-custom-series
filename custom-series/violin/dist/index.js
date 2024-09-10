@@ -135,6 +135,3 @@
     return index;
 
 }));
-if (typeof window !== 'undefined') {
-  window.violinCustomSeriesInstaller = violinCustomSeriesInstaller;
-}

@@ -3,7 +3,7 @@ module.exports = {
   output: {
     file: 'dist/index.js',
     format: 'umd',
-    name: 'violinCustomSeriesInstaller',
+    name: '$CUSTOM_SERIES_NAME$CustomSeriesInstaller',
     extend: true,
     globals: {
       window: 'window',
@@ -11,7 +11,7 @@ module.exports = {
   },
   plugins: [
     {
-      name: 'add-license',
+      name: 'add-window-assignment',
       renderChunk(code) {
         return `/*
 * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,7 +31,10 @@ module.exports = {
 * specific language governing permissions and limitations
 * under the License.
 */
-${code}`;
+${code}
+if (typeof window !== 'undefined') {
+  window.$CUSTOM_SERIES_NAME$CustomSeriesInstaller = violinCustomSeriesInstaller;
+}`;
       },
     },
   ],

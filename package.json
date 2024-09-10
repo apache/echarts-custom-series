@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/apache/echarts-custom-series#readme",
   "devDependencies": {
+    "chokidar": "^3.6.0",
     "http-server": "^14.1.1",
     "rollup": "^4.21.2",
     "terser": "^5.31.6",
