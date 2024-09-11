@@ -11,7 +11,7 @@ module.exports = {
   },
   plugins: [
     {
-      name: 'add-window-assignment',
+      name: 'add-license',
       renderChunk(code) {
         return `/*
 * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,10 +31,7 @@ module.exports = {
 * specific language governing permissions and limitations
 * under the License.
 */
-${code}
-if (typeof window !== 'undefined') {
-  window.$CUSTOM_SERIES_NAME$CustomSeriesInstaller = violinCustomSeriesInstaller;
-}`;
+${code}`;
       },
     },
   ],

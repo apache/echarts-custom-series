@@ -13,9 +13,16 @@
     <script src="../node_modules/echarts/dist/echarts.js"></script>
     <script src="../dist/index.js"></script>
     <script>
+        echarts.use(window.$CUSTOM_SERIES_NAME$CustomSeriesInstaller);
         const chart = echarts.init(document.getElementById('main'));
 
         option = {
+            series: {
+                type: 'custom',
+                renderItem: '$CUSTOM_SERIES_NAME$',
+                itemPayload: {
+                }
+            }
         };
 
         chart.setOption(option);

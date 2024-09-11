@@ -17,8 +17,12 @@
  * under the License.
  */
 
-import echarts, { CustomSeriesRenderItem } from 'echarts';
-import type { CustomRootElementOption } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
+import echarts from 'echarts';
+import type {
+  CustomRootElementOption,
+  CustomSeriesRenderItem,
+} from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
+import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
 
 const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
@@ -30,7 +34,11 @@ const renderItem = (
   } as CustomRootElementOption;
 };
 
-echarts.registerCustomSeries(
-  'violin',
-  renderItem as unknown as CustomSeriesRenderItem
-);
+export default {
+  install(registers: EChartsExtensionInstallRegisters) {
+    registers.registerCustomSeries(
+      '$CUSTOM_SERIES_NAME$',
+      renderItem as unknown as CustomSeriesRenderItem
+    );
+  },
+};
