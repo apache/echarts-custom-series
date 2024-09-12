@@ -4,8 +4,9 @@
   "description": "Custom Series for Apache ECharts",
   "scripts": {
     "build": "node scripts/build.js",
-    "create": "node scripts/create.js",
-    "serve": "node scripts/serve.js"
+    "generate": "node scripts/generate.js",
+    "serve": "node scripts/serve.js",
+    "g": "npm run generate"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "rollup": "^4.21.2",
     "terser": "^5.31.6",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2"
   }
 }

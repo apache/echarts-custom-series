@@ -1,5 +1,5 @@
 {
-  "name": "echarts-violin",
+  "name": "@echarts/custom-violin",
   "version": "0.0.1-beta",
   "description": "",
   "main": "dist/index.js",

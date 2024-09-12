@@ -28,7 +28,7 @@ npm link echarts
 npm run create <series-name>
 ```
 
-The generated files are in `custom-series/<series-name>`.
+The generated files are in `custom-series/<series-name>`. Note that if there are multiple words in the series name, they should be in camel case like `npm run create barRange`.
 
 ## Build
 

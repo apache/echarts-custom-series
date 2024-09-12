@@ -21,22 +21,51 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const chokidar = require('chokidar');
+const chalk = require('chalk');
 
 /**
  * Start a local server to run the test cases.
  */
-function serve() {
+function buildAndServe() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
     console.error(
-      'No custom series name provided. Run `npm run serve <series-name>` to serve a custom series.'
+      chalk.red(
+        'No custom series name provided. Run `npm run serve <series-name>` to serve a custom series.'
+      )
     );
     return;
   }
 
+  console.log('Building...');
+  build().then(() => {
+    startServer();
+  });
+}
+
+function build() {
+  const args = process.argv.slice(2);
+  return new Promise((resolve) => {
+    exec(`npm run build ${args[0]}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(chalk.red(`Build error: ${error}`));
+        // End the process
+        process.exit(1);
+      }
+      console.log(`Build output: ${stdout}`);
+      if (stderr) {
+        console.error(`Build stderr: ${stderr}`);
+      }
+      resolve();
+    });
+  });
+}
+
+function startServer() {
+  const args = process.argv.slice(2);
   const seriesPath = path.join(__dirname, '../custom-series', args[0]);
   if (!fs.existsSync(seriesPath)) {
-    console.error(`Custom series ${args[0]} does not exist`);
+    console.error(chalk.red(`Custom series ${args[0]} does not exist`));
     return;
   }
 
@@ -48,19 +77,9 @@ function serve() {
     ignored: /(^|[\/\\])\../, // ignore dotfiles
     persistent: true,
   });
-
   watcher.on('change', (path) => {
-    console.log(`File ${path} has been changed. Rebuilding...`);
-    exec(`npm run build ${args[0]}`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Build error: ${error}`);
-        return;
-      }
-      console.log(`Build output: ${stdout}`);
-      if (stderr) {
-        console.error(`Build stderr: ${stderr}`);
-      }
-    });
+    console.log(chalk.gray(`File ${path} has been changed. Rebuilding...`));
+    build();
   });
 
   serverProcess.stdout.on('data', (data) => {
@@ -74,19 +93,19 @@ function serve() {
       const url = `http://localhost:${port}/test/index.html`;
       exec(`${open} ${url}`, (error) => {
         if (error) {
-          console.error(`Failed to open browser: ${error}`);
+          console.error(chalk.red(`Failed to open browser: ${error}`));
         }
       });
     }
   });
 
   serverProcess.stderr.on('data', (data) => {
-    console.error(data.toString());
+    console.error(chalk.red(data.toString()));
   });
 
   serverProcess.on('close', (code) => {
-    console.log(`http-server process exited with code ${code}`);
+    console.log(chalk.gray(`http-server process exited with code ${code}`));
   });
 }
 
-serve();
+buildAndServe();

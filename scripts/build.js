@@ -20,6 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const chalk = require('chalk');
 
 /**
  * Install dependencies before build if needed.
@@ -31,7 +32,9 @@ function beforeBuild(dirName) {
   const seriesPath = path.join(__dirname, '../custom-series', dirName);
   const nodeModulesPath = path.join(seriesPath, 'node_modules');
   if (!fs.existsSync(nodeModulesPath)) {
-    console.log(`Installing dependencies for custom series ${dirName}...`);
+    console.log(
+      chalk.gray(`Installing dependencies for custom series ${dirName}...`)
+    );
     execSync(`npm install`, { cwd: seriesPath });
   }
 }
@@ -44,10 +47,11 @@ function beforeBuild(dirName) {
 function buildCustomSeries(dirName) {
   const seriesPath = path.join(__dirname, '../custom-series', dirName);
   if (fs.statSync(seriesPath).isDirectory() === false) {
+    console.log(chalk.yellow(`${dirName} is not a directory. Ignored.`));
     return;
   }
   if (!fs.existsSync(seriesPath)) {
-    console.error(`Custom series ${dirName} does not exist`);
+    console.error(chalk.red(`Custom series ${dirName} does not exist`));
     return;
   }
 
@@ -91,7 +95,9 @@ function compileTypeScript(seriesPath, dirName) {
     // as long as `lib/index.js` exists
   }
   if (!fs.existsSync(path.join(seriesPath, 'lib/index.js'))) {
-    console.error(`Error compiling TypeScript for custom series ${dirName}:`);
+    console.error(
+      chalk.red(`Error compiling TypeScript for custom series ${dirName}:`)
+    );
     console.error(e);
     process.exit(1);
   }
@@ -118,7 +124,6 @@ function bundleWithRollup(seriesPath, dirName) {
     );
 
     console.log(`Rollup bundling completed for ${dirName}`);
-    console.log(result);
 
     // Check if the output file was created
     if (!fs.existsSync(path.join(seriesPath, 'dist', 'index.js'))) {
@@ -159,14 +164,17 @@ function build() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
     // Build all custom series
-    fs.readdirSync(path.join(__dirname, '../custom-series')).forEach(
-      buildCustomSeries
-    );
+    const dirs = fs.readdirSync(path.join(__dirname, '../custom-series'));
+    dirs.forEach((name, index) => {
+      console.log(chalk.cyan(`Running ${name}: (${index + 1}/${dirs.length})`));
+      buildCustomSeries(name);
+      console.log(`---------------\n`);
+    });
   } else {
     // Build custom series from args
     args.forEach(buildCustomSeries);
   }
-  console.log('Build successfully.');
+  console.log(chalk.green('Build successfully.'));
 }
 
 build();
