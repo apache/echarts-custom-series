@@ -4,7 +4,8 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 ## List of Custom Series
 
-TODO
+| [barRange](custom-series/barRange) <br> ![barRange](screenshots/barRange.svg) | [violin](custom-series/violin) <br> ![violin](screenshots/violin.svg) |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 
 ## Setup
 
@@ -25,10 +26,10 @@ npm link echarts
 ## Create A New Custom Series
 
 ```bash
-npm run create <series-name>
+npm run generate <series-name>
 ```
 
-The generated files are in `custom-series/<series-name>`. Note that if there are multiple words in the series name, they should be in camel case like `npm run create barRange`.
+The generated files are in `custom-series/<series-name>`. Note that if there are multiple words in the series name, they should be in camel case like `npm run generate barRange`.
 
 ## Build
 
@@ -51,3 +52,15 @@ For example, to build `custom-series/violin`, run:
 ```bash
 npm run build violin
 ```
+
+## Generate Thumbnails
+
+```bash
+npm run thumbnail
+# or
+npm run thumbnail <series-name>
+```
+
+## Publish to the npm registry
+
+TODO

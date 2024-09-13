@@ -5,8 +5,11 @@
   "scripts": {
     "build": "node scripts/build.js",
     "generate": "node scripts/generate.js",
+    "thumbnail": "node scripts/thumbnail.js",
     "serve": "node scripts/serve.js",
-    "g": "npm run generate"
+    "g": "npm run generate",
+    "t": "npm run thumbnail",
+    "s": "npm run serve"
   },
   "repository": {
     "type": "git",
@@ -20,6 +23,7 @@
   "homepage": "https://github.com/apache/echarts-custom-series#readme",
   "devDependencies": {
     "chokidar": "^3.6.0",
+    "echarts": "^5.5.1",
     "http-server": "^14.1.1",
     "rollup": "^4.21.2",
     "terser": "^5.31.6",

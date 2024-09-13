@@ -66,7 +66,10 @@ const renderItem = (
   } else {
     violins = params.context.violins as any;
   }
-  const symbolSize = params.itemPayload.symbolSize;
+  let symbolSize = params.itemPayload.symbolSize;
+  if (symbolSize == null) {
+    symbolSize = 10;
+  }
   const xValue = api.value(0) as number;
   const yValue = api.value(1) as number;
   const coord = api.coord([xValue, yValue]);

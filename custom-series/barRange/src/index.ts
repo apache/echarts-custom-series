@@ -34,7 +34,11 @@ const renderItem = (
   const valueEnd = api.value(2);
   const coordEnd = api.coord([x, valueEnd]);
   const bandWidth = api.coord([1, 0])[0] - api.coord([0, 0])[0];
-  const barWidthRaw = params.itemPayload.barWidth as number | string;
+
+  let barWidthRaw = params.itemPayload.barWidth as number | string;
+  if (barWidthRaw == null) {
+    barWidthRaw = '70%';
+  }
   const barWidth: number =
     typeof barWidthRaw === 'string' && barWidthRaw.endsWith('%')
       ? (parseFloat(barWidthRaw) / 100) * bandWidth

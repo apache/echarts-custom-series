@@ -1,5 +1,9 @@
 # $CUSTOM_SERIES_NAME$
 
+`$CUSTOM_SERIES_NAME$` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
+
+![$CUSTOM_SERIES_NAME$](../../screenshots/$CUSTOM_SERIES_NAME$.svg)
+
 ## Usage
 
 Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
@@ -26,3 +30,22 @@ import $CUSTOM_SERIES_NAME$CustomSeriesInstaller from '@echarts/custom-$CUSTOM_S
 
 echarts.use($CUSTOM_SERIES_NAME$CustomSeriesInstaller);
 ```
+
+See [test](./test/index.html) for more details.
+
+## API
+
+### series.data
+
+The data of the series is an array of arrays. Each sub-array represents ...
+
+```js
+const data = [];
+```
+
+### series.itemPayload
+
+The `itemPayload` is an object that contains the following properties:
+
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
