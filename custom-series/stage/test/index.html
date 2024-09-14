@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache ECharts Custom Series Test</title>
+</head>
+
+<body>
+    <div id="main" style="width: 1000px;height:400px;border:1px solid #ccc"></div>
+
+    <script src="../node_modules/echarts/dist/echarts.js"></script>
+    <script src="../dist/index.js"></script>
+    <script>
+        echarts.use(window.stageCustomSeriesInstaller);
+        const chart = echarts.init(document.getElementById('main'));
+
+        const data = [
+            [new Date()]
+        ]
+
+        option = {
+            series: {
+                type: 'custom',
+                renderItem: 'stage',
+                itemPayload: {
+                }
+            }
+        };
+
+        chart.setOption(option);
+    </script>
+</body>
+
+</html>
