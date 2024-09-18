@@ -59,7 +59,7 @@ function create(name) {
   console.log(
     chalk.gray(`Installing dependencies for custom series ${name}...`)
   );
-  // require('child_process').execSync(`npm install`, { cwd: seriesPath });
+  require('child_process').execSync(`npm install`, { cwd: seriesPath });
 
   console.log(chalk.green(`Custom series ${name} created successfully.\n`));
 }

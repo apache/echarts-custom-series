@@ -6,6 +6,7 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 | [barRange](custom-series/barRange) <br> ![barRange](screenshots/barRange.svg) | [violin](custom-series/violin) <br> ![violin](screenshots/violin.svg) |
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [stage](custom-series/stage) <br> ![stage](screenshots/stage.svg)             |                                                                       |
 
 ## Setup
 
