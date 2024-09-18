@@ -17,14 +17,83 @@
         const chart = echarts.init(document.getElementById('main'));
 
         const data = [
-            [new Date()]
-        ]
+            [new Date('2024-09-07 06:12'), new Date('2024-09-07 06:12'), 'Awake'],
+            [new Date('2024-09-07 06:15'), new Date('2024-09-07 06:18'), 'Awake'],
+            [new Date('2024-09-07 08:59'), new Date('2024-09-07 09:00'), 'Awake'],
+            [new Date('2024-09-07 05:45'), new Date('2024-09-07 06:12'), 'REM'],
+            [new Date('2024-09-07 07:37'), new Date('2024-09-07 07:56'), 'REM'],
+            [new Date('2024-09-07 08:56'), new Date('2024-09-07 08:59'), 'REM'],
+            [new Date('2024-09-07 09:08'), new Date('2024-09-07 09:29'), 'REM'],
+            [new Date('2024-09-07 05:45'), new Date('2024-09-07 06:12'), 'REM'],
+            [new Date('2024-09-07 03:12'), new Date('2024-09-07 03:27'), 'Core'],
+            [new Date('2024-09-07 04:02'), new Date('2024-09-07 04:36'), 'Core'],
+            [new Date('2024-09-07 04:40'), new Date('2024-09-07 04:48'), 'Core'],
+            [new Date('2024-09-07 04:57'), new Date('2024-09-07 05:45'), 'Core'],
+            [new Date('2024-09-07 06:12'), new Date('2024-09-07 06:15'), 'Core'],
+            [new Date('2024-09-07 06:18'), new Date('2024-09-07 07:37'), 'Core'],
+            [new Date('2024-09-07 07:56'), new Date('2024-09-07 08:56'), 'Core'],
+            [new Date('2024-09-07 09:00'), new Date('2024-09-07 09:08'), 'Core'],
+            [new Date('2024-09-07 09:29'), new Date('2024-09-07 10:01'), 'Core'],
+            [new Date('2024-09-07 03:27'), new Date('2024-09-07 04:02'), 'Deep'],
+            [new Date('2024-09-07 04:36'), new Date('2024-09-07 04:40'), 'Deep'],
+            [new Date('2024-09-07 04:48'), new Date('2024-09-07 04:57'), 'Deep'],
+        ];
+
+        function formatTime(time) {
+            return time.getHours() + ':' + time.getMinutes();
+        }
 
         option = {
+            tooltip: {
+                show: true,
+                valueFormatter: (params) => {
+                    console.log(params);
+                    return formatTime(params[0]) + ' - ' + formatTime(params[1]);
+                }
+            },
+            xAxis: {
+                type: 'time',
+            },
+            yAxis: {
+                type: 'category',
+                data: ['Deep', 'Core', 'REM', 'Awake'],
+                splitLine: {
+                    show: true
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                }
+            },
+            dataset: {
+                source: data
+            },
             series: {
                 type: 'custom',
                 renderItem: 'stage',
                 itemPayload: {
+                    stages: [{
+                        name: 'Deep',
+                        color: '#33379D'
+                    }, {
+                        name: 'Core',
+                        color: '#1395F4'
+                    }, {
+                        name: 'REM',
+                        color: '#59C7FD'
+                    }, {
+                        name: 'Awake',
+                        color: '#FE816E'
+                    }],
+                    envelope: {
+                    }
+                },
+                encode: {
+                    x: [0, 1],
+                    y: 2,
+                    tooltip: [0, 1]
                 }
             }
         };
