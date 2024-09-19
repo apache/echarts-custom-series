@@ -36,39 +36,37 @@ const renderItem = (
   const startCoord = api.coord([start, stageIndex]);
   const endCoord = api.coord([end, stageIndex]);
 
-  const stages = params.itemPayload.stages || [];
   const bandWidth = api.coord([0, 0])[1] - api.coord([0, 1])[1];
   const fontSize = 14;
   const textMargin = 5;
   const barMargin = 8;
-  const seriesColor = api.visual('color');
+  const color = api.visual('color');
   const borderRadius = (params.itemPayload.borderRadius as number) || 8;
-  const isGrouping = params.itemPayload.grouping as boolean;
+  const barMinHeight = 2;
 
   const children: CustomElementOption[] = [];
 
-  const stage = stages[stageIndex];
-  if (stage && !isGrouping) {
-    children.push({
-      type: 'rect',
-      shape: {
-        x: startCoord[0],
-        y: startCoord[1] - bandWidth / 2 + textMargin + fontSize + barMargin,
-        width: endCoord[0] - startCoord[0],
-        height: bandWidth - fontSize - textMargin - 2 * barMargin,
-        r: borderRadius,
-      },
-      style: {
-        fill: stage.color || seriesColor,
-      },
-    });
-  }
+  const span = endCoord[0] - startCoord[0];
+  const height = Math.max(span, barMinHeight);
+  children.push({
+    type: 'rect',
+    shape: {
+      x: startCoord[0] - (height - span) / 2,
+      y: startCoord[1] - bandWidth / 2 + textMargin + fontSize + barMargin,
+      width: height,
+      height: bandWidth - fontSize - textMargin - 2 * barMargin,
+      r: borderRadius,
+    },
+    style: {
+      fill: color,
+    },
+  });
 
   if (!params.context.renderedStages) {
     params.context.renderedStages = [];
   }
   const renderedStages = params.context.renderedStages as boolean[];
-  if (stage && !renderedStages[stageIndex]) {
+  if (!renderedStages[stageIndex]) {
     // Each stage only render once as axis label
     children.push({
       type: 'text',
@@ -76,7 +74,7 @@ const renderItem = (
         x: (params.coordSys as any).x + textMargin,
         y: startCoord[1] - bandWidth / 2 + textMargin + fontSize,
         fill: (params.itemPayload.axisLabelColor as string) || '#777',
-        text: stage.name,
+        text: api.ordinalRawValue(2) as string,
         verticalAlign: 'bottom',
       },
     });

@@ -5,38 +5,47 @@
 <path d="M60 195.5L540 195.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
 <path d="M60 127.5L540 127.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
 <path d="M60 60.5L540 60.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60.5 330L60.5 60" fill="transparent" stroke="#6E7079" stroke-linecap="round" class="zr0-cls-0"></path>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(116.3325 338)" fill="#6E7079">04:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(186.7482 338)" fill="#6E7079">05:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(257.1638 338)" fill="#6E7079">06:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(327.5795 338)" fill="#6E7079">07:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(397.9951 338)" fill="#6E7079">08:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(468.4108 338)" fill="#6E7079">09:00</text>
-<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(538.8264 338)" fill="#6E7079">10:00</text>
-<path d="M271.2 87L271.2 119.5L271.2 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M60.5 60L60.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M125.5 60L125.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M192.5 60L192.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M259.5 60L259.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M326.5 60L326.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M393.5 60L393.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M460.5 60L460.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M527.5 60L527.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M540.5 60L540.5 330" fill="transparent" stroke="#E0E6F1" stroke-opacity="0.8" stroke-dasharray="4,2" class="zr0-cls-0"></path>
+<path d="M60.5 330L60.5 60" fill="transparent" stroke="#ccc" stroke-linecap="round" class="zr0-cls-0"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(124.8951 338)" fill="#6E7079">04:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(192.028 338)" fill="#6E7079">05:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(259.1608 338)" fill="#6E7079">06:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(326.2937 338)" fill="#6E7079">07:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(393.4266 338)" fill="#6E7079">08:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(460.5594 338)" fill="#6E7079">09:00</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: normal normal 12px sans-serif" y="6" transform="translate(527.6923 338)" fill="#6E7079">10:00</text>
+<path d="M272.6 87A1 1 0 0 1 273.6 88L273.6 118.5A1 1 0 0 1 272.6 119.5A1 1 0 0 1 271.6 118.5L271.6 88A1 1 0 0 1 272.6 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
 <text dominant-baseline="central" text-anchor="start" style="font: 12px sans-serif" x="65" y="73" fill="#777">Awake</text>
-<path d="M276.5 87A1.8 1.8 0 0 1 278.3 88.8L278.3 117.7A1.8 1.8 0 0 1 276.5 119.5A1.8 1.8 0 0 1 274.8 117.7L274.8 88.8A1.8 1.8 0 0 1 276.5 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
-<path d="M467.8 87A0.6 0.6 0 0 1 468.4 87.6L468.4 118.9A0.6 0.6 0 0 1 467.8 119.5A0.6 0.6 0 0 1 467.2 118.9L467.2 87.6A0.6 0.6 0 0 1 467.8 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="2" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
-<path d="M247.6 154.5L263.2 154.5A8 8 0 0 1 271.2 162.5L271.2 179A8 8 0 0 1 263.2 187L247.6 187A8 8 0 0 1 239.6 179L239.6 162.5A8 8 0 0 1 247.6 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="3" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
+<path d="M277.6 87A1.7 1.7 0 0 1 279.3 88.7L279.3 117.8A1.7 1.7 0 0 1 277.6 119.5A1.7 1.7 0 0 1 275.9 117.8L275.9 88.7A1.7 1.7 0 0 1 277.6 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M460 87A1 1 0 0 1 461 88L461 118.5A1 1 0 0 1 460 119.5A1 1 0 0 1 459 118.5L459 88A1 1 0 0 1 460 87" fill="#FE816E" ecmeta_series_index="0" ecmeta_data_index="2" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M250.4 154.5L264.6 154.5A8 8 0 0 1 272.6 162.5L272.6 179A8 8 0 0 1 264.6 187L250.4 187A8 8 0 0 1 242.4 179L242.4 162.5A8 8 0 0 1 250.4 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="3" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
 <text dominant-baseline="central" text-anchor="start" style="font: 12px sans-serif" x="65" y="140.5" fill="#777">REM</text>
-<path d="M379 154.5L385.3 154.5A8 8 0 0 1 393.3 162.5L393.3 179A8 8 0 0 1 385.3 187L379 187A8 8 0 0 1 371 179L371 162.5A8 8 0 0 1 379 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="4" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
-<path d="M465.5 154.5A1.8 1.8 0 0 1 467.2 156.3L467.2 185.2A1.8 1.8 0 0 1 465.5 187A1.8 1.8 0 0 1 463.7 185.2L463.7 156.3A1.8 1.8 0 0 1 465.5 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="5" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
-<path d="M485.8 154.5L494.4 154.5A8 8 0 0 1 502.4 162.5L502.4 179A8 8 0 0 1 494.4 187L485.8 187A8 8 0 0 1 477.8 179L477.8 162.5A8 8 0 0 1 485.8 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
-<path d="M247.6 154.5L263.2 154.5A8 8 0 0 1 271.2 162.5L271.2 179A8 8 0 0 1 263.2 187L247.6 187A8 8 0 0 1 239.6 179L239.6 162.5A8 8 0 0 1 247.6 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="7" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
-<path d="M68 222L69.6 222A8 8 0 0 1 77.6 230L77.6 246.5A8 8 0 0 1 69.6 254.5L68 254.5A8 8 0 0 1 60 246.5L60 230A8 8 0 0 1 68 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="8" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M375.7 154.5L381 154.5A8 8 0 0 1 389 162.5L389 179A8 8 0 0 1 381 187L375.7 187A8 8 0 0 1 367.7 179L367.7 162.5A8 8 0 0 1 375.7 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="4" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
+<path d="M457.8 154.5A1.7 1.7 0 0 1 459.4 156.2L459.4 185.3A1.7 1.7 0 0 1 457.8 187A1.7 1.7 0 0 1 456.1 185.3L456.1 156.2A1.7 1.7 0 0 1 457.8 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="5" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
+<path d="M477.5 154.5L485 154.5A8 8 0 0 1 493 162.5L493 179A8 8 0 0 1 485 187L477.5 187A8 8 0 0 1 469.5 179L469.5 162.5A8 8 0 0 1 477.5 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
+<path d="M250.4 154.5L264.6 154.5A8 8 0 0 1 272.6 162.5L272.6 179A8 8 0 0 1 264.6 187L250.4 187A8 8 0 0 1 242.4 179L242.4 162.5A8 8 0 0 1 250.4 154.5" fill="#59C7FD" ecmeta_series_index="0" ecmeta_data_index="7" ecmeta_ssr_type="chart" class="zr0-cls-2"></path>
+<path d="M79.2 222L80 222A8 8 0 0 1 88 230L88 246.5A8 8 0 0 1 80 254.5L79.2 254.5A8 8 0 0 1 71.2 246.5L71.2 230A8 8 0 0 1 79.2 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="8" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
 <text dominant-baseline="central" text-anchor="start" style="font: 12px sans-serif" x="65" y="208" fill="#777">Core</text>
-<path d="M126.7 222L150.6 222A8 8 0 0 1 158.6 230L158.6 246.5A8 8 0 0 1 150.6 254.5L126.7 254.5A8 8 0 0 1 118.7 246.5L118.7 230A8 8 0 0 1 126.7 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="9" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M168 222A4.7 4.7 0 0 1 172.7 226.7L172.7 249.8A4.7 4.7 0 0 1 168 254.5A4.7 4.7 0 0 1 163.3 249.8L163.3 226.7A4.7 4.7 0 0 1 168 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="10" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M191.2 222L231.6 222A8 8 0 0 1 239.6 230L239.6 246.5A8 8 0 0 1 231.6 254.5L191.2 254.5A8 8 0 0 1 183.2 246.5L183.2 230A8 8 0 0 1 191.2 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="11" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M273 222A1.8 1.8 0 0 1 274.8 223.8L274.8 252.7A1.8 1.8 0 0 1 273 254.5A1.8 1.8 0 0 1 271.2 252.7L271.2 223.8A1.8 1.8 0 0 1 273 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="12" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M286.3 222L363 222A8 8 0 0 1 371 230L371 246.5A8 8 0 0 1 363 254.5L286.3 254.5A8 8 0 0 1 278.3 246.5L278.3 230A8 8 0 0 1 286.3 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="13" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M401.3 222L455.7 222A8 8 0 0 1 463.7 230L463.7 246.5A8 8 0 0 1 455.7 254.5L401.3 254.5A8 8 0 0 1 393.3 246.5L393.3 230A8 8 0 0 1 401.3 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="14" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M473.1 222A4.7 4.7 0 0 1 477.8 226.7L477.8 249.8A4.7 4.7 0 0 1 473.1 254.5A4.7 4.7 0 0 1 468.4 249.8L468.4 226.7A4.7 4.7 0 0 1 473.1 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="15" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M510.4 222L532 222A8 8 0 0 1 540 230L540 246.5A8 8 0 0 1 532 254.5L510.4 254.5A8 8 0 0 1 502.4 246.5L502.4 230A8 8 0 0 1 510.4 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="16" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
-<path d="M85.6 289.5L110.7 289.5A8 8 0 0 1 118.7 297.5L118.7 314A8 8 0 0 1 110.7 322L85.6 322A8 8 0 0 1 77.6 314L77.6 297.5A8 8 0 0 1 85.6 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="17" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
+<path d="M135.1 222L157.2 222A8 8 0 0 1 165.2 230L165.2 246.5A8 8 0 0 1 157.2 254.5L135.1 254.5A8 8 0 0 1 127.1 246.5L127.1 230A8 8 0 0 1 135.1 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="9" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M174.1 222A4.5 4.5 0 0 1 178.6 226.5L178.6 250A4.5 4.5 0 0 1 174.1 254.5A4.5 4.5 0 0 1 169.7 250L169.7 226.5A4.5 4.5 0 0 1 174.1 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="10" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M196.7 222L234.4 222A8 8 0 0 1 242.4 230L242.4 246.5A8 8 0 0 1 234.4 254.5L196.7 254.5A8 8 0 0 1 188.7 246.5L188.7 230A8 8 0 0 1 196.7 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="11" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M274.3 222A1.7 1.7 0 0 1 275.9 223.7L275.9 252.8A1.7 1.7 0 0 1 274.3 254.5A1.7 1.7 0 0 1 272.6 252.8L272.6 223.7A1.7 1.7 0 0 1 274.3 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="12" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M287.3 222L359.7 222A8 8 0 0 1 367.7 230L367.7 246.5A8 8 0 0 1 359.7 254.5L287.3 254.5A8 8 0 0 1 279.3 246.5L279.3 230A8 8 0 0 1 287.3 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="13" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M397 222L448.1 222A8 8 0 0 1 456.1 230L456.1 246.5A8 8 0 0 1 448.1 254.5L397 254.5A8 8 0 0 1 389 246.5L389 230A8 8 0 0 1 397 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="14" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M465 222A4.5 4.5 0 0 1 469.5 226.5L469.5 250A4.5 4.5 0 0 1 465 254.5A4.5 4.5 0 0 1 460.6 250L460.6 226.5A4.5 4.5 0 0 1 465 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="15" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M501 222L520.8 222A8 8 0 0 1 528.8 230L528.8 246.5A8 8 0 0 1 520.8 254.5L501 254.5A8 8 0 0 1 493 246.5L493 230A8 8 0 0 1 501 222" fill="#1395F4" ecmeta_series_index="0" ecmeta_data_index="16" ecmeta_ssr_type="chart" class="zr0-cls-3"></path>
+<path d="M96 289.5L119.1 289.5A8 8 0 0 1 127.1 297.5L127.1 314A8 8 0 0 1 119.1 322L96 322A8 8 0 0 1 88 314L88 297.5A8 8 0 0 1 96 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="17" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
 <text dominant-baseline="central" text-anchor="start" style="font: 12px sans-serif" x="65" y="275.5" fill="#777">Deep</text>
-<path d="M160.9 289.5A2.3 2.3 0 0 1 163.3 291.8L163.3 319.7A2.3 2.3 0 0 1 160.9 322A2.3 2.3 0 0 1 158.6 319.7L158.6 291.8A2.3 2.3 0 0 1 160.9 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="18" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
-<path d="M177.9 289.5A5.3 5.3 0 0 1 183.2 294.8L183.2 316.7A5.3 5.3 0 0 1 177.9 322A5.3 5.3 0 0 1 172.7 316.7L172.7 294.8A5.3 5.3 0 0 1 177.9 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="19" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
+<path d="M167.4 289.5A2.2 2.2 0 0 1 169.7 291.7L169.7 319.8A2.2 2.2 0 0 1 167.4 322A2.2 2.2 0 0 1 165.2 319.8L165.2 291.7A2.2 2.2 0 0 1 167.4 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="18" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
+<path d="M183.6 289.5A5 5 0 0 1 188.7 294.5L188.7 317A5 5 0 0 1 183.6 322A5 5 0 0 1 178.6 317L178.6 294.5A5 5 0 0 1 183.6 289.5" fill="#33379D" ecmeta_series_index="0" ecmeta_data_index="19" ecmeta_ssr_type="chart" class="zr0-cls-4"></path>
 <style ><![CDATA[
 .zr0-cls-0:hover {
 pointer-events:none;
