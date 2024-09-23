@@ -106,58 +106,86 @@ const renderItem = (
   // If is the last item, render envelope
   if (params.dataIndex === params.dataInsideLength - 1) {
     const envelope: Envelope = params.itemPayload.envelope || {};
-    if (envelope.show !== false) {
+    if (envelope.show !== false && boxes.length > 1) {
       const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 5);
       // Sort boxes by x, then by y
       boxes.sort((a, b) => a.x - b.x || a.y - b.y);
       console.log(boxes);
-      // Render envelope so that the stage chart looks exactly like
-      // the Apple Health sleep chart
 
-      const paths: CustomElementOption[] = [];
-      for (let i = 0; i < boxes.length; i++) {
-        // Expand by margin
+      // Top-left of the first box
+      let path: string = `M ${boxes[0].x - margin} ${boxes[0].y - margin}`;
+      for (let i = 0; i < boxes.length - 1; i++) {
         const box = boxes[i];
-        paths.push({
-          type: 'rect',
-          shape: {
-            x: box.x - margin,
-            y: box.y - margin,
-            width: box.width + 2 * margin,
-            height: box.height + 2 * margin,
-            // r: borderRadius + margin,
-          },
-          style: {
-            fill: 'red',
-            opacity: 0.2,
-          },
-          z2: -1,
-        });
 
-        if (i > 0) {
-          const prev = boxes[i - 1];
-          const current = boxes[i];
-          paths.push({
-            type: 'rect',
-            shape: {
-              x: prev.x + prev.width + margin,
-              y: prev.y - margin,
-              width: current.x - prev.x - prev.width - margin * 2,
-              height: current.y + current.height + margin - (prev.y - margin),
-            },
-            style: {
-              fill: 'blue',
-              opacity: 0.2,
-            },
-            z2: -1,
-          });
+        // Go downside
+        path += `L ${box.x - margin} ${box.y + box.height + margin}`;
+
+        const nextBox = boxes[i + 1];
+        if (nextBox.y + nextBox.height > box.y + box.height) {
+          // Go right
+          path += `L ${nextBox.x - margin} ${box.y + box.height + margin}`;
+          // Go down to the bottom of the next box
+          path += `L ${nextBox.x - margin} ${
+            nextBox.y + nextBox.height + margin
+          }`;
+        } else {
+          // Go right to the right of the current box
+          path += `L ${box.x + box.width + margin} ${
+            box.y + box.height + margin
+          }`;
+          // Go up till the bottom of the next box
+          path += `L ${box.x + box.width + margin} ${
+            nextBox.y + nextBox.height + margin
+          }`;
         }
       }
+      // Go right and up for the last box
+      const lastBox = boxes[boxes.length - 1];
+      path += `L ${lastBox.x + lastBox.width + margin} ${
+        lastBox.y + lastBox.height + margin
+      }`;
+      path += `L ${lastBox.x + lastBox.width + margin} ${lastBox.y - margin}`;
 
-      children.push({
-        type: 'group',
-        children: paths,
-      });
+      // Then, there's a similar progress to close the path
+      for (let i = boxes.length - 1; i > 0; i--) {
+        const box = boxes[i];
+        path += `L ${box.x + box.width + margin} ${box.y - margin}`;
+        const prevBox = boxes[i - 1];
+        if (prevBox.y < box.y) {
+          // Go left
+          path += `L ${prevBox.x + prevBox.width + margin} ${box.y - margin}`;
+          // Go up to the top of the prev box
+          path += `L ${prevBox.x + prevBox.width + margin} ${
+            prevBox.y - margin
+          }`;
+        } else {
+          // Go left to the left of the current box
+          path += `L ${box.x - margin} ${box.y - margin}`;
+          // Go down till the top of the prev box
+          path += `L ${box.x - margin} ${prevBox.y - margin}`;
+        }
+      }
+      const firstBox = boxes[0];
+      path += `L ${firstBox.x - margin} ${firstBox.y - margin}`;
+      path += `L ${firstBox.x - margin} ${
+        firstBox.y + firstBox.height + margin
+      }`;
+
+      const envelopeEl = {
+        type: 'path' as const,
+        shape: {
+          d: path,
+        },
+        style: {
+          fill: 'blue',
+          opacity: 0.4,
+        },
+      };
+      console.log(path);
+
+      children.push(envelopeEl);
+
+      console.log(children);
     }
   }
 
