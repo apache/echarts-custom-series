@@ -108,67 +108,124 @@ const renderItem = (
     const envelope: Envelope = params.itemPayload.envelope || {};
     if (envelope.show !== false && boxes.length > 1) {
       const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 5);
+
       // Sort boxes by x, then by y
       boxes.sort((a, b) => a.x - b.x || a.y - b.y);
       console.log(boxes);
 
       // Top-left of the first box
-      let path: string = `M ${boxes[0].x - margin} ${boxes[0].y - margin}`;
+      const firstBox = boxes[0];
+      const firstRadius =
+        Math.min(firstBox.height, Math.min(firstBox.width, borderRadius * 2)) /
+          2 +
+        margin;
+      let path: string = `M ${firstBox.x - margin} ${
+        firstBox.y - margin + firstRadius
+      }`;
       for (let i = 0; i < boxes.length - 1; i++) {
         const box = boxes[i];
+        const innerRadius =
+          Math.min(box.height, Math.min(box.width, borderRadius * 2)) / 2;
+        const radius = innerRadius + margin;
 
         // Go downside
-        path += `L ${box.x - margin} ${box.y + box.height + margin}`;
+        path += `L ${box.x - margin} ${box.y + box.height + margin - radius}`;
+        path += `A ${radius} ${radius} 0 0 0 ${box.x - margin + radius} ${
+          box.y + box.height + margin
+        }`;
 
         const nextBox = boxes[i + 1];
         if (nextBox.y + nextBox.height > box.y + box.height) {
           // Go right
-          path += `L ${nextBox.x - margin} ${box.y + box.height + margin}`;
+          path += `L ${nextBox.x - margin - radius} ${
+            box.y + box.height + margin
+          }`;
+          path += `A ${radius} ${radius} 0 0 1 ${nextBox.x - margin} ${
+            box.y + box.height + margin + radius
+          }`;
           // Go down to the bottom of the next box
           path += `L ${nextBox.x - margin} ${
+            nextBox.y + nextBox.height + margin - radius
+          }`;
+          path += `A ${radius} ${radius} 0 0 0 ${nextBox.x - margin + radius} ${
             nextBox.y + nextBox.height + margin
           }`;
         } else {
           // Go right to the right of the current box
-          path += `L ${box.x + box.width + margin} ${
+          path += `L ${box.x + box.width + margin - radius} ${
             box.y + box.height + margin
+          }`;
+          path += `A ${radius} ${radius} 0 0 0 ${box.x + box.width + margin} ${
+            box.y + box.height + margin - radius
           }`;
           // Go up till the bottom of the next box
           path += `L ${box.x + box.width + margin} ${
-            nextBox.y + nextBox.height + margin
+            nextBox.y + nextBox.height + margin + radius
           }`;
+          path += `A ${radius} ${radius} 0 0 1 ${
+            box.x + box.width + margin + radius
+          } ${nextBox.y + nextBox.height + margin}`;
         }
       }
       // Go right and up for the last box
       const lastBox = boxes[boxes.length - 1];
-      path += `L ${lastBox.x + lastBox.width + margin} ${
+      const lastRadius =
+        Math.min(lastBox.height, Math.min(lastBox.width, borderRadius * 2)) /
+          2 +
+        margin;
+      path += `L ${lastBox.x + lastBox.width + margin - lastRadius} ${
         lastBox.y + lastBox.height + margin
       }`;
-      path += `L ${lastBox.x + lastBox.width + margin} ${lastBox.y - margin}`;
+      path += `A ${lastRadius} ${lastRadius} 0 0 0 ${
+        lastBox.x + lastBox.width + margin
+      } ${lastBox.y + lastBox.height + margin - lastRadius}`;
+      path += `L ${lastBox.x + lastBox.width + margin} ${
+        lastBox.y - margin + lastRadius
+      }`;
+      path += `A ${lastRadius} ${lastRadius} 0 0 0 ${
+        lastBox.x + lastBox.width + margin - lastRadius
+      } ${lastBox.y - margin}`;
 
       // Then, there's a similar progress to close the path
       for (let i = boxes.length - 1; i > 0; i--) {
         const box = boxes[i];
+        const innerRadius =
+          Math.min(box.height, Math.min(box.width, borderRadius * 2)) / 2;
+        const radius = innerRadius + margin;
+
         path += `L ${box.x + box.width + margin} ${box.y - margin}`;
         const prevBox = boxes[i - 1];
         if (prevBox.y < box.y) {
           // Go left
-          path += `L ${prevBox.x + prevBox.width + margin} ${box.y - margin}`;
+          path += `L ${prevBox.x + prevBox.width + margin + radius} ${
+            box.y - margin
+          }`;
+          path += `A ${radius} ${radius} 0 0 1 ${
+            prevBox.x + prevBox.width + margin
+          } ${box.y - margin - radius}`;
           // Go up to the top of the prev box
           path += `L ${prevBox.x + prevBox.width + margin} ${
-            prevBox.y - margin
+            prevBox.y - margin + radius
           }`;
+          path += `A ${radius} ${radius} 0 0 0 ${
+            prevBox.x + prevBox.width + margin - radius
+          } ${prevBox.y - margin}`;
         } else {
           // Go left to the left of the current box
-          path += `L ${box.x - margin} ${box.y - margin}`;
+          path += `L ${box.x - margin + radius} ${box.y - margin}`;
+          path += `A ${radius} ${radius} 0 0 0 ${box.x - margin} ${
+            box.y - margin + radius
+          }`;
           // Go down till the top of the prev box
-          path += `L ${box.x - margin} ${prevBox.y - margin}`;
+          path += `L ${box.x - margin} ${prevBox.y - margin - radius}`;
+          path += `A ${radius} ${radius} 0 0 1 ${box.x - margin - radius} ${
+            prevBox.y - margin
+          }`;
         }
       }
-      const firstBox = boxes[0];
-      path += `L ${firstBox.x - margin} ${firstBox.y - margin}`;
-      path += `L ${firstBox.x - margin} ${
-        firstBox.y + firstBox.height + margin
+      path += `L ${firstBox.x - margin + firstRadius} ${firstBox.y - margin}`;
+      path += `A ${firstRadius} ${firstRadius} 0 0 0 ${firstBox.x - margin} ${
+        firstBox.y - margin + firstRadius
       }`;
 
       const envelopeEl = {
@@ -180,6 +237,7 @@ const renderItem = (
           fill: 'blue',
           opacity: 0.4,
         },
+        silent: true,
       };
       console.log(path);
 
