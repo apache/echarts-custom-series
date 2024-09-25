@@ -127,14 +127,15 @@ const renderItem = (
         const innerRadius =
           Math.min(box.height, Math.min(box.width, borderRadius * 2)) / 2;
         const radius = innerRadius + margin;
+        const nextBox = boxes[i + 1];
 
         // Go downside
         path += `L ${box.x - margin} ${box.y + box.height + margin - radius}`;
-        path += `A ${radius} ${radius} 0 0 0 ${box.x - margin + radius} ${
-          box.y + box.height + margin
-        }`;
+        path += `A ${radius} ${radius} 0 0 0 ${Math.min(
+          box.x - margin + radius,
+          nextBox.x - margin
+        )} ${box.y + box.height + margin}`;
 
-        const nextBox = boxes[i + 1];
         if (nextBox.y + nextBox.height > box.y + box.height) {
           // Go right
           path += `L ${nextBox.x - margin - radius} ${
@@ -235,7 +236,7 @@ const renderItem = (
         },
         style: {
           fill: 'blue',
-          opacity: 0.4,
+          opacity: 0.3,
         },
         silent: true,
       };

@@ -18,7 +18,11 @@ Note: Building requires the lib files of ECharts v6. So before ECharts v6 is rel
 
 ```bash
 # Under the directory of echarts
+git checkout v6
+npm install
 npm link
+npm run prepare
+npm run build
 
 # Under the directory of echarts-custom-series/custom-series/<series-name>
 npm link echarts
