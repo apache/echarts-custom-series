@@ -105,6 +105,11 @@ const renderItem = (
 
   // If is the last item, render envelope
   if (params.dataIndex === params.dataInsideLength - 1) {
+    const allColors: string[] = [];
+    for (let i = 0; i < params.dataInsideLength; i++) {
+      allColors.push(api.visual('color', i) as string);
+    }
+
     const envelope: Envelope = params.itemPayload.envelope || {};
     if (envelope.show !== false && boxes.length > 1) {
       const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 5);
@@ -113,138 +118,137 @@ const renderItem = (
       boxes.sort((a, b) => a.x - b.x || a.y - b.y);
       console.log(boxes);
 
-      // Top-left of the first box
-      const firstBox = boxes[0];
-      const firstRadius =
-        Math.min(firstBox.height, Math.min(firstBox.width, borderRadius * 2)) /
-          2 +
-        margin;
-      let path: string = `M ${firstBox.x - margin} ${
-        firstBox.y - margin + firstRadius
-      }`;
-      for (let i = 0; i < boxes.length - 1; i++) {
+      const canvas = document.createElement('canvas');
+      const coordSys = params.coordSys as any;
+      const dpr = window.devicePixelRatio || 1;
+      const canvasWidth = coordSys.width * dpr;
+      const canvasHeight = coordSys.height * dpr;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+
+      const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+      if (allColors.length > 0 && !envelope.color) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+        for (let i = 0; i < allColors.length; i++) {
+          gradient.addColorStop(i / (allColors.length - 1), allColors[i]);
+        }
+        ctx.fillStyle = gradient;
+      } else {
+        ctx.fillStyle = envelope.color || '#888';
+      }
+
+      for (let i = 0; i < boxes.length; i++) {
         const box = boxes[i];
-        const innerRadius =
-          Math.min(box.height, Math.min(box.width, borderRadius * 2)) / 2;
-        const radius = innerRadius + margin;
-        const nextBox = boxes[i + 1];
 
-        // Go downside
-        path += `L ${box.x - margin} ${box.y + box.height + margin - radius}`;
-        path += `A ${radius} ${radius} 0 0 0 ${Math.min(
-          box.x - margin + radius,
-          nextBox.x - margin
-        )} ${box.y + box.height + margin}`;
+        ctx.fillStyle = '#888';
+        drawRoundedRect(
+          ctx,
+          (box.x - margin - coordSys.x) * dpr,
+          (box.y - margin - coordSys.y) * dpr,
+          (box.width + margin * 2) * dpr,
+          (box.height + margin * 2) * dpr,
+          (Math.min(borderRadius, box.width / 2) + margin) * dpr
+        );
 
-        if (nextBox.y + nextBox.height > box.y + box.height) {
-          // Go right
-          path += `L ${nextBox.x - margin - radius} ${
-            box.y + box.height + margin
-          }`;
-          path += `A ${radius} ${radius} 0 0 1 ${nextBox.x - margin} ${
-            box.y + box.height + margin + radius
-          }`;
-          // Go down to the bottom of the next box
-          path += `L ${nextBox.x - margin} ${
-            nextBox.y + nextBox.height + margin - radius
-          }`;
-          path += `A ${radius} ${radius} 0 0 0 ${nextBox.x - margin + radius} ${
-            nextBox.y + nextBox.height + margin
-          }`;
-        } else {
-          // Go right to the right of the current box
-          path += `L ${box.x + box.width + margin - radius} ${
-            box.y + box.height + margin
-          }`;
-          path += `A ${radius} ${radius} 0 0 0 ${box.x + box.width + margin} ${
-            box.y + box.height + margin - radius
-          }`;
-          // Go up till the bottom of the next box
-          path += `L ${box.x + box.width + margin} ${
-            nextBox.y + nextBox.height + margin + radius
-          }`;
-          path += `A ${radius} ${radius} 0 0 1 ${
-            box.x + box.width + margin + radius
-          } ${nextBox.y + nextBox.height + margin}`;
+        if (i > 0) {
+          const prevBox = boxes[i - 1];
+          const isPrevLower = prevBox.y > box.y + box.height;
+          const height = isPrevLower
+            ? prevBox.y - box.y - box.height + borderRadius * 2
+            : box.y - prevBox.y - prevBox.height + borderRadius * 2;
+          const y = isPrevLower
+            ? box.y + box.height - borderRadius
+            : prevBox.y + prevBox.height - borderRadius;
+
+          // Draw outer border-radius
+          ctx.beginPath();
+          if (isPrevLower) {
+            ctx.fillStyle = '#f00';
+            if (box.x - margin - prevBox.x > 0) {
+              const right = Math.ceil((box.x - margin - coordSys.x) * dpr);
+              const bottom = (prevBox.y - margin - coordSys.y) * dpr;
+              const r =
+                Math.min(
+                  (box.x - margin - prevBox.x) / 2,
+                  margin + borderRadius
+                ) * dpr;
+              ctx.moveTo(right, bottom + r);
+              ctx.arc(right - r, bottom - r, r, 0, Math.PI / 2);
+              ctx.lineTo(right, bottom + margin * dpr);
+              ctx.lineTo(right, bottom - r);
+            }
+
+            if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
+              const top = (box.y + box.height + margin - coordSys.y) * dpr;
+              const left = Math.floor(
+                (prevBox.x + prevBox.width + margin - coordSys.x) * dpr
+              );
+              const r =
+                Math.min(
+                  (box.x + box.width - prevBox.x - prevBox.width - margin) / 2,
+                  margin + borderRadius
+                ) * dpr;
+              ctx.moveTo(left, top + r);
+              ctx.arc(left + r, top + r, r, Math.PI, Math.PI * 1.5);
+              ctx.lineTo(left, top - margin * dpr);
+              ctx.lineTo(left, top);
+            }
+          } else {
+            ctx.fillStyle = '#0f0';
+            if (box.x - margin - prevBox.x > 0) {
+              const right = Math.ceil((box.x - margin - coordSys.x) * dpr);
+              const top =
+                (prevBox.y + prevBox.height + margin - coordSys.y) * dpr;
+              const r =
+                Math.min(
+                  (box.x - margin - prevBox.x) / 2,
+                  margin + borderRadius
+                ) * dpr;
+              ctx.moveTo(right, top + r);
+              ctx.arc(right - r, top + r, r, -Math.PI / 2, 0);
+              ctx.lineTo(right, top - margin * dpr);
+              ctx.lineTo(right - r, top);
+            }
+
+            if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
+              const bottom = (box.y - margin - coordSys.y) * dpr;
+              const left = Math.floor(
+                (prevBox.x + prevBox.width + margin - coordSys.x) * dpr
+              );
+              const r =
+                Math.min(
+                  (box.x + box.width - prevBox.x - prevBox.width - margin) / 2,
+                  margin + borderRadius
+                ) * dpr;
+              ctx.moveTo(left + r, bottom);
+              ctx.arc(left + r, bottom - r, r, Math.PI / 2, Math.PI);
+              ctx.lineTo(left, bottom + margin * dpr);
+              ctx.lineTo(left, bottom);
+            }
+          }
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw bars between boxes
+          ctx.fillRect(
+            (prevBox.x + prevBox.width + margin - coordSys.x) * dpr,
+            (y - coordSys.y) * dpr,
+            (box.x - prevBox.x - prevBox.width - margin * 2) * dpr,
+            height * dpr
+          );
         }
       }
-      // Go right and up for the last box
-      const lastBox = boxes[boxes.length - 1];
-      const lastRadius =
-        Math.min(lastBox.height, Math.min(lastBox.width, borderRadius * 2)) /
-          2 +
-        margin;
-      path += `L ${lastBox.x + lastBox.width + margin - lastRadius} ${
-        lastBox.y + lastBox.height + margin
-      }`;
-      path += `A ${lastRadius} ${lastRadius} 0 0 0 ${
-        lastBox.x + lastBox.width + margin
-      } ${lastBox.y + lastBox.height + margin - lastRadius}`;
-      path += `L ${lastBox.x + lastBox.width + margin} ${
-        lastBox.y - margin + lastRadius
-      }`;
-      path += `A ${lastRadius} ${lastRadius} 0 0 0 ${
-        lastBox.x + lastBox.width + margin - lastRadius
-      } ${lastBox.y - margin}`;
 
-      // Then, there's a similar progress to close the path
-      for (let i = boxes.length - 1; i > 0; i--) {
-        const box = boxes[i];
-        const innerRadius =
-          Math.min(box.height, Math.min(box.width, borderRadius * 2)) / 2;
-        const radius = innerRadius + margin;
-
-        path += `L ${box.x + box.width + margin} ${box.y - margin}`;
-        const prevBox = boxes[i - 1];
-        if (prevBox.y < box.y) {
-          // Go left
-          path += `L ${prevBox.x + prevBox.width + margin + radius} ${
-            box.y - margin
-          }`;
-          path += `A ${radius} ${radius} 0 0 1 ${
-            prevBox.x + prevBox.width + margin
-          } ${box.y - margin - radius}`;
-          // Go up to the top of the prev box
-          path += `L ${prevBox.x + prevBox.width + margin} ${
-            prevBox.y - margin + radius
-          }`;
-          path += `A ${radius} ${radius} 0 0 0 ${
-            prevBox.x + prevBox.width + margin - radius
-          } ${prevBox.y - margin}`;
-        } else {
-          // Go left to the left of the current box
-          path += `L ${box.x - margin + radius} ${box.y - margin}`;
-          path += `A ${radius} ${radius} 0 0 0 ${box.x - margin} ${
-            box.y - margin + radius
-          }`;
-          // Go down till the top of the prev box
-          path += `L ${box.x - margin} ${prevBox.y - margin - radius}`;
-          path += `A ${radius} ${radius} 0 0 1 ${box.x - margin - radius} ${
-            prevBox.y - margin
-          }`;
-        }
-      }
-      path += `L ${firstBox.x - margin + firstRadius} ${firstBox.y - margin}`;
-      path += `A ${firstRadius} ${firstRadius} 0 0 0 ${firstBox.x - margin} ${
-        firstBox.y - margin + firstRadius
-      }`;
-
-      const envelopeEl = {
-        type: 'path' as const,
-        shape: {
-          d: path,
-        },
+      children.push({
+        type: 'image',
         style: {
-          fill: 'blue',
-          opacity: 0.3,
+          image: canvas,
+          x: coordSys.x,
+          y: coordSys.y,
+          opacity: 0.5,
         },
-        silent: true,
-      };
-      console.log(path);
-
-      children.push(envelopeEl);
-
-      console.log(children);
+      });
     }
   }
 
@@ -253,6 +257,35 @@ const renderItem = (
     children,
   } as CustomRootElementOption;
 };
+
+function drawRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y); // Move to the top-left corner
+  ctx.lineTo(x + width - radius, y); // Top edge
+  ctx.arc(x + width - radius, y + radius, radius, -Math.PI / 2, 0, false); // Top-right corner
+  ctx.lineTo(x + width, y + height - radius); // Right edge
+  ctx.arc(
+    x + width - radius,
+    y + height - radius,
+    radius,
+    0,
+    Math.PI / 2,
+    false
+  ); // Bottom-right corner
+  ctx.lineTo(x + radius, y + height); // Bottom edge
+  ctx.arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI, false); // Bottom-left corner
+  ctx.lineTo(x, y + radius); // Left edge
+  ctx.arc(x + radius, y + radius, radius, Math.PI, Math.PI * 1.5, false); // Top-left corner
+  ctx.closePath();
+  ctx.fill();
+}
 
 export default {
   install(registers: EChartsExtensionInstallRegisters) {

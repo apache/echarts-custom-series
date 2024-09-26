@@ -14,7 +14,9 @@
     <script src="../dist/index.js"></script>
     <script>
         echarts.use(window.stageCustomSeriesInstaller);
-        const chart = echarts.init(document.getElementById('main'));
+        const chart = echarts.init(document.getElementById('main'), null, {
+            renderer: 'svg'
+        });
 
         const data = [
             [new Date('2024-09-07 06:12'), new Date('2024-09-07 06:12'), 'Awake'],
