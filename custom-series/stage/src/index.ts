@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import echarts from 'echarts';
+import echarts, { zrUtil } from 'echarts';
 import type {
   CustomElementOption,
   CustomRootElementOption,
@@ -25,12 +25,31 @@ import type {
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
 
-type Envelope = {
+interface Envelope {
   show?: boolean;
   color?: 'auto' | string;
+  externalRadius?: number;
   opacity?: number;
   margin?: number;
-};
+  dpr?: number;
+}
+
+interface ItemStyle {
+  borderRadius?: number;
+  verticalMargin?: number;
+  minHorizontalSize?: number;
+}
+
+interface AxisLabel {
+  color?: string;
+  formatter?: (value: string, index: number) => string;
+}
+
+interface StageItemPayload {
+  itemStyle?: ItemStyle;
+  axisLabel?: AxisLabel;
+  envelope?: Envelope;
+}
 
 const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
@@ -46,10 +65,22 @@ const renderItem = (
   const bandWidth = api.coord([0, 0])[1] - api.coord([0, 1])[1];
   const fontSize = 14;
   const textMargin = 5;
-  const barMargin = 8;
   const color = api.visual('color');
-  const borderRadius = (params.itemPayload.borderRadius as number) || 8;
-  const barMinHeight = 2;
+  const itemPayload = params.itemPayload as StageItemPayload;
+  const itemStyle = itemPayload.itemStyle || {};
+  const borderRadius = itemStyle.borderRadius || 8;
+  const externalRadius = zrUtil.retrieve2(
+    itemPayload.envelope?.externalRadius,
+    6
+  ) as number;
+  const barVerticalMargin = zrUtil.retrieve2(
+    itemStyle.verticalMargin,
+    8
+  ) as number;
+  const barMinWidth = zrUtil.retrieve2(
+    itemStyle.minHorizontalSize,
+    3
+  ) as number;
 
   const children: CustomElementOption[] = [];
   const boxes: { x: number; y: number; width: number; height: number }[] =
@@ -61,12 +92,13 @@ const renderItem = (
     }[]) || [];
 
   const span = endCoord[0] - startCoord[0];
-  const height = Math.max(span, barMinHeight);
+  const height = Math.max(span, barMinWidth);
   const shape = {
     x: startCoord[0] - (height - span) / 2,
-    y: startCoord[1] - bandWidth / 2 + textMargin + fontSize + barMargin,
+    y:
+      startCoord[1] - bandWidth / 2 + textMargin + fontSize + barVerticalMargin,
     width: height,
-    height: bandWidth - fontSize - textMargin - 2 * barMargin,
+    height: bandWidth - fontSize - textMargin - 2 * barVerticalMargin,
   };
   children.push({
     type: 'rect',
@@ -89,14 +121,19 @@ const renderItem = (
   }
   const renderedStages = params.context.renderedStages as boolean[];
   if (!renderedStages[stageIndex]) {
+    const axisLabel: AxisLabel = itemPayload.axisLabel || {};
+    let text = api.ordinalRawValue(2) as string;
+    if (typeof axisLabel.formatter === 'function') {
+      text = axisLabel.formatter(text, stageIndex as number);
+    }
     // Each stage only render once as axis label
     children.push({
       type: 'text',
       style: {
         x: (params.coordSys as any).x + textMargin,
         y: startCoord[1] - bandWidth / 2 + textMargin + fontSize,
-        fill: (params.itemPayload.axisLabelColor as string) || '#777',
-        text: api.ordinalRawValue(2) as string,
+        fill: axisLabel.color || '#8A8A8A',
+        text,
         verticalAlign: 'bottom',
       },
     });
@@ -107,51 +144,58 @@ const renderItem = (
   if (params.dataIndex === params.dataInsideLength - 1) {
     const allColors: string[] = [];
     for (let i = 0; i < params.dataInsideLength; i++) {
-      allColors.push(api.visual('color', i) as string);
+      const color = api.visual('color', i) as string;
+      if (allColors.indexOf(color) < 0) {
+        allColors.push(color);
+      }
     }
 
-    const envelope: Envelope = params.itemPayload.envelope || {};
+    const envelope: Envelope = itemPayload.envelope || {};
     if (envelope.show !== false && boxes.length > 1) {
-      const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 5);
+      const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 2);
 
       // Sort boxes by x, then by y
       boxes.sort((a, b) => a.x - b.x || a.y - b.y);
-      console.log(boxes);
 
-      const canvas = document.createElement('canvas');
       const coordSys = params.coordSys as any;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = envelope.dpr == null ? 2 : envelope.dpr || 1;
       const canvasWidth = coordSys.width * dpr;
       const canvasHeight = coordSys.height * dpr;
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
+      const canvas = createCanvas(canvasWidth, canvasHeight);
+      const ox = coordSys.x;
+      const oy = coordSys.y;
 
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
       if (allColors.length > 0 && !envelope.color) {
         const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
         for (let i = 0; i < allColors.length; i++) {
-          gradient.addColorStop(i / (allColors.length - 1), allColors[i]);
+          // For example, if there are 4 colors, the gradient stops are 1/8,
+          // 3/8, 5/8, 7/8.
+          gradient.addColorStop(
+            (i * 2 + 1) / (allColors.length * 2),
+            allColors[i]
+          );
         }
         ctx.fillStyle = gradient;
       } else {
         ctx.fillStyle = envelope.color || '#888';
       }
+      const opacity = zrUtil.retrieve2(envelope.opacity as number, 0.25);
 
       for (let i = 0; i < boxes.length; i++) {
         const box = boxes[i];
 
-        ctx.fillStyle = '#888';
         drawRoundedRect(
           ctx,
-          (box.x - margin - coordSys.x) * dpr,
-          (box.y - margin - coordSys.y) * dpr,
+          (box.x - margin - ox) * dpr,
+          (box.y - margin - oy) * dpr,
           (box.width + margin * 2) * dpr,
           (box.height + margin * 2) * dpr,
           (Math.min(borderRadius, box.width / 2) + margin) * dpr
         );
 
         if (i > 0) {
+          ctx.beginPath();
           const prevBox = boxes[i - 1];
           const isPrevLower = prevBox.y > box.y + box.height;
           const height = isPrevLower
@@ -161,18 +205,19 @@ const renderItem = (
             ? box.y + box.height - borderRadius
             : prevBox.y + prevBox.height - borderRadius;
 
+          if (box.x - margin >= prevBox.x + prevBox.width + margin) {
+            // No overlapping
+            continue;
+          }
+
           // Draw outer border-radius
-          ctx.beginPath();
           if (isPrevLower) {
-            ctx.fillStyle = '#f00';
             if (box.x - margin - prevBox.x > 0) {
-              const right = Math.ceil((box.x - margin - coordSys.x) * dpr);
-              const bottom = (prevBox.y - margin - coordSys.y) * dpr;
+              const right = Math.ceil((box.x - margin - ox) * dpr);
+              const bottom = (prevBox.y - margin - oy) * dpr;
               const r =
-                Math.min(
-                  (box.x - margin - prevBox.x) / 2,
-                  margin + borderRadius
-                ) * dpr;
+                Math.min((box.x - margin - prevBox.x) / 2, externalRadius) *
+                dpr;
               ctx.moveTo(right, bottom + r);
               ctx.arc(right - r, bottom - r, r, 0, Math.PI / 2);
               ctx.lineTo(right, bottom + margin * dpr);
@@ -180,14 +225,14 @@ const renderItem = (
             }
 
             if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
-              const top = (box.y + box.height + margin - coordSys.y) * dpr;
+              const top = (box.y + box.height + margin - oy) * dpr;
               const left = Math.floor(
-                (prevBox.x + prevBox.width + margin - coordSys.x) * dpr
+                (prevBox.x + prevBox.width + margin - ox) * dpr
               );
               const r =
                 Math.min(
                   (box.x + box.width - prevBox.x - prevBox.width - margin) / 2,
-                  margin + borderRadius
+                  externalRadius
                 ) * dpr;
               ctx.moveTo(left, top + r);
               ctx.arc(left + r, top + r, r, Math.PI, Math.PI * 1.5);
@@ -195,16 +240,12 @@ const renderItem = (
               ctx.lineTo(left, top);
             }
           } else {
-            ctx.fillStyle = '#0f0';
             if (box.x - margin - prevBox.x > 0) {
-              const right = Math.ceil((box.x - margin - coordSys.x) * dpr);
-              const top =
-                (prevBox.y + prevBox.height + margin - coordSys.y) * dpr;
+              const right = Math.ceil((box.x - margin - ox) * dpr);
+              const top = (prevBox.y + prevBox.height + margin - oy) * dpr;
               const r =
-                Math.min(
-                  (box.x - margin - prevBox.x) / 2,
-                  margin + borderRadius
-                ) * dpr;
+                Math.min((box.x - margin - prevBox.x) / 2, externalRadius) *
+                dpr;
               ctx.moveTo(right, top + r);
               ctx.arc(right - r, top + r, r, -Math.PI / 2, 0);
               ctx.lineTo(right, top - margin * dpr);
@@ -212,19 +253,19 @@ const renderItem = (
             }
 
             if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
-              const bottom = (box.y - margin - coordSys.y) * dpr;
+              const bottom = (box.y - margin - oy) * dpr;
               const left = Math.floor(
-                (prevBox.x + prevBox.width + margin - coordSys.x) * dpr
+                (prevBox.x + prevBox.width + margin - ox) * dpr
               );
               const r =
                 Math.min(
                   (box.x + box.width - prevBox.x - prevBox.width - margin) / 2,
-                  margin + borderRadius
+                  externalRadius
                 ) * dpr;
               ctx.moveTo(left + r, bottom);
               ctx.arc(left + r, bottom - r, r, Math.PI / 2, Math.PI);
-              ctx.lineTo(left, bottom + margin * dpr);
-              ctx.lineTo(left, bottom);
+              ctx.lineTo(left, bottom + (margin + borderRadius) * dpr);
+              ctx.lineTo(left + r, bottom);
             }
           }
           ctx.closePath();
@@ -232,8 +273,8 @@ const renderItem = (
 
           // Draw bars between boxes
           ctx.fillRect(
-            (prevBox.x + prevBox.width + margin - coordSys.x) * dpr,
-            (y - coordSys.y) * dpr,
+            (prevBox.x + prevBox.width + margin - ox) * dpr,
+            (y - oy) * dpr,
             (box.x - prevBox.x - prevBox.width - margin * 2) * dpr,
             height * dpr
           );
@@ -244,10 +285,13 @@ const renderItem = (
         type: 'image',
         style: {
           image: canvas,
-          x: coordSys.x,
-          y: coordSys.y,
-          opacity: 0.5,
+          x: coordSys.x * dpr,
+          y: coordSys.y * dpr,
+          opacity,
         },
+        silent: true,
+        scaleX: 1 / dpr,
+        scaleY: 1 / dpr,
       });
     }
   }
@@ -257,6 +301,13 @@ const renderItem = (
     children,
   } as CustomRootElementOption;
 };
+
+function createCanvas(width, height) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  return canvas;
+}
 
 function drawRoundedRect(
   ctx: CanvasRenderingContext2D,

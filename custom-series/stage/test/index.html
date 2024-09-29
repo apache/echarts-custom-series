@@ -14,9 +14,7 @@
     <script src="../dist/index.js"></script>
     <script>
         echarts.use(window.stageCustomSeriesInstaller);
-        const chart = echarts.init(document.getElementById('main'), null, {
-            renderer: 'svg'
-        });
+        const chart = echarts.init(document.getElementById('main'));
 
         const data = [
             [new Date('2024-09-07 06:12'), new Date('2024-09-07 06:12'), 'Awake'],
@@ -35,14 +33,16 @@
             [new Date('2024-09-07 06:18'), new Date('2024-09-07 07:37'), 'Core'],
             [new Date('2024-09-07 07:56'), new Date('2024-09-07 08:56'), 'Core'],
             [new Date('2024-09-07 09:00'), new Date('2024-09-07 09:08'), 'Core'],
-            [new Date('2024-09-07 09:29'), new Date('2024-09-07 10:01'), 'Core'],
+            [new Date('2024-09-07 09:29'), new Date('2024-09-07 10:41'), 'Core'],
             [new Date('2024-09-07 03:27'), new Date('2024-09-07 04:02'), 'Deep'],
             [new Date('2024-09-07 04:36'), new Date('2024-09-07 04:40'), 'Deep'],
             [new Date('2024-09-07 04:48'), new Date('2024-09-07 04:57'), 'Deep'],
         ];
 
         function formatTime(time) {
-            return time.getHours() + ':' + time.getMinutes();
+            const minutes = time.getMinutes();
+            const minStr = minutes < 10 ? '0' + minutes : minutes;
+            return time.getHours() + ':' + minStr;
         }
 
         option = {
@@ -61,8 +61,18 @@
                         opacity: 0.8
                     }
                 },
-                min: value => value.min - 10 * 60 * 1000,
-                max: value => value.max + 10 * 60 * 1000
+                min: value => {
+                    // Max whole hour that is no biggeer than value
+                    return Math.floor(value.min / (60 * 60 * 1000)) * 60 * 60 * 1000
+                },
+                max: value => {
+                    // Min whole hour that is no smaller than value
+                    return Math.ceil(value.max / (60 * 60 * 1000)) * 60 * 60 * 1000
+                },
+                axisLabel: {
+                    align: 'left',
+                    color: '#c6c6c6'
+                }
             },
             yAxis: {
                 type: 'category',
@@ -74,7 +84,15 @@
                     show: false
                 },
                 axisLabel: {
-                    show: false
+                    show: false,
+                    // formatter: value => {
+                    //     return {
+                    //         Deep: '深度睡眠',
+                    //         REM: '快速动眼睡眠',
+                    //         Core: '核心睡眠',
+                    //         Awake: '清醒时间'
+                    //     }
+                    // }
                 },
                 axisLine: {
                     lineStyle: {
@@ -90,6 +108,16 @@
                 renderItem: 'stage',
                 colorBy: 'data',
                 itemPayload: {
+                    axisLabel: {
+                        formatter: value => {
+                            return {
+                                Deep: '深度睡眠',
+                                REM: '快速动眼睡眠',
+                                Core: '核心睡眠',
+                                Awake: '清醒时间'
+                            }[value]
+                        }
+                    },
                     envelope: {
                     }
                 },
@@ -106,10 +134,10 @@
                 dimension: 2,
                 inRange: {
                     color: {
-                        0: '#33379D',
-                        1: '#1395F4',
-                        2: '#59C7FD',
-                        3: '#FE816E'
+                        0: '#35349D',
+                        1: '#3478F6',
+                        2: '#59AAE1',
+                        3: '#EF8872'
                     }
                 },
                 seriesIndex: 0,
