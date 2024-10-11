@@ -68,6 +68,7 @@ function thumbnail(seriesName) {
     chart.setOption(option);
   } catch (error) {
     console.error(chalk.red(error.stack));
+    console.info(chalk.blue(code));
     return;
   }
 

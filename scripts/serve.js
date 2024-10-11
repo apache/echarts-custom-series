@@ -69,7 +69,7 @@ function startServer() {
     return;
   }
 
-  const port = 8080;
+  const port = 8081;
   const serverProcess = exec(`http-server ${seriesPath} -p ${port}`);
 
   // Add file watcher
