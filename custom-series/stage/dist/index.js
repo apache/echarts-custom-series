@@ -61,6 +61,7 @@
             style: {
                 fill: color,
             },
+            z2: 10,
         });
         boxes.push(shape);
         params.context.boxes = boxes;
@@ -83,6 +84,7 @@
                     text: text,
                     verticalAlign: 'bottom',
                 },
+                z2: 20,
             });
             renderedStages[stageIndex] = true;
         }
@@ -96,32 +98,42 @@
             }
             var envelope = itemPayload.envelope || {};
             if (envelope.show !== false && boxes.length > 1) {
+                var envelopePaths = [];
                 var margin = echarts.zrUtil.retrieve2(envelope.margin, 2);
                 boxes.sort(function (a, b) { return a.x - b.x || a.y - b.y; });
-                var coordSys = params.coordSys;
-                var dpr = envelope.dpr == null ? 2 : envelope.dpr || 1;
-                var canvasWidth = coordSys.width * dpr;
-                var canvasHeight = coordSys.height * dpr;
-                var canvas = createCanvas(canvasWidth, canvasHeight);
-                var ox = coordSys.x;
-                var oy = coordSys.y;
-                var ctx = canvas.getContext('2d');
+                var envelopeFill = envelope.color || '#888';
                 if (allColors.length > 0 && !envelope.color) {
-                    var gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+                    var stops = [];
                     for (var i = 0; i < allColors.length; i++) {
-                        gradient.addColorStop((i * 2 + 1) / (allColors.length * 2), allColors[i]);
+                        stops.push({
+                            offset: (i * 2 + 1) / (allColors.length * 2),
+                            color: allColors[i],
+                        });
                     }
-                    ctx.fillStyle = gradient;
-                }
-                else {
-                    ctx.fillStyle = envelope.color || '#888';
+                    envelopeFill = {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        global: false,
+                        colorStops: stops,
+                    };
                 }
                 var opacity = echarts.zrUtil.retrieve2(envelope.opacity, 0.25);
                 for (var i = 0; i < boxes.length; i++) {
                     var box = boxes[i];
-                    drawRoundedRect(ctx, (box.x - margin - ox) * dpr, (box.y - margin - oy) * dpr, (box.width + margin * 2) * dpr, (box.height + margin * 2) * dpr, (Math.min(borderRadius, box.width / 2) + margin) * dpr);
+                    envelopePaths.push({
+                        type: 'rect',
+                        shape: {
+                            x: box.x - margin,
+                            y: box.y - margin,
+                            width: box.width + margin * 2,
+                            height: box.height + margin * 2,
+                            r: Math.min(borderRadius, box.width / 2) + margin,
+                        },
+                    });
                     if (i > 0) {
-                        ctx.beginPath();
                         var prevBox = boxes[i - 1];
                         var isPrevLower = prevBox.y > box.y + box.height;
                         var height_1 = isPrevLower
@@ -135,62 +147,73 @@
                         }
                         if (isPrevLower) {
                             if (box.x - margin - prevBox.x > 0) {
-                                var right = Math.ceil((box.x - margin - ox) * dpr);
-                                var bottom = (prevBox.y - margin - oy) * dpr;
-                                var r = Math.min((box.x - margin - prevBox.x) / 2, externalRadius) *
-                                    dpr;
-                                ctx.moveTo(right, bottom + r);
-                                ctx.arc(right - r, bottom - r, r, 0, Math.PI / 2);
-                                ctx.lineTo(right, bottom + margin * dpr);
-                                ctx.lineTo(right, bottom - r);
+                                var right = Math.ceil(box.x - margin);
+                                var bottom = prevBox.y - margin;
+                                var r = Math.min((box.x - margin - prevBox.x) / 2, externalRadius);
+                                envelopePaths.push({
+                                    type: 'path',
+                                    shape: {
+                                        pathData: "M".concat(right - r, " ").concat(bottom, "A").concat(r, " ").concat(r, " 0 0 0 ").concat(right, " ").concat(bottom - r, "L").concat(right, ",").concat(bottom + margin, "L").concat(right - r, ",").concat(bottom, "Z"),
+                                    },
+                                });
                             }
                             if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
-                                var top_1 = (box.y + box.height + margin - oy) * dpr;
-                                var left = Math.floor((prevBox.x + prevBox.width + margin - ox) * dpr);
-                                var r = Math.min((box.x + box.width - prevBox.x - prevBox.width - margin) / 2, externalRadius) * dpr;
-                                ctx.moveTo(left, top_1 + r);
-                                ctx.arc(left + r, top_1 + r, r, Math.PI, Math.PI * 1.5);
-                                ctx.lineTo(left, top_1 - margin * dpr);
-                                ctx.lineTo(left, top_1);
+                                var top_1 = box.y + box.height + margin;
+                                var left = Math.floor(prevBox.x + prevBox.width + margin);
+                                var r = Math.min((box.x + box.width - prevBox.x - prevBox.width - margin) / 2, externalRadius);
+                                envelopePaths.push({
+                                    type: 'path',
+                                    shape: {
+                                        pathData: "M".concat(left + r, " ").concat(top_1, "A").concat(r, " ").concat(r, " 0 0 0 ").concat(left, " ").concat(top_1 + r, "L").concat(left, ",").concat(top_1 - margin, "L").concat(left + r, ",").concat(top_1, "Z"),
+                                    },
+                                });
                             }
                         }
                         else {
                             if (box.x - margin - prevBox.x > 0) {
-                                var right = Math.ceil((box.x - margin - ox) * dpr);
-                                var top_2 = (prevBox.y + prevBox.height + margin - oy) * dpr;
-                                var r = Math.min((box.x - margin - prevBox.x) / 2, externalRadius) *
-                                    dpr;
-                                ctx.moveTo(right, top_2 + r);
-                                ctx.arc(right - r, top_2 + r, r, -Math.PI / 2, 0);
-                                ctx.lineTo(right, top_2 - margin * dpr);
-                                ctx.lineTo(right - r, top_2);
+                                var right = Math.ceil(box.x - margin);
+                                var top_2 = prevBox.y + prevBox.height + margin;
+                                var r = Math.min((box.x - margin - prevBox.x) / 2, externalRadius);
+                                envelopePaths.push({
+                                    type: 'path',
+                                    shape: {
+                                        pathData: "M".concat(right, " ").concat(top_2 + r, "A").concat(r, " ").concat(r, " 0 0 0 ").concat(right - r, " ").concat(top_2, "L").concat(right, ",").concat(top_2 - margin, "L").concat(right, ",").concat(top_2 + r, "Z"),
+                                    },
+                                });
                             }
                             if (box.x + box.width - prevBox.x - prevBox.width - margin > 0) {
-                                var bottom = (box.y - margin - oy) * dpr;
-                                var left = Math.floor((prevBox.x + prevBox.width + margin - ox) * dpr);
-                                var r = Math.min((box.x + box.width - prevBox.x - prevBox.width - margin) / 2, externalRadius) * dpr;
-                                ctx.moveTo(left + r, bottom);
-                                ctx.arc(left + r, bottom - r, r, Math.PI / 2, Math.PI);
-                                ctx.lineTo(left, bottom + (margin + borderRadius) * dpr);
-                                ctx.lineTo(left + r, bottom);
+                                var bottom = box.y - margin;
+                                var left = Math.floor(prevBox.x + prevBox.width + margin);
+                                var r = Math.min((box.x + box.width - prevBox.x - prevBox.width - margin) / 2, externalRadius);
+                                envelopePaths.push({
+                                    type: 'path',
+                                    shape: {
+                                        pathData: "M".concat(left, " ").concat(bottom - r, "A").concat(r, " ").concat(r, " 0 0 0 ").concat(left + r, " ").concat(bottom, "L").concat(left, ",").concat(bottom + margin, "L").concat(left, ",").concat(bottom - r, "Z"),
+                                    },
+                                });
                             }
                         }
-                        ctx.closePath();
-                        ctx.fill();
-                        ctx.fillRect((prevBox.x + prevBox.width + margin - ox) * dpr, (y - oy) * dpr, (box.x - prevBox.x - prevBox.width - margin * 2) * dpr, height_1 * dpr);
+                        envelopePaths.push({
+                            type: 'rect',
+                            shape: {
+                                x: prevBox.x + prevBox.width + margin,
+                                y: y + height_1,
+                                width: box.x - prevBox.x - prevBox.width - margin * 2,
+                                height: -height_1,
+                            },
+                        });
                     }
                 }
                 children.push({
-                    type: 'image',
+                    type: 'compoundPath',
+                    shape: {
+                        paths: envelopePaths,
+                    },
                     style: {
-                        image: canvas,
-                        x: coordSys.x * dpr,
-                        y: coordSys.y * dpr,
+                        fill: envelopeFill,
                         opacity: opacity,
                     },
                     silent: true,
-                    scaleX: 1 / dpr,
-                    scaleY: 1 / dpr,
                 });
             }
         }
@@ -199,26 +222,6 @@
             children: children,
         };
     };
-    function createCanvas(width, height) {
-        var canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        return canvas;
-    }
-    function drawRoundedRect(ctx, x, y, width, height, radius) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.arc(x + width - radius, y + radius, radius, -Math.PI / 2, 0, false);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.arc(x + width - radius, y + height - radius, radius, 0, Math.PI / 2, false);
-        ctx.lineTo(x + radius, y + height);
-        ctx.arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI, false);
-        ctx.lineTo(x, y + radius);
-        ctx.arc(x + radius, y + radius, radius, Math.PI, Math.PI * 1.5, false);
-        ctx.closePath();
-        ctx.fill();
-    }
     var index = {
         install: function (registers) {
             registers.registerCustomSeries('stage', renderItem);

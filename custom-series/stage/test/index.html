@@ -84,15 +84,7 @@
                     show: false
                 },
                 axisLabel: {
-                    show: false,
-                    // formatter: value => {
-                    //     return {
-                    //         Deep: '深度睡眠',
-                    //         REM: '快速动眼睡眠',
-                    //         Core: '核心睡眠',
-                    //         Awake: '清醒时间'
-                    //     }
-                    // }
+                    show: false
                 },
                 axisLine: {
                     lineStyle: {
@@ -108,16 +100,16 @@
                 renderItem: 'stage',
                 colorBy: 'data',
                 itemPayload: {
-                    axisLabel: {
-                        formatter: value => {
-                            return {
-                                Deep: '深度睡眠',
-                                REM: '快速动眼睡眠',
-                                Core: '核心睡眠',
-                                Awake: '清醒时间'
-                            }[value]
-                        }
-                    },
+                    // axisLabel: {
+                    //     formatter: value => {
+                    //         return {
+                    //             Deep: '深度睡眠',
+                    //             REM: '快速动眼睡眠',
+                    //             Core: '核心睡眠',
+                    //             Awake: '清醒时间'
+                    //         }[value]
+                    //     }
+                    // },
                     envelope: {
                     }
                 },
