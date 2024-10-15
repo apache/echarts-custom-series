@@ -24,6 +24,7 @@ import type {
   CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
+import type { Path } from 'echarts/src/util/graphic.ts';
 
 interface Envelope {
   show?: boolean;
@@ -154,7 +155,7 @@ const renderItem = (
 
     const envelope: Envelope = itemPayload.envelope || {};
     if (envelope.show !== false && boxes.length > 1) {
-      const envelopePaths: CustomElementOption[] = [];
+      const envelopePaths: Path[] = [];
       const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 2);
 
       // Sort boxes by x, then by y
