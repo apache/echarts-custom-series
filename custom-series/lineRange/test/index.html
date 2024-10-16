@@ -36,18 +36,34 @@
             tooltip: {
                 show: true
             },
-            series: {
+            legend: {
+                top: 15
+            },
+            series: [{
                 type: 'custom',
+                name: 'line',
                 renderItem: 'lineRange',
                 data,
                 itemPayload: {
+                    areaStyle: {
+                    },
+                    // lineStyle: {
+                    //     width: 2
+                    // }
                 },
                 encode: {
                     x: 0,
                     y: [1, 2],
                     tooltip: [1, 2]
                 }
-            }
+            }, {
+                type: 'line',
+                name: 'line', // To use the same color as custom series
+                data: data.map(function (item) {
+                    const ratio = Math.random() * 0.5 + 0.25;
+                    return item[1] * ratio + item[2] * (1 - ratio);
+                }),
+            }]
         };
 
         chart.setOption(option);
