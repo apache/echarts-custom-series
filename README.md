@@ -4,9 +4,10 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 ## List of Custom Series
 
-| [barRange](custom-series/barRange) <br> ![barRange](screenshots/barRange.svg) | [violin](custom-series/violin) <br> ![violin](screenshots/violin.svg) |
-| ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [stage](custom-series/stage) <br> ![stage](screenshots/stage.svg)             |                                                                       |
+| | |
+|-|-|
+| [violin](custom-series/violin) <br> ![violin](screenshots/violin.svg) | [stage](custom-series/stage) <br> ![stage](screenshots/stage.svg) |                                                                       |
+| [barRange](custom-series/barRange) <br> ![barRange](screenshots/barRange.svg) | [lineRange](custom-series/lineRange) <br> ![lineRange](screenshots/lineRange.svg) |
 
 ## Setup
 

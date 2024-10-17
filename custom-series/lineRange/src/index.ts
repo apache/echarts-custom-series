@@ -63,20 +63,25 @@ const renderItem = (
   const cnt = params.dataInsideLength;
   if (params.dataIndex === cnt - 1) {
     const itemPayload = params.itemPayload as LineRangeItemPayload;
+    const isHorizontal = params.encode.x.length === 1;
+    const startDim = isHorizontal ? params.encode.y[0] : params.encode.x[0];
+    const endDim = isHorizontal ? params.encode.y[1] : params.encode.x[1];
 
     const points: number[][] = [];
     let pathDataStart: string = '';
     let pathDataEnd: string = '';
     for (let i = 0; i < cnt; i++) {
-      const startValue = api.value(1, i);
-      const startCoord = api.coord([i, startValue]);
+      const startValue = api.value(startDim, i);
+      const startCoord = api.coord(
+        isHorizontal ? [i, startValue] : [startValue, i]
+      );
       points.push(startCoord);
       pathDataStart +=
         (i === 0 ? 'M' : 'L') + startCoord[0] + ',' + startCoord[1] + ' ';
     }
     for (let i = cnt - 1; i >= 0; i--) {
-      const endValue = api.value(2, i);
-      const endCoord = api.coord([i, endValue]);
+      const endValue = api.value(endDim, i);
+      const endCoord = api.coord(isHorizontal ? [i, endValue] : [endValue, i]);
       points.push(endCoord);
       pathDataEnd +=
         (i === cnt - 1 ? 'M' : 'L') + endCoord[0] + ',' + endCoord[1] + ' ';
@@ -92,6 +97,10 @@ const renderItem = (
         style: {
           fill: areaStyle.color || api.visual('color'),
           opacity: zrUtil.retrieve2(areaStyle.opacity, 0.2),
+          shadowBlur: areaStyle.shadowBlur,
+          shadowColor: areaStyle.shadowColor,
+          shadowOffsetX: areaStyle.shadowOffsetX,
+          shadowOffsetY: areaStyle.shadowOffsetY,
         },
         silent: true,
       } as Polygon);

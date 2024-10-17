@@ -1,19 +1,19 @@
 <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" viewBox="0 0 600 400">
 <rect width="600" height="400" x="0" y="0" fill="#fff"></rect>
-<path d="M60 330.5L540 330.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60 262.5L540 262.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60 195.5L540 195.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60 127.5L540 127.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60 60.5L540 60.5" fill="transparent" stroke="#E0E6F1" class="zr0-cls-0"></path>
-<path d="M60 330.5L540 330.5" fill="transparent" stroke="#6E7079" stroke-linecap="round" class="zr0-cls-0"></path>
-<path d="M60.5 330L60.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M128.5 330L128.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M197.5 330L197.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M265.5 330L265.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M334.5 330L334.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M403.5 330L403.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M471.5 330L471.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
-<path d="M540.5 330L540.5 335" fill="transparent" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M60 330.5L540 330.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr0-cls-0"></path>
+<path d="M60 262.5L540 262.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr0-cls-0"></path>
+<path d="M60 195.5L540 195.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr0-cls-0"></path>
+<path d="M60 127.5L540 127.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr0-cls-0"></path>
+<path d="M60 60.5L540 60.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr0-cls-0"></path>
+<path d="M60 330.5L540 330.5" fill="none" pointer-events="visible" stroke="#6E7079" stroke-linecap="round" class="zr0-cls-0"></path>
+<path d="M60.5 330L60.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M128.5 330L128.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M197.5 330L197.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M265.5 330L265.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M334.5 330L334.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M403.5 330L403.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M471.5 330L471.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
+<path d="M540.5 330L540.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr0-cls-0"></path>
 <text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 330)" fill="#6E7079">0</text>
 <text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 262.5)" fill="#6E7079">10</text>
 <text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 195)" fill="#6E7079">20</text>

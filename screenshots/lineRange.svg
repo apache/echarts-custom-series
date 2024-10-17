@@ -1,0 +1,84 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" viewBox="0 0 600 400">
+<rect width="600" height="400" x="0" y="0" fill="#fff"></rect>
+<path d="M60 330.5L540 330.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr1-cls-2"></path>
+<path d="M60 262.5L540 262.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr1-cls-2"></path>
+<path d="M60 195.5L540 195.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr1-cls-2"></path>
+<path d="M60 127.5L540 127.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr1-cls-2"></path>
+<path d="M60 60.5L540 60.5" fill="none" pointer-events="visible" stroke="#E0E6F1" class="zr1-cls-2"></path>
+<path d="M60 330.5L540 330.5" fill="none" pointer-events="visible" stroke="#6E7079" stroke-linecap="round" class="zr1-cls-2"></path>
+<path d="M60.5 330L60.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M128.5 330L128.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M197.5 330L197.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M265.5 330L265.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M334.5 330L334.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M403.5 330L403.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M471.5 330L471.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<path d="M540.5 330L540.5 335" fill="none" pointer-events="visible" stroke="#6E7079" class="zr1-cls-2"></path>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 330)" fill="#6E7079">0</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 262.5)" fill="#6E7079">10</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 195)" fill="#6E7079">20</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 127.5)" fill="#6E7079">30</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(52 60)" fill="#6E7079">40</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(94.2857 338)" fill="#6E7079">Sun</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(162.8571 338)" fill="#6E7079">Mon</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(231.4286 338)" fill="#6E7079">Tue</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(300 338)" fill="#6E7079">Wed</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(368.5714 338)" fill="#6E7079">Thu</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(437.1429 338)" fill="#6E7079">Fri</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(505.7143 338)" fill="#6E7079">Sat</text>
+<polygon points="94.3 149.8 162.9 159.2 231.4 164 300 149.1 368.6 153.2 437.1 161.9 505.7 159.2 505.7 107.9 437.1 118.1 368.6 106.6 300 88.4 231.4 109.3 162.9 111.3 94.3 110.6" fill="#5470c6" fill-opacity="0.2" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" ecmeta_silent="true" class="zr1-cls-2"></polygon>
+<path d="M94.3 149.8L162.9 159.2L231.4 163.9L300 149.1L368.6 153.1L437.1 161.9L505.7 159.2" fill="none" pointer-events="visible" stroke="#5470c6" stroke-width="0" stroke-linecap="butt" stroke-miterlimit="10" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" ecmeta_silent="true" class="zr1-cls-2"></path>
+<path d="M505.7 107.9L437.1 118.1L368.6 106.6L300 88.3L231.4 109.3L162.9 111.3L94.3 110.6" fill="none" pointer-events="visible" stroke="#5470c6" stroke-width="0" stroke-linecap="butt" stroke-miterlimit="10" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" ecmeta_silent="true" class="zr1-cls-2"></path>
+<g clip-path="url(#zr1-c0)">
+<path d="M94.3 131.3L162.9 146.4L231.4 130.8L300 133L368.6 123.8L437.1 138.2L505.7 132.5" fill="none" pointer-events="visible" stroke="#5470c6" stroke-width="2" stroke-linejoin="bevel" class="zr1-cls-5"></path>
+</g>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,94.2857,131.3106)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,162.8571,146.4212)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,231.4286,130.7965)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="2" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,300,133.0354)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="3" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,368.5714,123.7732)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="4" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,437.1429,138.1992)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="5" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M1 0A1 1 0 1 1 1 -0.1A1 1 0 0 1 1 0" transform="matrix(2,0,0,2,505.7143,132.5082)" fill="#fff" stroke="#5470c6" ecmeta_series_index="1" ecmeta_data_index="6" ecmeta_ssr_type="chart" class="zr1-cls-6"></path>
+<path d="M-5 -5l58.7 0l0 24l-58.7 0Z" transform="translate(275.64 20)" fill="rgb(0,0,0)" fill-opacity="0" stroke="#ccc" stroke-width="0" class="zr1-cls-2"></path>
+<path d="M3.5 0L21.5 0A3.5 3.5 0 0 1 25 3.5L25 10.5A3.5 3.5 0 0 1 21.5 14L3.5 14A3.5 3.5 0 0 1 0 10.5L0 3.5A3.5 3.5 0 0 1 3.5 0" transform="translate(275.64 20)" fill="#5470c6" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="legend" ecmeta_silent="true" class="zr1-cls-2"></path>
+<text dominant-baseline="central" text-anchor="start" style="font-size:12px;font-family:sans-serif;" x="30" y="7" transform="translate(275.64 20)" fill="#333">line</text>
+<path d="M0 0l48.7 0l0 14l-48.7 0Z" transform="translate(275.64 20)" fill="none" pointer-events="visible" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="legend" class="zr1-cls-7"></path>
+<defs >
+<clipPath id="zr1-c0">
+<path d="M59 59l482 0l0 272l-482 0Z" fill="#000" class="zr1-cls-3 zr1-cls-4"></path>
+</clipPath>
+</defs>
+<style ><![CDATA[
+.zr1-cls-2:hover {
+pointer-events:none;
+}
+.zr1-cls-3 {
+animation:zr1-ani-0 1s linear both;
+}
+.zr1-cls-4:hover {
+cursor:pointer;
+fill:rgba(0,0,0,1);
+}
+.zr1-cls-5:hover {
+cursor:pointer;
+}
+.zr1-cls-6:hover {
+cursor:pointer;
+fill:rgba(255,255,255,1);
+}
+.zr1-cls-7:hover {
+cursor:pointer;
+fill:rgba(0,0,0,0);
+}
+@keyframes zr1-ani-0 {
+0% {
+d:path("M59 59l0 0l0 272l0 0Z");
+}
+100% {
+d:path("M59 59l482 0l0 272l-482 0Z");
+}
+}
+]]>
+
+</style>
+</svg>
