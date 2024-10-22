@@ -17,10 +17,10 @@
 * under the License.
 */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lineRangeCustomSeriesInstaller = factory());
-})(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('echarts')) :
+    typeof define === 'function' && define.amd ? define(['echarts'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lineRangeCustomSeriesInstaller = factory(global.echarts));
+})(this, (function (echarts) { 'use strict';
 
     var renderItem = function (params, api) {
         var group = {
@@ -29,27 +29,77 @@
         };
         var cnt = params.dataInsideLength;
         if (params.dataIndex === cnt - 1) {
+            var itemPayload = params.itemPayload;
+            var isHorizontal = params.encode.x.length === 1;
+            var startDim = isHorizontal ? params.encode.y[0] : params.encode.x[0];
+            var endDim = isHorizontal ? params.encode.y[1] : params.encode.x[1];
             var points = [];
+            var pathDataStart = '';
+            var pathDataEnd = '';
             for (var i = 0; i < cnt; i++) {
-                var startValue = api.value(1, i);
-                var startCoord = api.coord([i, startValue]);
+                var startValue = api.value(startDim, i);
+                var startCoord = api.coord(isHorizontal ? [i, startValue] : [startValue, i]);
                 points.push(startCoord);
+                pathDataStart +=
+                    (i === 0 ? 'M' : 'L') + startCoord[0] + ',' + startCoord[1] + ' ';
             }
             for (var i = cnt - 1; i >= 0; i--) {
-                var endValue = api.value(2, i);
-                var endCoord = api.coord([i, endValue]);
+                var endValue = api.value(endDim, i);
+                var endCoord = api.coord(isHorizontal ? [i, endValue] : [endValue, i]);
                 points.push(endCoord);
+                pathDataEnd +=
+                    (i === cnt - 1 ? 'M' : 'L') + endCoord[0] + ',' + endCoord[1] + ' ';
             }
-            var polygon = {
-                type: 'polygon',
-                shape: {
-                    points: points,
-                },
-                style: {
-                    fill: api.visual('color'),
-                },
+            if (itemPayload.areaStyle) {
+                var areaStyle = itemPayload.areaStyle;
+                group.children.push({
+                    type: 'polygon',
+                    shape: {
+                        points: points,
+                    },
+                    style: {
+                        fill: areaStyle.color || api.visual('color'),
+                        opacity: echarts.zrUtil.retrieve2(areaStyle.opacity, 0.2),
+                        shadowBlur: areaStyle.shadowBlur,
+                        shadowColor: areaStyle.shadowColor,
+                        shadowOffsetX: areaStyle.shadowOffsetX,
+                        shadowOffsetY: areaStyle.shadowOffsetY,
+                    },
+                    silent: true,
+                });
+            }
+            var lineStyle = itemPayload.lineStyle || {};
+            var polylineStyle = {
+                fill: 'none',
+                stroke: lineStyle.color || api.visual('color'),
+                lineWidth: echarts.zrUtil.retrieve2(lineStyle.width, 0),
+                opacity: echarts.zrUtil.retrieve2(lineStyle.opacity, 1),
+                type: lineStyle.type,
+                dashOffset: lineStyle.dashOffset,
+                lineCap: lineStyle.cap,
+                lineJoin: lineStyle.join,
+                miterLimit: lineStyle.miterLimit,
+                shadowBlur: lineStyle.shadowBlur,
+                shadowColor: lineStyle.shadowColor,
+                shadowOffsetX: lineStyle.shadowOffsetX,
+                shadowOffsetY: lineStyle.shadowOffsetY,
             };
-            group.children.push(polygon);
+            group.children.push({
+                type: 'path',
+                shape: {
+                    pathData: pathDataStart,
+                },
+                style: polylineStyle,
+                silent: true,
+            });
+            group.children.push({
+                type: 'path',
+                shape: {
+                    pathData: pathDataEnd,
+                },
+                style: polylineStyle,
+                silent: true,
+            });
         }
         return group;
     };
