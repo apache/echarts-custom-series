@@ -21,6 +21,16 @@ const fs = require('fs');
 const path = require('path');
 const echarts = require('echarts');
 const chalk = require('chalk');
+const seedrandom = require('seedrandom');
+
+/** Use seed to make sure each time data is the same when making thumbnails */
+let myRandom = new seedrandom('echarts-random');
+// Fixed random generator
+Math.random = function () {
+  const val = myRandom();
+  return val;
+};
+
 /**
  * Generate a thumbnail for the custom series using SVG SSR.
  */

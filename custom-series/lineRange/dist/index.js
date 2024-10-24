@@ -65,7 +65,7 @@
                         shadowOffsetX: areaStyle.shadowOffsetX,
                         shadowOffsetY: areaStyle.shadowOffsetY,
                     },
-                    silent: true,
+                    disableTooltip: true,
                 });
             }
             var lineStyle = itemPayload.lineStyle || {};
@@ -90,7 +90,7 @@
                     pathData: pathDataStart,
                 },
                 style: polylineStyle,
-                silent: true,
+                disableTooltip: true,
             });
             group.children.push({
                 type: 'path',
@@ -98,7 +98,7 @@
                     pathData: pathDataEnd,
                 },
                 style: polylineStyle,
-                silent: true,
+                disableTooltip: true,
             });
         }
         return group;
