@@ -102,7 +102,7 @@ const renderItem = (
           shadowOffsetX: areaStyle.shadowOffsetX,
           shadowOffsetY: areaStyle.shadowOffsetY,
         },
-        silent: true,
+        disableTooltip: true,
       } as Polygon);
     }
 
@@ -128,7 +128,7 @@ const renderItem = (
         pathData: pathDataStart,
       },
       style: polylineStyle,
-      silent: true,
+      disableTooltip: true,
     } as Polyline);
     group.children.push({
       type: 'path',
@@ -136,7 +136,7 @@ const renderItem = (
         pathData: pathDataEnd,
       },
       style: polylineStyle,
-      silent: true,
+      disableTooltip: true,
     } as Polyline);
   }
   return group;
