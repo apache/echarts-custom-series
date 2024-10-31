@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache ECharts Custom Series Test</title>
+</head>
+
+<body>
+    <div id="main" style="width: 1000px;height:400px;border:1px solid #ccc"></div>
+
+    <script src="../node_modules/echarts/dist/echarts.js"></script>
+    <script src="../node_modules/d3/dist/d3.js"></script>
+    <script src="../node_modules/d3-contour/dist/d3-contour.js"></script>
+
+    <script src="../dist/index.js"></script>
+    <script>
+        echarts.use(window.contourCustomSeriesInstaller);
+        const chart = echarts.init(document.getElementById('main'));
+
+        const data = [];
+        const cnt = 300;
+        for (let i = 0; i < cnt; i++) {
+            data.push([
+                (Math.sin(i / cnt * Math.PI * 2) + Math.random() * 0.2 - 0.4) * 100 * Math.random(),
+                (Math.cos(i / cnt * Math.PI * 2) + Math.random() * 0.2 - 0.4) * 100 * Math.random(),
+                Math.random() * 10000
+            ]);
+        }
+
+        option = {
+            xAxis: {},
+            yAxis: {},
+            series: [{
+                type: 'custom',
+                renderItem: 'contour',
+                data,
+                itemPayload: {
+                    itemStyle: {
+                        color: ['#5470c6', '#91cc75', '#fac858', '#ee6666']
+                    },
+                    lineStyle: {
+                        opacity: 0.5
+                    },
+                    bandwidth: 30
+                },
+                encode: {
+                    x: 0,
+                    y: 1,
+                    tooltip: 2
+                },
+                name: 'data'
+            }, {
+                type: 'scatter',
+                data,
+                name: 'data'
+            }],
+            visualMap: {
+                seriesIndex: 1,
+                min: 0,
+                max: 10000,
+                inRange: {
+                    symbolSize: [3, 5]
+                },
+                show: false
+            }
+        };
+
+        chart.setOption(option);
+    </script>
+</body>
+
+</html>
