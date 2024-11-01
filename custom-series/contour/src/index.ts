@@ -30,7 +30,7 @@ type ContourItemPayload = {
   thresholds?: number;
   bandwidth?: number;
   itemStyle?: {
-    color?: string[];
+    color?: string[] | 'none';
     opacity?: number | number[];
   };
   lineStyle?: {
@@ -124,38 +124,43 @@ const renderItem = (
 
     const children: CustomElementOption[] = [];
     paths.forEach((path, index) => {
-      const fill = blendColors(colors, thresholds, index);
-      // fill shape
-      children.push({
-        type: 'path',
-        shape: {
-          pathData: path,
-        },
-        style: {
-          fill,
-          opacity:
-            itemOpacity[0] +
-            (itemOpacity[1] - itemOpacity[0]) * (index / (paths.length - 1)),
-        },
-        z2: -1,
-        disableTooltip: true,
-      } as CustomElementOption);
+      const fill =
+        colors === 'none' ? 'none' : blendColors(colors, thresholds, index);
+      if (colors !== 'none') {
+        // fill shape
+        children.push({
+          type: 'path',
+          shape: {
+            pathData: path,
+          },
+          style: {
+            fill,
+            opacity:
+              itemOpacity[0] +
+              (itemOpacity[1] - itemOpacity[0]) * (index / (paths.length - 1)),
+          },
+          z2: -1,
+          disableTooltip: true,
+        } as CustomElementOption);
+      }
 
       // stroke shape (due to stroke opacity)
-      children.push({
-        type: 'path',
-        shape: {
-          pathData: path,
-        },
-        style: {
-          fill: 'none',
-          stroke: zrUtil.retrieve2(stroke, fill),
-          lineWidth,
-          opacity: zrUtil.retrieve2(lineStyle.opacity, 1),
-        },
-        z2: -1,
-        disableTooltip: true,
-      } as CustomElementOption);
+      if (stroke !== 'none' && (stroke != null || colors !== 'none')) {
+        children.push({
+          type: 'path',
+          shape: {
+            pathData: path,
+          },
+          style: {
+            fill: 'none',
+            stroke: zrUtil.retrieve2(stroke, fill),
+            lineWidth,
+            opacity: zrUtil.retrieve2(lineStyle.opacity, 1),
+          },
+          z2: -1,
+          disableTooltip: true,
+        } as CustomElementOption);
+      }
     });
 
     return {

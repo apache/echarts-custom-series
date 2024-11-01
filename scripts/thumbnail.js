@@ -34,7 +34,7 @@ Math.random = function () {
 /**
  * Generate a thumbnail for the custom series using SVG SSR.
  */
-function thumbnail(seriesName) {
+async function thumbnail(seriesName) {
   const seriesPath = path.join(__dirname, '..', 'custom-series', seriesName);
   const testPath = path.join(seriesPath, 'test', 'index.html');
   const outputPath = path.join('./screenshots', `${seriesName}.svg`);
@@ -72,6 +72,14 @@ function thumbnail(seriesName) {
 
   // Run the code
   try {
+    // Load d3 and d3-contour using dynamic import
+    const d3 = await import('d3');
+    const d3Contour = await import('d3-contour');
+
+    // Assign d3 and d3Contour to the global object
+    globalThis.d3 = d3;
+    globalThis.d3Contour = d3Contour;
+
     eval(code);
     // To make sure text is readable in dark mode
     option.backgroundColor = '#fff';
