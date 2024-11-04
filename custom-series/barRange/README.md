@@ -54,7 +54,7 @@ The `itemPayload` is an object that contains the following properties:
 
 | Property       | Type     | Default | Description                               |
 | -------------- | -------- | ------- | ----------------------------------------- | --------------------- |
-| `barWidth`     | `number  | string` | `70%`                                     | The width of the bar. |
+| `barWidth`     | `number`  | string` | `70%`                                     | The width of the bar. |
 | `borderRadius` | `number` | `0`     | The border radius of the bar.             |
 | `margin`       | `number` | `10`    | The margin between the bars and the text. |
 

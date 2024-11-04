@@ -49,3 +49,17 @@ The `itemPayload` is an object that contains the following properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
+
+### series.encode
+
+To make sure the value axis and tooltip take the correct range, `encode` should be set as follows:
+
+```js
+encode: {
+    x: 0,
+    y: 1,
+    tooltip: 2
+}
+```
+
+See [test](./test/index.html) for more details.
