@@ -24,10 +24,20 @@ import type {
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
 
+type $CUSTOM_SERIES_PASCAL_NAME$ItemPayload = {
+
+};
+
 const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
   api: echarts.CustomSeriesRenderItemAPI
 ) => {
+  const itemPayload = params.itemPayload as $CUSTOM_SERIES_PASCAL_NAME$ItemPayload;
+
+  const cnt = params.dataInsideLength;
+  if (params.dataIndex === cnt - 1) {
+  }
+
   return {
     type: 'group',
     children: [],

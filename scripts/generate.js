@@ -80,6 +80,8 @@ function replaceCustomSeriesName(filePath, name, kebabCaseName) {
       /\$CUSTOM_SERIES_KEBAB_NAME\$/g,
       kebabCaseName
     );
+    const pascalCase = name.charAt(0).toUpperCase() + name.slice(1);
+    newContent = newContent.replace(/\$CUSTOM_SERIES_PASCAL_NAME\$/g, pascalCase);
     fs.writeFileSync(filePath, newContent);
   }
 }
