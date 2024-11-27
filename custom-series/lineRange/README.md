@@ -84,7 +84,7 @@ The `itemPayload` is an object that contains the following properties:
 | `lineStyle.type` | `string` | 'solid' | The type of the lines. |
 | `lineStyle.dashOffset` | `number` | 0 | The dashOffset of the lines. |
 | `lineStyle.cap` | `'butt' \| 'round' \| 'square'` | 'butt' | The cap of the lines. |
-| `lineStyle.join` | `'bevel' \| 'round' \| 'miter'` | 'bevel'` | The join of the lines. |
+| `lineStyle.join` | `'bevel' \| 'round' \| 'miter'` | 'bevel' | The join of the lines. |
 | `lineStyle.miterLimit` | `number` | 10 | The miterLimit of the lines. |
 | `lineStyle.shadowBlur` | `number` | 0 | The shadowBlur of the lines. |
 | `lineStyle.shadowColor` | `string` | null | The shadowColor of the lines. |
