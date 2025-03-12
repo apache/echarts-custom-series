@@ -1,0 +1,18 @@
+{
+  "name": "@echarts/custom-segmented-doughnut",
+  "version": "0.0.1-beta.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "echarts": "github:apache/echarts#v6"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

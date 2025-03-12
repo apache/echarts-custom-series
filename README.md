@@ -19,9 +19,16 @@ npm install
 Note: Building requires the lib files of ECharts v6. So before ECharts v6 is released, you need to clone `apache/echarts` locally and use `npm link` to link it.
 
 ```bash
+# Under the directory of zrender
+git checkout v6
+npm install
+npm run prepare
+npm link
+
 # Under the directory of echarts
 git checkout v6
 npm install
+npm link zrender
 npm link
 npm run prepare
 npm run build
