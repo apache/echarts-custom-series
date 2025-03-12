@@ -80,7 +80,7 @@ const renderItem = (
 
   const violin = violins[xValue];
   let violinPath: CustomRootElementOption | null = null;
-  if (violin && violin.firstDataIndex === params.dataIndex) {
+  if (violin && violin.firstDataIndex === params.dataIndexInside) {
     const kde = kernelDensityEstimator(epanechnikovKernel, 1, violin.data);
     const binCount = (params.itemPayload.binCount as number) || 100;
     const xRange: number[] = [];
