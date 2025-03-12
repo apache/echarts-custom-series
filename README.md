@@ -7,7 +7,7 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 | | |
 |-|-|
 | [violin](custom-series/violin) <br> ![violin](screenshots/violin.svg) | [contour](custom-series/contour) <br> ![contour](screenshots/contour.svg) |
-| [stage](custom-series/stage) <br> ![stage](screenshots/stage.svg) |
+| [stage](custom-series/stage) <br> ![stage](screenshots/stage.svg) | [segmentedDoughnut](custom-series/segmentedDoughnut) <br> ![segmentedDoughnut](screenshots/segmentedDoughnut.svg) |
 | [barRange](custom-series/barRange) <br> ![barRange](screenshots/barRange.svg) | [lineRange](custom-series/lineRange) <br> ![lineRange](screenshots/lineRange.svg) |
 
 ## Setup
