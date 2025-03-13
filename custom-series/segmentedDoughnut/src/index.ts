@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import echarts, { zrUtil, number } from 'echarts';
+import echarts, { zrUtil, number, format } from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
@@ -31,6 +31,7 @@ type SegmentedDoughnutItemPayload = {
   segmentCount?: number;
   padAngle?: number;
   backgroundStyle?: {
+    show?: boolean;
     color?: string;
     borderColor?: string;
     borderWidth?: number;
@@ -40,6 +41,12 @@ type SegmentedDoughnutItemPayload = {
     shadowColor?: string;
     shadowOffsetX?: number;
     shadowOffsetY?: number;
+  },
+  label?: {
+    show?: boolean;
+    color?: string;
+    formatter?: string;
+    fontSize?: number;
   }
 };
 
@@ -47,15 +54,10 @@ const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
   api: echarts.CustomSeriesRenderItemAPI
 ) => {
+  const group = [] as CustomElementOption[];
   const itemPayload = params.itemPayload as SegmentedDoughnutItemPayload;
-
-  const cnt = params.dataInsideLength;
-  if (params.dataIndex === cnt - 1) {
-  }
-  console.log(params, itemPayload);
-
   const segmentCount = Math.max(1, itemPayload.segmentCount || 1);
-  const value = Math.min(segmentCount, api.value(0) as number || 0);
+  const value = Math.max(0, api.value(0) as number || 0);
 
   const center = itemPayload.center || ['50%', '50%'];
   const radius = itemPayload.radius || ['50%', '60%'];
@@ -76,8 +78,10 @@ const renderItem = (
   const backgroundGroup = {
     type: 'group',
     children: [] as CustomElementOption[],
-  };
+  } as CustomElementOption;
+  group.push(backgroundGroup);
   const bgStyle = itemPayload.backgroundStyle || {};
+  const showBackground = bgStyle.show !== false;
   const backgroundStyle = {
     fill: bgStyle.color || 'rgba(180, 180, 180, 0.2)',
     stroke: bgStyle.borderColor || 'none',
@@ -93,7 +97,8 @@ const renderItem = (
   const itemGroup = {
     type: 'group',
     children: [] as CustomElementOption[],
-  };
+  } as CustomElementOption;
+  group.push(itemGroup);
   const itemStyle = api.style();
   const itemStyleEmphasis = api.styleEmphasis();
 
@@ -102,21 +107,24 @@ const renderItem = (
   for (let i = 0; i < segmentCount; ++i) {
     const sAngle = startAngle + (pieceAngle + padAngle) * i;
     const eAngle = startAngle + (pieceAngle + padAngle) * i + pieceAngle;
-    backgroundGroup.children.push({
-      type: 'sector',
-      shape: {
-        cx,
-        cy,
-        r0,
-        r,
-        cornerRadius,
-        startAngle: sAngle,
-        endAngle: eAngle,
-        clockwise: true,
-      },
-      style: backgroundStyle,
-      silent: true
-    });
+
+    if (showBackground) {
+      backgroundGroup.children.push({
+        type: 'sector',
+        shape: {
+          cx,
+          cy,
+          r0,
+          r,
+          cornerRadius,
+          startAngle: sAngle,
+          endAngle: eAngle,
+          clockwise: true,
+        },
+        style: backgroundStyle,
+        silent: true
+      });
+    }
 
     if (i < value) {
       itemGroup.children.push({
@@ -137,9 +145,34 @@ const renderItem = (
     }
   }
 
+  const label = itemPayload.label;
+  let labelEl: CustomElementOption | undefined;
+  if (label && label.show) {
+    const text = format.formatTpl(label.formatter || '{c}/{b}', {
+      $vars: ['seriesName', 'b', 'c', 'd'],
+      seriesName: params.seriesName,
+      b: segmentCount,
+      c: value,
+      d: Math.round(value / segmentCount * 100) + '%'
+    });
+    labelEl = {
+      type: 'text',
+      style: {
+        text: text,
+        fontSize: label.fontSize || 12,
+        fill: label.color || '#000',
+        textAlign: 'center',
+        textVerticalAlign: 'middle',
+      },
+      x: cx,
+      y: cy,
+    }
+    group.push(labelEl);
+  }
+
   return {
     type: 'group',
-    children: [backgroundGroup, itemGroup],
+    children: group,
   } as CustomRootElementOption;
 };
 
