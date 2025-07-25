@@ -14,7 +14,7 @@
     <script src="../dist/index.js"></script>
     <script>
         echarts.use(window.violinCustomSeriesInstaller);
-        const chart = echarts.init(document.getElementById('main'));
+        const chart = echarts.init(document.getElementById('main'), null, { renderer: 'svg' });
 
         const xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         const dataSource = [['Day', 'value']];
@@ -27,27 +27,41 @@
         }
 
         option = {
+            animation: 0,
             tooltip: {
                 show: true
             },
             xAxis: {
-                data: xData
+                type: 'category',
+                data: xData,
+                jitter: 100,
+                jitterOverlap: false
             },
             yAxis: {},
             dataset: {
                 source: dataSource
             },
-            series: {
+            series: [{
                 type: 'custom',
                 renderItem: 'violin',
                 colorBy: 'item',
+                silent: true,
                 itemPayload: {
                     symbolSize: 4,
                     areaOpacity: 0.6,
                     bandWidthScale: 1.5
                     // binCount: 20
                 }
-            }
+            }, {
+                type: 'scatter',
+                encode: {
+                    x: 0,
+                    y: 1
+                },
+                colorBy: 'item',
+                silent: true,
+                symbolSize: 6
+            }]
         };
 
         chart.setOption(option);
