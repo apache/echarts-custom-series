@@ -1,4 +1,7 @@
 notifications:
-    commits: commits@echarts.apache.org
-    pullrequests: commits@echarts.apache.org
-    issues: commits@echarts.apache.org
+  commits: commits@echarts.apache.org
+  pullrequests: commits@echarts.apache.org
+  issues: commits@echarts.apache.org
+github:
+  features:
+    issues: true
