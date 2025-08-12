@@ -33,7 +33,7 @@ const chart = echarts.init(...);
 // ...
 
 // AMD
-define(['echarts', '@echarts-x/custom-violin'], function(echarts, violinInstaller) {
+require(['echarts', '@echarts-x/custom-violin'], function(echarts, violinInstaller) {
   echarts.use(violinInstaller);
 });
 ```
@@ -47,7 +47,7 @@ npm install @echarts-x/custom-violin
 ```
 
 ```js
-import echarts from 'echarts';
+import * as echarts from 'echarts';
 import violinCustomSeriesInstaller from '@echarts-x/custom-violin/dist/index.esm.js';
 
 echarts.use(violinCustomSeriesInstaller);
