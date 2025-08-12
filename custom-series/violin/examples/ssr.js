@@ -1,14 +1,21 @@
 const echarts = require('echarts');
-const violinInstaller = require('../dist/index.cjs.js');
+const violinInstaller = require('../dist/index.js');
 
 echarts.use(violinInstaller);
 
 const chart = echarts.init(null, null, {
   renderer: 'svg',
   ssr: true,
-  width: 1000,
-  height: 400
+  width: 600,
+  height: 400,
 });
+
+// Set up seeded random for consistent thumbnails
+const seedrandom = require('seedrandom');
+const myRandom = new seedrandom('echarts-random');
+Math.random = function () {
+  return myRandom();
+};
 
 const xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const dataSource = [['Day', 'value']];
@@ -24,38 +31,41 @@ for (let i = 0; i < xData.length; ++i) {
 const option = {
   animation: false,
   tooltip: {
-    show: false
+    show: false,
   },
   xAxis: {
     type: 'category',
     data: xData,
     jitter: 100,
-    jitterOverlap: false
+    jitterOverlap: false,
   },
   yAxis: {},
   dataset: {
-    source: dataSource
+    source: dataSource,
   },
-  series: [{
-    type: 'custom',
-    renderItem: 'violin',
-    colorBy: 'item',
-    silent: true,
-    itemPayload: {
-      symbolSize: 4,
-      areaOpacity: 0.6,
-      bandWidthScale: 1.5
-    }
-  }, {
-    type: 'scatter',
-    encode: {
-      x: 0,
-      y: 1
+  series: [
+    {
+      type: 'custom',
+      renderItem: 'violin',
+      colorBy: 'item',
+      silent: true,
+      itemPayload: {
+        symbolSize: 4,
+        areaOpacity: 0.6,
+        bandWidthScale: 1.5,
+      },
     },
-    colorBy: 'item',
-    silent: true,
-    symbolSize: 6
-  }]
+    {
+      type: 'scatter',
+      encode: {
+        x: 0,
+        y: 1,
+      },
+      colorBy: 'item',
+      silent: true,
+      symbolSize: 6,
+    },
+  ],
 };
 
 chart.setOption(option);

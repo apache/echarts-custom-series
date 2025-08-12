@@ -68,7 +68,7 @@ const renderItem = (
   }
   let symbolSize = params.itemPayload.symbolSize;
   if (symbolSize == null) {
-    symbolSize = 10;
+    symbolSize = 12;
   }
   const xValue = api.value(0) as number;
   const yValue = api.value(1) as number;

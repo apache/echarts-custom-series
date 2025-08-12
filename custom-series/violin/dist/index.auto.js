@@ -17,11 +17,8 @@
 * under the License.
 */
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.violinCustomSeriesInstaller = factory());
-})(this, (function () { 'use strict';
+this.violinCustomSeriesInstaller = (function () {
+    'use strict';
 
     function epanechnikovKernel(u) {
         return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
@@ -119,4 +116,8 @@
 
     return index;
 
-}));
+})();
+// Automatically register the custom series
+if (typeof window !== 'undefined' && window.echarts) {
+  window.echarts.use(window.violinCustomSeriesInstaller);
+}
