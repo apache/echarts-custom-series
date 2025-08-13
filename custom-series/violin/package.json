@@ -1,23 +1,40 @@
 {
-  "name": "@echarts/custom-violin",
-  "version": "0.0.1-beta",
+  "name": "@echarts-x/custom-violin",
+  "version": "1.0.0",
   "description": "Custom violin series for Apache ECharts",
   "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc"
-  },
-  "keywords": [],
+  "module": "dist/index.esm.js",
+  "keywords": [
+    "echarts",
+    "apache-echarts",
+    "data-visualization",
+    "chart",
+    "dataviz"
+  ],
   "author": "",
   "license": "Apache-2.0",
-  "dependencies": {
-    "echarts": "github:apache/echarts#v6"
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/echarts-custom-series.git",
+    "directory": "custom-series/violin"
+  },
+  "scripts": {
+    "test:browser": "npx http-server test -p 8080 -o",
+    "test:ssr": "node test/ssr.js",
+    "test": "npm run test:ssr"
   },
   "devDependencies": {
+    "echarts": "^6.0.0",
     "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "echarts": "^6.0.0"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "screenshots"
   ],
   "publishConfig": {
     "access": "public"

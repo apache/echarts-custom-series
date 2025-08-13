@@ -1,37 +1,61 @@
-# violin
+# @echarts-x/custom-violin
 
 `violin` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the distribution of data using violin plots.
 
-![violin](../../screenshots/violin.svg)
+![violin](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/violin/screenshots/violin.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-violin/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.violinCustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
   // ...
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+### UMD (Universal Module Definition)
+
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const violinInstaller = require('@echarts-x/custom-violin');
+echarts.use(violinInstaller);
+const chart = echarts.init(...);
+// ...
+
+// AMD
+require(['echarts', '@echarts-x/custom-violin'], function(echarts, violinInstaller) {
+  echarts.use(violinInstaller);
+});
+```
+
+### ESM (ES Modules)
+
+For modern module bundlers or native ES module environments:
 
 ```bash
-npm install @echarts/custom-violin
+npm install @echarts-x/custom-violin
 ```
 
 ```js
-import echarts from 'echarts';
-import violinCustomSeriesInstaller from '@echarts/custom-violin';
+import * as echarts from 'echarts';
+import violinCustomSeriesInstaller from '@echarts-x/custom-violin/dist/index.esm.js';
 
 echarts.use(violinCustomSeriesInstaller);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 

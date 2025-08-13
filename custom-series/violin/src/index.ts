@@ -17,13 +17,13 @@
  * under the License.
  */
 
-import echarts from 'echarts';
+import * as echarts from 'echarts';
 import type {
   CustomPathOption,
   CustomRootElementOption,
   CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
+import type { EChartsExtensionInstallRegisters } from 'echarts/types/src/extension.js';
 
 function epanechnikovKernel(u: number) {
   return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
@@ -68,7 +68,7 @@ const renderItem = (
   }
   let symbolSize = params.itemPayload.symbolSize;
   if (symbolSize == null) {
-    symbolSize = 10;
+    symbolSize = 12;
   }
   const xValue = api.value(0) as number;
   const yValue = api.value(1) as number;
@@ -128,24 +128,7 @@ const renderItem = (
     };
   }
 
-  const scatter = {
-    type: 'circle',
-    shape: {
-      cx: coord[0],
-      cy: coord[1],
-      r: symbolSize == null ? 5 : symbolSize,
-    },
-    style: {
-      fill: api.visual('color'),
-    },
-  };
-
-  return violinPath
-    ? {
-        type: 'group',
-        children: [scatter, violinPath],
-      }
-    : scatter;
+  return violinPath;
 };
 
 export default {

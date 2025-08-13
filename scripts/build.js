@@ -106,7 +106,7 @@ function compileTypeScript(seriesPath, dirName) {
 
 function bundleWithRollup(seriesPath, dirName) {
   const rollupPath = path.join(__dirname, '../node_modules/.bin/rollup');
-  const configPath = path.join(seriesPath, 'rollup.config.js');
+  const configPath = path.join(__dirname, 'rollup.config.js'); // 使用统一的 rollup.config.js
   const distPath = path.join(seriesPath, 'dist');
 
   // Create dist directory if it doesn't exist
@@ -115,12 +115,16 @@ function bundleWithRollup(seriesPath, dirName) {
   }
 
   try {
-    const result = execSync(
-      `${rollupPath} -c ${configPath} \
-        --input ${seriesPath}/lib/index.js \
-        --file ${seriesPath}/dist/index.js \
-        --name ${dirName}CustomSeriesInstaller`,
-      { encoding: 'utf8', stdio: 'pipe' }
+    // 通过环境变量传递自定义系列名称和路径
+    const env = {
+      ...process.env,
+      CUSTOM_SERIES_NAME: dirName,
+      CUSTOM_SERIES_PATH: seriesPath
+    };
+
+    execSync(
+      `${rollupPath} -c ${configPath}`,
+      { encoding: 'utf8', stdio: 'pipe', env, cwd: seriesPath }
     );
 
     console.log(`Rollup bundling completed for ${dirName}`);
