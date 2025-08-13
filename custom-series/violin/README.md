@@ -1,8 +1,10 @@
-# violin
+# @echarts-x/custom-violin
 
 `violin` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the distribution of data using violin plots.
 
-![violin](https://raw.githubusercontent.com/apache/echarts-custom-series/dev/custom-series/violin/screenshots/violin.svg)
+![violin](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/violin/screenshots/violin.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin)
 
 ## Usage
 
@@ -53,7 +55,7 @@ import violinCustomSeriesInstaller from '@echarts-x/custom-violin/dist/index.esm
 echarts.use(violinCustomSeriesInstaller);
 ```
 
-See [test](./test) for more details.
+See [examples](./examples) for more details.
 
 ## API
 

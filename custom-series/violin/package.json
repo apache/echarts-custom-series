@@ -1,10 +1,9 @@
 {
   "name": "@echarts-x/custom-violin",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Custom violin series for Apache ECharts",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
-  "browser": "dist/index.browser.js",
   "keywords": [
     "echarts",
     "apache-echarts",
@@ -14,6 +13,12 @@
   ],
   "author": "",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/echarts-custom-series.git",
+    "directory": "custom-series/violin"
+  },
   "scripts": {
     "test:browser": "npx http-server test -p 8080 -o",
     "test:ssr": "node test/ssr.js",

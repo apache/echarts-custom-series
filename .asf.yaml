@@ -3,5 +3,12 @@ notifications:
   pullrequests: commits@echarts.apache.org
   issues: commits@echarts.apache.org
 github:
+  description: 'Apache ECharts Custom Series'
   features:
     issues: true
+  labels:
+    - chart
+    - data-visualization
+    - echarts
+    - visualization
+    - dataviz
