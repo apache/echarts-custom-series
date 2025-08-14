@@ -1,37 +1,61 @@
-# $CUSTOM_SERIES_NAME$
+# @echarts-x/custom-$CUSTOM_SERIES_NAME$
 
 `$CUSTOM_SERIES_NAME$` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
 
-![$CUSTOM_SERIES_NAME$](../../screenshots/$CUSTOM_SERIES_NAME$.svg)
+![$CUSTOM_SERIES_NAME$](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/$CUSTOM_SERIES_KEBAB_NAME$/screenshots/$CUSTOM_SERIES_NAME$.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/$CUSTOM_SERIES_NAME$)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.$CUSTOM_SERIES_NAME$CustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
   // ...
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+### UMD (Universal Module Definition)
+
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const $CUSTOM_SERIES_NAME$Installer = require('@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$');
+echarts.use($CUSTOM_SERIES_NAME$Installer);
+const chart = echarts.init(...);
+// ...
+
+// AMD
+require(['echarts', '@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$'], function(echarts, $CUSTOM_SERIES_NAME$Installer) {
+  echarts.use($CUSTOM_SERIES_NAME$Installer);
+});
+```
+
+### ESM (ES Modules)
+
+For modern module bundlers or native ES module environments:
 
 ```bash
-npm install @echarts/custom-$CUSTOM_SERIES_KEBAB_NAME$
+npm install @echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$
 ```
 
 ```js
-import echarts from 'echarts';
-import $CUSTOM_SERIES_NAME$CustomSeriesInstaller from '@echarts/custom-$CUSTOM_SERIES_KEBAB_NAME$';
+import * as echarts from 'echarts';
+import $CUSTOM_SERIES_NAME$CustomSeriesInstaller from '@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$';
 
 echarts.use($CUSTOM_SERIES_NAME$CustomSeriesInstaller);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 
@@ -61,5 +85,3 @@ encode: {
     tooltip: 2
 }
 ```
-
-See [test](./test/index.html) for more details.

@@ -69,7 +69,7 @@ function startServer() {
     return;
   }
 
-  const port = 8081;
+  const port = 8087;
   const serverProcess = exec(`http-server ${seriesPath} -p ${port}`);
 
   // Add file watcher
@@ -90,7 +90,7 @@ function startServer() {
           : process.platform === 'win32'
           ? 'start'
           : 'xdg-open';
-      const url = `http://localhost:${port}/test/index.html`;
+      const url = `http://localhost:${port}/examples/index.html`;
       exec(`${open} ${url}`, (error) => {
         if (error) {
           console.error(chalk.red(`Failed to open browser: ${error}`));

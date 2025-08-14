@@ -50,7 +50,7 @@ npm install @echarts-x/custom-violin
 
 ```js
 import * as echarts from 'echarts';
-import violinCustomSeriesInstaller from '@echarts-x/custom-violin/dist/index.esm.js';
+import violinCustomSeriesInstaller from '@echarts-x/custom-violin';
 
 echarts.use(violinCustomSeriesInstaller);
 ```

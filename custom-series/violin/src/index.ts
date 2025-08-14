@@ -23,7 +23,10 @@ import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/types/src/extension.js';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
 
 function epanechnikovKernel(u: number) {
   return Math.abs(u) <= 1 ? 0.75 * (1 - u * u) : 0;
@@ -138,4 +141,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;
