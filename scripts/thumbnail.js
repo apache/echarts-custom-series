@@ -19,85 +19,81 @@
 
 const fs = require('fs');
 const path = require('path');
-const echarts = require('echarts');
 const chalk = require('chalk');
-const seedrandom = require('seedrandom');
-
-/** Use seed to make sure each time data is the same when making thumbnails */
-let myRandom = new seedrandom('echarts-random');
-// Fixed random generator
-Math.random = function () {
-  const val = myRandom();
-  return val;
-};
 
 /**
  * Generate a thumbnail for the custom series using SVG SSR.
  */
 async function thumbnail(seriesName) {
   const seriesPath = path.join(__dirname, '..', 'custom-series', seriesName);
-  const testPath = path.join(seriesPath, 'test', 'index.html');
-  const outputPath = path.join('./screenshots', `${seriesName}.svg`);
+  const ssrPath = path.join(seriesPath, 'examples', 'ssr.js');
 
-  // Install the custom series
-  const customSeries = require(`../custom-series/${seriesName}`);
-  echarts.use(customSeries);
+  // Create screenshots directory inside the series folder
+  const screenshotsDir = path.join(seriesPath, 'screenshots');
+  if (!fs.existsSync(screenshotsDir)) {
+    fs.mkdirSync(screenshotsDir, { recursive: true });
+  }
 
-  let chart = echarts.init(null, null, {
-    renderer: 'svg',
-    ssr: true,
-    width: 600,
-    height: 400,
-  });
+  const outputPath = path.join(screenshotsDir, `${seriesName}.svg`);
 
-  // Load the js code from the content of the last <script></script>
-  // in 'test/index.html'
-  const html = fs.readFileSync(testPath, 'utf8');
-  const lastScriptStartIndex = html.lastIndexOf('<script>');
-  const lastScriptEndIndex = html.lastIndexOf('</script>');
-  const jsCode = html.substring(lastScriptStartIndex + 8, lastScriptEndIndex);
-
-  // Ignore the lines containing `echarts.use`, `echarts.init` and `.setOption`
-  // TODO: Not considered the case where there are multiple `chart.setOption`
-  // calls
-  const lines = jsCode.split('\n');
-  const code = lines
-    .filter(
-      (line) =>
-        !line.includes('echarts.use') &&
-        !line.includes('echarts.init') &&
-        !line.includes('chart.setOption')
-    )
-    .join('\n');
-
-  // Run the code
-  try {
-    // Load d3 and d3-contour using dynamic import
-    const d3 = await import('d3');
-    const d3Contour = await import('d3-contour');
-
-    // Assign d3 and d3Contour to the global object
-    globalThis.d3 = d3;
-    globalThis.d3Contour = d3Contour;
-
-    eval(code);
-    // To make sure text is readable in dark mode
-    option.backgroundColor = '#fff';
-    chart.setOption(option);
-  } catch (error) {
-    console.error(chalk.red(error.stack));
-    console.info(chalk.blue(code));
+  // Check if ssr.js exists
+  if (!fs.existsSync(ssrPath)) {
+    console.error(
+      chalk.red(`ssr.js not found for ${seriesName} at ${ssrPath}`)
+    );
     return;
   }
 
-  const svg = chart.renderToSVGString();
+  const { spawn } = require('child_process');
 
-  chart.dispose();
-  chart = null;
-  option = null;
+  try {
+    // Run the ssr.js file and capture its output
+    const child = spawn('node', [ssrPath], {
+      cwd: seriesPath,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
 
-  // Save the SVG to file
-  fs.writeFileSync(outputPath, svg);
+    let svgOutput = '';
+    let errorOutput = '';
+
+    child.stdout.on('data', (data) => {
+      svgOutput += data.toString();
+    });
+
+    child.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        console.error(
+          chalk.red(`ssr.js failed for ${seriesName} with code ${code}`)
+        );
+        if (errorOutput) {
+          console.error(chalk.red(errorOutput));
+        }
+        return;
+      }
+
+      // Extract SVG content from output (in case there are other console logs)
+      const svgMatch = svgOutput.match(/<svg[\s\S]*<\/svg>/);
+      if (!svgMatch) {
+        console.error(chalk.red(`No SVG output found for ${seriesName}`));
+        return;
+      }
+
+      const svg = svgMatch[0];
+
+      // Save the SVG to file
+      fs.writeFileSync(outputPath, svg);
+      console.log(
+        chalk.green(`Thumbnail generated for ${seriesName}: ${outputPath}`)
+      );
+    });
+  } catch (error) {
+    console.error(chalk.red(`Error running ssr.js for ${seriesName}:`));
+    console.error(chalk.red(error.stack));
+  }
 }
 
 const args = process.argv.slice(2);

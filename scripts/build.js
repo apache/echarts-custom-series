@@ -61,14 +61,16 @@ function buildCustomSeries(dirName) {
 
   compileTypeScript(seriesPath, dirName);
   bundleWithRollup(seriesPath, dirName);
-  minifyWithTerser(seriesPath, dirName);
 }
 
 function compileTypeScript(seriesPath, dirName) {
   const tscPath = path.join(__dirname, '../node_modules/.bin/tsc');
   // Remove dir of lib
   if (fs.existsSync(path.join(seriesPath, 'lib'))) {
-    fs.rmSync(path.join(seriesPath, 'lib'), { recursive: true, force: true });
+    fs.rmSync(path.join(seriesPath, 'lib'), {
+      recursive: true,
+      force: true,
+    });
   }
 
   try {
@@ -83,8 +85,6 @@ function compileTypeScript(seriesPath, dirName) {
         --sourceMap \
         --moduleResolution node \
         --esModuleInterop \
-        --declaration \
-        --declarationMap false \
         --importHelpers \
         --pretty \
         --ignoreDeprecations 5.0 \
@@ -106,7 +106,7 @@ function compileTypeScript(seriesPath, dirName) {
 
 function bundleWithRollup(seriesPath, dirName) {
   const rollupPath = path.join(__dirname, '../node_modules/.bin/rollup');
-  const configPath = path.join(__dirname, 'rollup.config.js'); // 使用统一的 rollup.config.js
+  const configPath = path.join(__dirname, 'rollup.config.js');
   const distPath = path.join(seriesPath, 'dist');
 
   // Create dist directory if it doesn't exist
@@ -119,44 +119,52 @@ function bundleWithRollup(seriesPath, dirName) {
     const env = {
       ...process.env,
       CUSTOM_SERIES_NAME: dirName,
-      CUSTOM_SERIES_PATH: seriesPath
+      CUSTOM_SERIES_PATH: seriesPath,
     };
 
-    execSync(
-      `${rollupPath} -c ${configPath}`,
-      { encoding: 'utf8', stdio: 'pipe', env, cwd: seriesPath }
-    );
+    execSync(`${rollupPath} -c ${configPath}`, {
+      encoding: 'utf8',
+      stdio: 'pipe',
+      env,
+      cwd: seriesPath,
+    });
 
-    console.log(`Rollup bundling completed for ${dirName}`);
+    console.log(`Rollup bundling and minification completed for ${dirName}`);
 
-    // Check if the output file was created
-    if (!fs.existsSync(path.join(seriesPath, 'dist', 'index.js'))) {
-      console.error(`Error: Output file not created for ${dirName}`);
+    // Create fixed type definition file in dist directory
+    const distTypesPath = path.join(seriesPath, 'dist', 'index.d.ts');
+    const fixedTypeDefinition = `// Tricky: use1 and use2 are incompatible.
+import type {use as use1} from 'echarts/core';
+import type {use as use2} from 'echarts';
+declare const _default: Parameters<typeof use1>[0] & Parameters<typeof use2>[0];
+export default _default;
+`;
+    fs.writeFileSync(distTypesPath, fixedTypeDefinition, 'utf8');
+    console.log(`Created fixed type definitions for ${dirName}`);
+
+    // Check if the output files were created
+    const expectedFiles = [
+      'index.js',
+      'index.min.js',
+      'index.auto.js',
+      'index.auto.min.js',
+      'index.esm.mjs',
+      'index.esm.min.mjs',
+      'index.d.ts',
+    ];
+
+    for (const file of expectedFiles) {
+      if (!fs.existsSync(path.join(seriesPath, 'dist', file))) {
+        console.warn(
+          chalk.yellow(`Warning: ${file} not created for ${dirName}`)
+        );
+      }
     }
   } catch (e) {
     console.error(`Error bundling custom series ${dirName}:`);
     console.error(e.message);
     if (e.stdout) console.error('Rollup stdout:', e.stdout.toString());
     if (e.stderr) console.error('Rollup stderr:', e.stderr.toString());
-  }
-}
-
-function minifyWithTerser(seriesPath, dirName) {
-  const terserPath = path.join(__dirname, '../node_modules/.bin/terser');
-  try {
-    execSync(
-      `${terserPath} ${seriesPath}/dist/index.js \
-          --compress \
-          --mangle \
-          --ecma 3 \
-          --comments all \
-          --source-map \
-          --output ${seriesPath}/dist/index.min.js`
-    );
-    console.log(`Minified custom series ${dirName} using Terser`);
-  } catch (e) {
-    console.error(`Error minifying custom series ${dirName}:`);
-    console.error(e.message);
   }
 }
 

@@ -1,0 +1,54 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" viewBox="0 0 600 400">
+<rect width="600" height="400" x="0" y="0" fill="none"></rect>
+<path d="M90 320.5L540 320.5" fill="none" pointer-events="visible" stroke="#dbdee4" class="zr0-cls-0"></path>
+<path d="M90 256.5L540 256.5" fill="none" pointer-events="visible" stroke="#dbdee4" class="zr0-cls-0"></path>
+<path d="M90 192.5L540 192.5" fill="none" pointer-events="visible" stroke="#dbdee4" class="zr0-cls-0"></path>
+<path d="M90 129.5L540 129.5" fill="none" pointer-events="visible" stroke="#dbdee4" class="zr0-cls-0"></path>
+<path d="M90 65.5L540 65.5" fill="none" pointer-events="visible" stroke="#dbdee4" class="zr0-cls-0"></path>
+<path d="M90 320.5L540 320.5" fill="none" pointer-events="visible" stroke="#54555a" stroke-linecap="round" class="zr0-cls-0"></path>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(82 320)" fill="#54555a">0</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(82 256.25)" fill="#54555a">10</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(82 192.5)" fill="#54555a">20</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(82 128.75)" fill="#54555a">30</text>
+<text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(82 65)" fill="#54555a">40</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(122.1429 328)" fill="#54555a">Sun</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(186.4286 328)" fill="#54555a">Mon</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(250.7143 328)" fill="#54555a">Tue</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(315 328)" fill="#54555a">Wed</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(379.2857 328)" fill="#54555a">Thu</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(443.5714 328)" fill="#54555a">Fri</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(507.8571 328)" fill="#54555a">Sat</text>
+<path d="M122.1 112.8A5 5 0 0 1 127.1 117.8L127.1 144.8A5 5 0 0 1 122.1 149.8A5 5 0 0 1 117.1 144.8L117.1 117.8A5 5 0 0 1 122.1 112.8" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(122.1429 102.8125)" fill="#333">32.5℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(122.1429 159.7875)" fill="#333">26.7℃</text>
+<path d="M186.4 113.5A5 5 0 0 1 191.4 118.5L191.4 153.7A5 5 0 0 1 186.4 158.7A5 5 0 0 1 181.4 153.7L181.4 118.5A5 5 0 0 1 186.4 113.5" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(186.4286 103.45)" fill="#333">32.4℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(186.4286 168.7125)" fill="#333">25.3℃</text>
+<path d="M250.7 111.5A5 5 0 0 1 255.7 116.5L255.7 158.2A5 5 0 0 1 250.7 163.2A5 5 0 0 1 245.7 158.2L245.7 116.5A5 5 0 0 1 250.7 111.5" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="2" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(250.7143 101.5375)" fill="#333">32.7℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(250.7143 173.175)" fill="#333">24.6℃</text>
+<path d="M315 91.8A5 5 0 0 1 320 96.8L320 144.1A5 5 0 0 1 315 149.1A5 5 0 0 1 310 144.1L310 96.8A5 5 0 0 1 315 91.8" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="3" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(315 81.775)" fill="#333">35.8℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(315 159.15)" fill="#333">26.8℃</text>
+<path d="M379.3 109A5 5 0 0 1 384.3 114L384.3 148A5 5 0 0 1 379.3 153A5 5 0 0 1 374.3 148L374.3 114A5 5 0 0 1 379.3 109" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="4" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(379.2857 98.9875)" fill="#333">33.1℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(379.2857 162.975)" fill="#333">26.2℃</text>
+<path d="M443.6 119.8A5 5 0 0 1 448.6 124.8L448.6 156.3A5 5 0 0 1 443.6 161.3A5 5 0 0 1 438.6 156.3L438.6 124.8A5 5 0 0 1 443.6 119.8" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="5" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(443.5714 109.825)" fill="#333">31.4℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(443.5714 171.2625)" fill="#333">24.9℃</text>
+<path d="M507.9 110.3L507.9 110.3A5 5 0 0 1 512.9 115.3L512.9 153.7A5 5 0 0 1 507.9 158.7L507.9 158.7A5 5 0 0 1 502.9 153.7L502.9 115.3A5 5 0 0 1 507.9 110.3" fill="#5070dd" ecmeta_series_index="0" ecmeta_data_index="6" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="-6" transform="translate(507.8571 100.2625)" fill="#333">32.9℃</text>
+<text dominant-baseline="central" text-anchor="middle" style="font: 12px sans-serif" y="6" transform="translate(507.8571 168.7125)" fill="#333">25.3℃</text>
+<style ><![CDATA[
+.zr0-cls-0:hover {
+pointer-events:none;
+}
+.zr0-cls-1:hover {
+cursor:pointer;
+fill:rgba(88,123,243,1);
+}
+
+]]>
+
+</style>
+</svg>

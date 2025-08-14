@@ -17,12 +17,15 @@
  * under the License.
  */
 
-import echarts from 'echarts';
+import * as echarts from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
 
 const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
@@ -98,4 +101,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;

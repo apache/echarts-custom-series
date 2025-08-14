@@ -17,11 +17,8 @@
 * under the License.
 */
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.barRangeCustomSeriesInstaller = factory());
-})(this, (function () { 'use strict';
+this.barRangeCustomSeriesInstaller = (function () {
+    'use strict';
 
     var renderItem = function (params, api) {
         var x = api.value(0);
@@ -88,4 +85,8 @@
 
     return index;
 
-}));
+})();
+// Automatically register the custom series
+if (typeof window !== 'undefined' && window.echarts) {
+  window.echarts.use(window.barRangeCustomSeriesInstaller);
+}

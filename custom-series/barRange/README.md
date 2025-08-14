@@ -1,37 +1,61 @@
-# barRange
+# @echarts-x/custom-barRange
 
 `barRange` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the range of data using bars.
 
-![barRange](../../screenshots/barRange.svg)
+![barRange](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/bar-range/screenshots/barRange.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/barRange)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-bar-range/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.barRangeCustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
   // ...
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+### UMD (Universal Module Definition)
+
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const barRangeInstaller = require('@echarts-x/custom-bar-range');
+echarts.use(barRangeInstaller);
+const chart = echarts.init(...);
+// ...
+
+// AMD
+require(['echarts', '@echarts-x/custom-bar-range'], function(echarts, barRangeInstaller) {
+  echarts.use(barRangeInstaller);
+});
+```
+
+### ESM (ES Modules)
+
+For modern module bundlers or native ES module environments:
 
 ```bash
-npm install @echarts/custom-bar-range
+npm install @echarts-x/custom-bar-range
 ```
 
 ```js
-import echarts from 'echarts';
-import barRangeCustomSeriesInstaller from '@echarts/custom-bar-range';
+import * as echarts from 'echarts';
+import barRangeCustomSeriesInstaller from '@echarts-x/custom-bar-range';
 
 echarts.use(barRangeCustomSeriesInstaller);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 
@@ -69,5 +93,3 @@ encode: {
     tooltip: [1, 2]
 }
 ```
-
-See [test](./test/index.html) for more details.

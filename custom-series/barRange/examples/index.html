@@ -33,58 +33,44 @@
     <script src="../node_modules/echarts/dist/echarts.js"></script>
     <script src="../dist/index.auto.js"></script>
     <script>
-      const chart = echarts.init(document.getElementById('main'), null, {
-        renderer: 'svg',
-      });
+      echarts.use(window.barRangeCustomSeriesInstaller);
+      const chart = echarts.init(document.getElementById('main'));
 
-      const xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      const dataSource = [['Day', 'value']];
-      for (let i = 0; i < xData.length; ++i) {
-        const dataCount = 10 * Math.round(Math.random() * 5) + 5;
-        for (let j = 0; j < dataCount; ++j) {
-          const value = Math.tan(i) / 2 + 3 * Math.random() + 2;
-          dataSource.push([xData[i], value]);
-        }
-      }
+      const data = [
+        [0, 26.7, 32.5],
+        [1, 25.3, 32.4],
+        [2, 24.6, 32.7],
+        [3, 26.8, 35.8],
+        [4, 26.2, 33.1],
+        [5, 24.9, 31.4],
+        [6, 25.3, 32.9],
+      ];
 
       option = {
+        xAxis: {
+          data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          type: 'category',
+        },
+        yAxis: {
+          type: 'value',
+        },
         tooltip: {
           show: true,
         },
-        xAxis: {
-          type: 'category',
-          data: xData,
-          jitter: 100,
-          jitterOverlap: false,
-        },
-        yAxis: {},
-        dataset: {
-          source: dataSource,
-        },
-        series: [
-          {
-            type: 'custom',
-            renderItem: 'violin',
-            colorBy: 'item',
-            silent: true,
-            itemPayload: {
-              symbolSize: 4,
-              areaOpacity: 0.6,
-              bandWidthScale: 1.5,
-              // binCount: 20
-            },
+        series: {
+          type: 'custom',
+          renderItem: 'barRange',
+          data,
+          itemPayload: {
+            barWidth: 10,
+            borderRadius: 5,
           },
-          {
-            type: 'scatter',
-            encode: {
-              x: 0,
-              y: 1,
-            },
-            colorBy: 'item',
-            silent: true,
-            symbolSize: 6,
+          encode: {
+            x: 0,
+            y: [1, 2],
+            tooltip: [1, 2],
           },
-        ],
+        },
       };
 
       chart.setOption(option);

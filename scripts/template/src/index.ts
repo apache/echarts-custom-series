@@ -17,22 +17,24 @@
  * under the License.
  */
 
-import echarts from 'echarts';
+import * as echarts from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
 
-type $CUSTOM_SERIES_PASCAL_NAME$ItemPayload = {
-
-};
+type $CUSTOM_SERIES_PASCAL_NAME$ItemPayload = {};
 
 const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
   api: echarts.CustomSeriesRenderItemAPI
 ) => {
-  const itemPayload = params.itemPayload as $CUSTOM_SERIES_PASCAL_NAME$ItemPayload;
+  const itemPayload =
+    params.itemPayload as $CUSTOM_SERIES_PASCAL_NAME$ItemPayload;
 
   const cnt = params.dataInsideLength;
   if (params.dataIndex === cnt - 1) {
@@ -51,4 +53,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;
