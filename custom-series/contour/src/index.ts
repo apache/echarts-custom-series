@@ -17,14 +17,19 @@
  * under the License.
  */
 
-import echarts, { zrUtil } from 'echarts';
 import type {
   CustomRootElementOption,
-  CustomElementOption,
   CustomSeriesRenderItem,
+  CustomElementOption,
+  CustomSeriesRenderItemParams,
+  CustomSeriesRenderItemAPI,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
-declare var d3: any;
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
+import { zrUtil } from 'echarts';
+import * as d3 from 'd3';
 
 type ContourItemPayload = {
   thresholds?: number;
@@ -60,8 +65,8 @@ const blendColors = (colors: string[], dataLength: number, index: number) => {
 };
 
 const renderItem = (
-  params: echarts.CustomSeriesRenderItemParams,
-  api: echarts.CustomSeriesRenderItemAPI
+  params: CustomSeriesRenderItemParams,
+  api: CustomSeriesRenderItemAPI
 ) => {
   const cnt = params.dataInsideLength;
   if (params.dataIndex === cnt - 1) {
@@ -180,4 +185,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;

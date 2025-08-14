@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-bar-range",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "Custom barRange series for Apache ECharts",
   "main": "dist/index.js",
   "module": "dist/index.esm.mjs",

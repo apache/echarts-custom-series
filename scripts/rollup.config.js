@@ -18,9 +18,17 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 
 const seriesName = process.env.CUSTOM_SERIES_NAME || 'customSeries';
 const seriesPath = process.env.CUSTOM_SERIES_PATH || '.';
+
+// Check if series has its own rollup config
+let seriesRollupConfig = {};
+const seriesConfigPath = path.join(seriesPath, 'rollup.config.js');
+if (fs.existsSync(seriesConfigPath)) {
+  seriesRollupConfig = require(seriesConfigPath);
+}
 
 const licenseHeader = `/*
 * Licensed to the Apache Software Foundation (ASF) under one
@@ -46,7 +54,33 @@ const licenseHeader = `/*
 const baseConfig = {
   input: path.join(seriesPath, 'lib/index.js'),
   plugins: [],
+  external: seriesRollupConfig.external || [],
 };
+
+// Helper function to get all external dependencies for UMD
+function getUMDExternals() {
+  const allExternals = [...(baseConfig.external || []), 'echarts'];
+  return allExternals;
+}
+
+// Helper function to get all globals for UMD
+function getUMDGlobals() {
+  const allExternals = getUMDExternals();
+  const globals = {};
+
+  // Map each external to its global variable name
+  allExternals.forEach((ext) => {
+    // Default: use the same name as the package name
+    globals[ext] = ext;
+  });
+
+  // Override with series-specific globals from config if provided
+  if (seriesRollupConfig.output && seriesRollupConfig.output.globals) {
+    Object.assign(globals, seriesRollupConfig.output.globals);
+  }
+
+  return globals;
+}
 
 const autoRegisterFooter = `
 // Automatically register the custom series
@@ -102,14 +136,13 @@ module.exports = [
   // UMD version
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.js'),
       format: 'umd',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
-      globals: {
-        window: 'window',
-      },
+      globals: getUMDGlobals(),
     },
     plugins: [licensePlugin],
   },
@@ -117,30 +150,28 @@ module.exports = [
   // UMD minified version
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.min.js'),
       format: 'umd',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
-      globals: {
-        window: 'window',
-      },
+      globals: getUMDGlobals(),
       sourcemap: true,
     },
     plugins: [licensePlugin, terserPlugin],
   },
 
-  // Browser version - automatically registers
+  // Browser version - automatically registers (IIFE with all dependencies)
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.auto.js'),
       format: 'iife',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
-      globals: {
-        window: 'window',
-      },
+      globals: getUMDGlobals(),
     },
     plugins: [autoRegisterPlugin],
   },
@@ -148,14 +179,13 @@ module.exports = [
   // Browser minified version - automatically registers
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.auto.min.js'),
       format: 'iife',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
-      globals: {
-        window: 'window',
-      },
+      globals: getUMDGlobals(),
       sourcemap: true,
     },
     plugins: [autoRegisterPlugin, terserPlugin],
@@ -164,6 +194,7 @@ module.exports = [
   // ES Module version
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.esm.mjs'),
       format: 'esm',
@@ -174,6 +205,7 @@ module.exports = [
   // ES Module minified version
   {
     ...baseConfig,
+    external: getUMDExternals(),
     output: {
       file: path.join(seriesPath, 'dist/index.esm.min.mjs'),
       format: 'esm',
