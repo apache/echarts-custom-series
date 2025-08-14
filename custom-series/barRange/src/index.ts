@@ -17,10 +17,11 @@
  * under the License.
  */
 
-import * as echarts from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
+  CustomSeriesRenderItemParams,
+  CustomSeriesRenderItemAPI,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 import type {
   EChartsExtensionInstallRegisters,
@@ -28,8 +29,8 @@ import type {
 } from 'echarts/types/src/extension.d.ts';
 
 const renderItem = (
-  params: echarts.CustomSeriesRenderItemParams,
-  api: echarts.CustomSeriesRenderItemAPI
+  params: CustomSeriesRenderItemParams,
+  api: CustomSeriesRenderItemAPI
 ) => {
   const x = api.value(0);
   const valueStart = api.value(1);

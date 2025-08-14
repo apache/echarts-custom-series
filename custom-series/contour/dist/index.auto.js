@@ -17,11 +17,8 @@
 * under the License.
 */
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('echarts'), require('d3')) :
-    typeof define === 'function' && define.amd ? define(['echarts', 'd3'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.contourCustomSeriesInstaller = factory(global.echarts, global.d3));
-})(this, (function (echarts, d3) { 'use strict';
+this.contourCustomSeriesInstaller = (function (echarts, d3) {
+    'use strict';
 
     function _interopNamespaceDefault(e) {
         var n = Object.create(null);
@@ -158,4 +155,8 @@
 
     return index;
 
-}));
+})(echarts, d3);
+// Automatically register the custom series
+if (typeof window !== 'undefined' && window.echarts) {
+  window.echarts.use(window.contourCustomSeriesInstaller);
+}

@@ -52,7 +52,7 @@ function create(name) {
 
   const packageJsonPath = path.join(seriesPath, 'package.json');
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-  packageJson.name = `@echarts/custom-${kebabCaseName}`;
+  // packageJson.name = `@echarts-x/custom-${kebabCaseName}`;
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
   // Run `npm install`

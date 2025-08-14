@@ -17,11 +17,12 @@
  * under the License.
  */
 
-import * as echarts from 'echarts';
 import type {
   CustomPathOption,
   CustomRootElementOption,
   CustomSeriesRenderItem,
+  CustomSeriesRenderItemParams,
+  CustomSeriesRenderItemAPI,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 import type {
   EChartsExtensionInstallRegisters,
@@ -47,8 +48,8 @@ function kernelDensityEstimator(
 }
 
 const renderItem = (
-  params: echarts.CustomSeriesRenderItemParams,
-  api: echarts.CustomSeriesRenderItemAPI
+  params: CustomSeriesRenderItemParams,
+  api: CustomSeriesRenderItemAPI
 ) => {
   let violins: { [key: number]: { firstDataIndex: number; data: number[] } } =
     {};

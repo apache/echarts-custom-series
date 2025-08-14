@@ -2,7 +2,7 @@
 
 `barRange` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the range of data using bars.
 
-![barRange](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/bar-range/screenshots/barRange.svg)
+![barRange](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/barRange/screenshots/barRange.svg)
 
 [Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/barRange)
 
@@ -76,11 +76,11 @@ The first element of the sub-array is the x value. The second and third elements
 
 The `itemPayload` is an object that contains the following properties:
 
-| Property       | Type     | Default | Description                               |
-| -------------- | -------- | ------- | ----------------------------------------- | --------------------- |
-| `barWidth`     | `number`  | string` | `70%`                                     | The width of the bar. |
-| `borderRadius` | `number` | `0`     | The border radius of the bar.             |
-| `margin`       | `number` | `10`    | The margin between the bars and the text. |
+| Property       | Type              | Default | Description                               |
+| -------------- | ----------------- | ------- | ----------------------------------------- |
+| `barWidth`     | `number \| string` | `70%`   | The width of the bar.                     |
+| `borderRadius` | `number`          | `0`     | The border radius of the bar.             |
+| `margin`       | `number`          | `10`    | The margin between the bars and the text. |
 
 ### series.encode
 

@@ -2,7 +2,7 @@
 
 `$CUSTOM_SERIES_NAME$` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
 
-![$CUSTOM_SERIES_NAME$](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/$CUSTOM_SERIES_KEBAB_NAME$/screenshots/$CUSTOM_SERIES_NAME$.svg)
+![$CUSTOM_SERIES_NAME$](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/$CUSTOM_SERIES_NAME$/screenshots/$CUSTOM_SERIES_NAME$.svg)
 
 [Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/$CUSTOM_SERIES_NAME$)
 

@@ -1,58 +1,70 @@
-# contour
+# @echarts-x/custom-contour
 
-`contour` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to visualize where the data points are concentrated.
+`contour` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
 
-This is a contour custom series for Apache ECharts using [d3-contour](https://d3js.org/d3-contour).
+![contour](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/contour/screenshots/contour.svg)
 
-![contour](../../screenshots/contour.svg)
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/contour)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-contour/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.contourCustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
   // ...
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+### UMD (Universal Module Definition)
 
-```bash
-npm install d3 d3-contour @echarts/custom-contour
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const contourInstaller = require('@echarts-x/custom-contour');
+echarts.use(contourInstaller);
+const chart = echarts.init(...);
+// ...
+
+// AMD
+require(['echarts', '@echarts-x/custom-contour'], function(echarts, contourInstaller) {
+  echarts.use(contourInstaller);
+});
 ```
 
-You need to import `d3` and `d3-contour` before importing calling `echarts.use(contourCustomSeriesInstaller);`.
+### ESM (ES Modules)
 
-```html
-<script src="../node_modules/d3/dist/d3.js"></script>
-<script src="../node_modules/d3-contour/dist/d3-contour.js"></script>
+For modern module bundlers or native ES module environments:
+
+```bash
+npm install @echarts-x/custom-contour
 ```
 
 ```js
-import echarts from 'echarts';
-import contourCustomSeriesInstaller from '@echarts/custom-contour';
+import * as echarts from 'echarts';
+import contourCustomSeriesInstaller from '@echarts-x/custom-contour';
 
 echarts.use(contourCustomSeriesInstaller);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 
 ### series.data
 
-The data of the series is an array of arrays. Each sub-array represents the x and y value of a point. The contour is generated automatically based on the data.
+The data of the series is an array of arrays. Each sub-array represents ...
 
 ```js
-const data = [
-  [12, 100],
-  [20, 34]
-];
+const data = [];
 ```
 
 ### series.itemPayload
@@ -61,15 +73,6 @@ The `itemPayload` is an object that contains the following properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `thresholds` | `number` | 8 | Bypassed to [d3-contour.thresholds](https://d3js.org/d3-contour/density#density_thresholds) |
-| `bandwidth` | `number` | 20 | Bypassed to [d3-contour.bandwidth](https://d3js.org/d3-contour/density#density_bandwidth) |
-| `itemStyle` | `object` | `{}` | The style of the contour. |
-| `itemStyle.opacity` | `number | number[]` | `[0.3, 1]` | The opacity of the contour. If it's typed in `number`, all contours will have the same opacity. If it's typed in `number[]`, it should have a length at 2, representing the min and max opacity. In this case, the opacity of each contour will be set according to the interpolation of the array. |
-| `itemStyle.color` | `string | string[]` | `null` | The color of the contour. If it's typed in `string`, all contours will have the same color. If it's typed in `string[]`, the color of each contour will be set according to the interpolation of the array. If it's `null`, series color will be used. |
-| `itemStyle.lineStyle` | `object` | `{}` | The style of the contour line. |
-| `itemStyle.lineStyle.color` | `string` | `null` | The color of the contour line. If it's `null`, the stroke will not be shown. |
-| `itemStyle.lineStyle.width` | `number` | `1` | The width of the contour line. |
-| `itemStyle.lineStyle.opacity` | `number` | `1` | The opacity of the contour line. |
 
 ### series.encode
 
@@ -82,5 +85,3 @@ encode: {
     tooltip: 2
 }
 ```
-
-See [test](./test/index.html) for more details.
