@@ -1,37 +1,85 @@
-# lineRange
+# @echarts-x/custom-line-range
 
 `lineRange` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to show the range of data.
 
-![lineRange](../../screenshots/lineRange.svg)
+![lineRange](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/lineRange/screenshots/lineRange.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/lineRange)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-line-range/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.lineRangeCustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: 'lineRange',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+See [examples](./examples) for more details.
+
+### UMD (Universal Module Definition)
+
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const lineRangeInstaller = require('@echarts-x/custom-line-range');
+echarts.use(lineRangeInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'lineRange',
+    // ...
+  }]
+}
+chart.setOption(option);
+```
+
+See [examples](./examples) for more details.
+
+### ESM (ES Modules)
+
+For modern module bundlers or native ES module environments:
 
 ```bash
-npm install @echarts/custom-line-range
+npm install @echarts-x/custom-line-range
 ```
 
 ```js
-import echarts from 'echarts';
-import lineRangeCustomSeriesInstaller from '@echarts/custom-line-range';
+import * as echarts from 'echarts';
+import lineRangeCustomSeriesInstaller from '@echarts-x/custom-line-range';
 
 echarts.use(lineRangeCustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'lineRange',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 
@@ -42,11 +90,11 @@ The data of the series is an array of arrays.
 ```js
 option = {
   xAxis: {
-      data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      type: 'category'
+    data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    type: 'category'
   },
   yAxis: {
-      type: 'value'
+    type: 'value'
   },
   series: [{
     type: 'custom',

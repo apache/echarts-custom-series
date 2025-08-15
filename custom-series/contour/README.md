@@ -1,6 +1,6 @@
 # @echarts-x/custom-contour
 
-`contour` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
+`contour` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to visualize three-dimensional data—such as terrain elevation, temperature, or pollutant concentration—on a two-dimensional plane by connecting points of equal value (e.g., elevation or intensity) with contour lines.
 
 ![contour](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/contour/screenshots/contour.svg)
 
@@ -18,9 +18,18 @@ For browser usage, use the auto-registration version that automatically installs
 <script>
   // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: 'violin',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
+
+See [examples](./examples) for more details.
 
 ### UMD (Universal Module Definition)
 
@@ -32,13 +41,18 @@ const echarts = require('echarts');
 const contourInstaller = require('@echarts-x/custom-contour');
 echarts.use(contourInstaller);
 const chart = echarts.init(...);
-// ...
 
-// AMD
-require(['echarts', '@echarts-x/custom-contour'], function(echarts, contourInstaller) {
-  echarts.use(contourInstaller);
-});
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: '$CUSTOM_SERIES_NAME$',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
+
+See [examples](./examples) for more details.
 
 ### ESM (ES Modules)
 
@@ -53,6 +67,16 @@ import * as echarts from 'echarts';
 import contourCustomSeriesInstaller from '@echarts-x/custom-contour';
 
 echarts.use(contourCustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'violin',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
 See [examples](./examples) for more details.

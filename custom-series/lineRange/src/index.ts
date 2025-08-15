@@ -17,13 +17,17 @@
  * under the License.
  */
 
-import echarts, { zrUtil } from 'echarts';
+import * as echarts from 'echarts';
 import type {
-  CustomElementOption,
+  CustomRootElementOption,
   CustomSeriesRenderItem,
+  CustomElementOption,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
-import type { Polygon, Polyline } from 'echarts/src/util/graphic.ts';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
+import { zrUtil } from 'echarts';
 
 type LineRangeItemPayload = {
   lineStyle?: {
@@ -103,7 +107,7 @@ const renderItem = (
           shadowOffsetY: areaStyle.shadowOffsetY,
         },
         disableTooltip: true,
-      } as Polygon);
+      } as CustomElementOption);
     }
 
     const lineStyle = itemPayload.lineStyle || {};
@@ -129,7 +133,7 @@ const renderItem = (
       },
       style: polylineStyle,
       disableTooltip: true,
-    } as Polyline);
+    } as CustomElementOption);
     group.children.push({
       type: 'path',
       shape: {
@@ -137,9 +141,9 @@ const renderItem = (
       },
       style: polylineStyle,
       disableTooltip: true,
-    } as Polyline);
+    } as CustomElementOption);
   }
-  return group;
+  return group as CustomRootElementOption;
 };
 
 export default {
@@ -149,4 +153,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;

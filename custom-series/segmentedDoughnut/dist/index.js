@@ -16,6 +16,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('echarts')) :
     typeof define === 'function' && define.amd ? define(['echarts'], factory) :
@@ -36,7 +37,7 @@
         var cy = echarts.number.parsePercent(center[1], api.getHeight());
         var r = echarts.number.parsePercent(radius[1], size / 2);
         var r0 = echarts.number.parsePercent(radius[0], size / 2);
-        var padAngle = (echarts.zrUtil.retrieve2(itemPayload.padAngle, 2) || 0) * Math.PI / 180;
+        var padAngle = ((echarts.zrUtil.retrieve2(itemPayload.padAngle, 2) || 0) * Math.PI) / 180;
         var pieceAngle = (Math.PI * 2 - padAngle * segmentCount) / segmentCount;
         var backgroundGroup = {
             type: 'group',
@@ -82,7 +83,7 @@
                         clockwise: true,
                     },
                     style: backgroundStyle,
-                    silent: true
+                    silent: true,
                 });
             }
             if (i < value) {
@@ -99,7 +100,7 @@
                         clockwise: true,
                     },
                     style: itemStyle,
-                    styleEmphasis: itemStyleEmphasis
+                    styleEmphasis: itemStyleEmphasis,
                 });
             }
         }
@@ -111,7 +112,7 @@
                 seriesName: params.seriesName,
                 b: segmentCount,
                 c: value,
-                d: Math.round(value / segmentCount * 100) + '%'
+                d: Math.round((value / segmentCount) * 100) + '%',
             });
             labelEl = {
                 type: 'text',

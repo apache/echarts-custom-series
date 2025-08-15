@@ -17,13 +17,19 @@
  * under the License.
  */
 
-import echarts, { zrUtil, number, format } from 'echarts';
+import * as echarts from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
+  CustomElementOption,
+  CustomGroupOption,
+  CustomTextOption,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
-import type { CustomElementOption } from 'echarts/src/chart/custom/CustomSeries.ts';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
+import { zrUtil, number, format } from 'echarts';
 
 type SegmentedDoughnutItemPayload = {
   center?: [number | string, number | string];
@@ -41,13 +47,13 @@ type SegmentedDoughnutItemPayload = {
     shadowColor?: string;
     shadowOffsetX?: number;
     shadowOffsetY?: number;
-  },
+  };
   label?: {
     show?: boolean;
     color?: string;
     formatter?: string;
     fontSize?: number;
-  }
+  };
 };
 
 const renderItem = (
@@ -57,7 +63,7 @@ const renderItem = (
   const group = [] as CustomElementOption[];
   const itemPayload = params.itemPayload as SegmentedDoughnutItemPayload;
   const segmentCount = Math.max(1, itemPayload.segmentCount || 1);
-  const value = Math.max(0, api.value(0) as number || 0);
+  const value = Math.max(0, (api.value(0) as number) || 0);
 
   const center = itemPayload.center || ['50%', '50%'];
   const radius = itemPayload.radius || ['50%', '60%'];
@@ -69,16 +75,14 @@ const renderItem = (
   const r = number.parsePercent(radius[1], size / 2);
   const r0 = number.parsePercent(radius[0], size / 2);
 
-  const padAngle = (zrUtil.retrieve2(
-    itemPayload.padAngle,
-    2
-  ) || 0) * Math.PI / 180;
+  const padAngle =
+    ((zrUtil.retrieve2(itemPayload.padAngle, 2) || 0) * Math.PI) / 180;
   const pieceAngle = (Math.PI * 2 - padAngle * segmentCount) / segmentCount;
 
   const backgroundGroup = {
     type: 'group',
     children: [] as CustomElementOption[],
-  } as CustomElementOption;
+  } as CustomGroupOption;
   group.push(backgroundGroup);
   const bgStyle = itemPayload.backgroundStyle || {};
   const showBackground = bgStyle.show !== false;
@@ -92,12 +96,12 @@ const renderItem = (
     shadowColor: bgStyle.shadowColor || 'rgba(0, 0, 0, 0)',
     shadowOffsetX: bgStyle.shadowOffsetX || 0,
     shadowOffsetY: bgStyle.shadowOffsetY || 0,
-  }
+  };
 
   const itemGroup = {
     type: 'group',
     children: [] as CustomElementOption[],
-  } as CustomElementOption;
+  } as CustomGroupOption;
   group.push(itemGroup);
   const itemStyle = api.style();
   const itemStyleEmphasis = api.styleEmphasis();
@@ -122,7 +126,7 @@ const renderItem = (
           clockwise: true,
         },
         style: backgroundStyle,
-        silent: true
+        silent: true,
       });
     }
 
@@ -140,20 +144,20 @@ const renderItem = (
           clockwise: true,
         },
         style: itemStyle,
-        styleEmphasis: itemStyleEmphasis
+        styleEmphasis: itemStyleEmphasis,
       });
     }
   }
 
   const label = itemPayload.label;
-  let labelEl: CustomElementOption | undefined;
+  let labelEl: CustomTextOption;
   if (label && label.show) {
     const text = format.formatTpl(label.formatter || '{c}/{b}', {
       $vars: ['seriesName', 'b', 'c', 'd'],
       seriesName: params.seriesName,
       b: segmentCount,
       c: value,
-      d: Math.round(value / segmentCount * 100) + '%'
+      d: Math.round((value / segmentCount) * 100) + '%',
     });
     labelEl = {
       type: 'text',
@@ -163,10 +167,10 @@ const renderItem = (
         fill: label.color || '#000',
         textAlign: 'center',
         textVerticalAlign: 'middle',
-      },
+      } as CustomTextOption['style'],
       x: cx,
       y: cy,
-    }
+    };
     group.push(labelEl);
   }
 
@@ -183,4 +187,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;

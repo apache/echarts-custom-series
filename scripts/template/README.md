@@ -1,4 +1,4 @@
-# @echarts-x/custom-$CUSTOM_SERIES_NAME$
+# @echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$
 
 `$CUSTOM_SERIES_NAME$` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
 
@@ -18,9 +18,18 @@ For browser usage, use the auto-registration version that automatically installs
 <script>
   // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: '$CUSTOM_SERIES_NAME$',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
+
+See [examples](./examples) for more details.
 
 ### UMD (Universal Module Definition)
 
@@ -32,13 +41,18 @@ const echarts = require('echarts');
 const $CUSTOM_SERIES_NAME$Installer = require('@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$');
 echarts.use($CUSTOM_SERIES_NAME$Installer);
 const chart = echarts.init(...);
-// ...
 
-// AMD
-require(['echarts', '@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$'], function(echarts, $CUSTOM_SERIES_NAME$Installer) {
-  echarts.use($CUSTOM_SERIES_NAME$Installer);
-});
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: '$CUSTOM_SERIES_NAME$',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
+
+See [examples](./examples) for more details.
 
 ### ESM (ES Modules)
 
@@ -53,6 +67,16 @@ import * as echarts from 'echarts';
 import $CUSTOM_SERIES_NAME$CustomSeriesInstaller from '@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$';
 
 echarts.use($CUSTOM_SERIES_NAME$CustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: '$CUSTOM_SERIES_NAME$',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
 See [examples](./examples) for more details.

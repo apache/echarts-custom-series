@@ -1,5 +1,5 @@
 {
-  "name": "@echarts-x/custom-$CUSTOM_SERIES_NAME$",
+  "name": "@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$",
   "version": "1.0.0-beta.0",
   "description": "Custom $CUSTOM_SERIES_NAME$ series for Apache ECharts",
   "main": "dist/index.js",

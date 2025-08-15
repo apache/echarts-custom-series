@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-contour",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom contour series for Apache ECharts",
   "main": "dist/index.js",
   "module": "dist/index.esm.mjs",
