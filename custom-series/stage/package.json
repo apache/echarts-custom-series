@@ -1,19 +1,42 @@
 {
-  "name": "@echarts/custom-stage",
-  "version": "0.0.1-beta.1",
+  "name": "@echarts-x/custom-stage",
+  "version": "1.0.0",
   "description": "Custom stage series for Apache ECharts",
   "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc"
+  "module": "dist/index.esm.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.mjs",
+      "require": "./dist/index.js"
+    }
   },
-  "keywords": [],
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "echarts",
+    "apache-echarts",
+    "data-visualization",
+    "chart",
+    "dataviz"
+  ],
   "author": "",
   "license": "Apache-2.0",
-  "dependencies": {
-    "echarts": "github:apache/echarts#v6"
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/echarts-custom-series.git"
+  },
+  "scripts": {
+    "test:browser": "npx http-server . -p 8088 -o examples/index.html",
+    "test:ssr": "node examples/ssr.js",
+    "test": "npm run test:ssr"
   },
   "devDependencies": {
+    "echarts": "^6.0.0",
     "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "echarts": "^6.0.0"
   },
   "files": [
     "dist",

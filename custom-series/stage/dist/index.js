@@ -16,11 +16,31 @@
 * specific language governing permissions and limitations
 * under the License.
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('echarts')) :
     typeof define === 'function' && define.amd ? define(['echarts'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.stageCustomSeriesInstaller = factory(global.echarts));
 })(this, (function (echarts) { 'use strict';
+
+    function _interopNamespaceDefault(e) {
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () { return e[k]; }
+                    });
+                }
+            });
+        }
+        n.default = e;
+        return Object.freeze(n);
+    }
+
+    var echarts__namespace = /*#__PURE__*/_interopNamespaceDefault(echarts);
 
     var renderItem = function (params, api) {
         var _a;
@@ -99,7 +119,7 @@
             var envelope = itemPayload.envelope || {};
             if (envelope.show !== false && boxes.length > 1) {
                 var envelopePaths = [];
-                var margin = echarts.zrUtil.retrieve2(envelope.margin, 2);
+                var margin = echarts__namespace.zrUtil.retrieve2(envelope.margin, 2);
                 boxes.sort(function (a, b) { return a.x - b.x || a.y - b.y; });
                 var envelopeFill = envelope.color || '#888';
                 if (allColors.length > 0 && !envelope.color) {

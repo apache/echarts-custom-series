@@ -1,0 +1,20 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+import*as echarts from"echarts";import{zrUtil}from"echarts";var renderItem=function(t,e){var a,c=e.value(0),o=e.value(1),i=e.value(2),h=e.coord([c,i]),r=e.coord([o,i]),n=e.coord([0,0])[1]-e.coord([0,1])[1],l=e.visual("color"),s=t.itemPayload,x=s.itemStyle||{},d=x.borderRadius||8,p=zrUtil.retrieve2(null===(a=s.envelope)||void 0===a?void 0:a.externalRadius,6),y=zrUtil.retrieve2(x.verticalMargin,8),f=zrUtil.retrieve2(x.minHorizontalSize,3),u=[],v=t.context.boxes||[],g=r[0]-h[0],w=Math.max(g,f),m={x:h[0]-(w-g)/2,y:h[1]-n/2+5+14+y,width:w,height:n-14-5-2*y};u.push({type:"rect",shape:{x:m.x,y:m.y,width:m.width,height:m.height,r:d},style:{fill:l},z2:10}),v.push(m),t.context.boxes=v,t.context.renderedStages||(t.context.renderedStages=[]);var M=t.context.renderedStages;if(!M[i]){var L=s.axisLabel||{},z=e.ordinalRawValue(2);"function"==typeof L.formatter&&(z=L.formatter(z,i)),u.push({type:"text",style:{x:t.coordSys.x+5,y:h[1]-n/2+5+14,fill:L.color||"#8A8A8A",text:z,verticalAlign:"bottom"},z2:20}),M[i]=!0}if(t.dataIndex===t.dataInsideLength-1){for(var A=[],S=0;S<t.dataInsideLength;S++){var b=e.visual("color",S);A.indexOf(b)<0&&A.push(b)}var U=s.envelope||{};if(!1!==U.show&&v.length>1){var I=[],D=echarts.zrUtil.retrieve2(U.margin,2);v.sort((function(t,e){return t.x-e.x||t.y-e.y}));var Z=U.color||"#888";if(A.length>0&&!U.color){var R=[];for(S=0;S<A.length;S++)R.push({offset:(2*S+1)/(2*A.length),color:A[S]});Z={type:"linear",x:0,y:0,x2:0,y2:1,global:!1,colorStops:R}}var P=zrUtil.retrieve2(U.opacity,.25);for(S=0;S<v.length;S++){var C=v[S];if(I.push({type:"rect",shape:{x:C.x-D,y:C.y-D,width:C.width+2*D,height:C.height+2*D,r:Math.min(d,C.width/2)+D}}),S>0){var H=v[S-1],O=H.y>C.y+C.height,V=O?H.y-C.y-C.height+2*d:C.y-H.y-H.height+2*d,j=O?C.y+C.height-d:H.y+H.height-d;if(C.x-D>=H.x+H.width+D)continue;if(O){if(C.x-D-H.x>0){var k=Math.ceil(C.x-D),q=H.y-D,B=Math.min((C.x-D-H.x)/2,p);I.push({type:"path",shape:{pathData:"M".concat(k-B," ").concat(q,"A").concat(B," ").concat(B," 0 0 0 ").concat(k," ").concat(q-B,"L").concat(k,",").concat(q+D,"L").concat(k-B,",").concat(q,"Z")}})}if(C.x+C.width-H.x-H.width-D>0){var E=C.y+C.height+D,F=Math.floor(H.x+H.width+D);B=Math.min((C.x+C.width-H.x-H.width-D)/2,p);I.push({type:"path",shape:{pathData:"M".concat(F+B," ").concat(E,"A").concat(B," ").concat(B," 0 0 0 ").concat(F," ").concat(E+B,"L").concat(F,",").concat(E-D,"L").concat(F+B,",").concat(E,"Z")}})}}else{if(C.x-D-H.x>0){k=Math.ceil(C.x-D);var G=H.y+H.height+D;B=Math.min((C.x-D-H.x)/2,p);I.push({type:"path",shape:{pathData:"M".concat(k," ").concat(G+B,"A").concat(B," ").concat(B," 0 0 0 ").concat(k-B," ").concat(G,"L").concat(k,",").concat(G-D,"L").concat(k,",").concat(G+B,"Z")}})}if(C.x+C.width-H.x-H.width-D>0){q=C.y-D,F=Math.floor(H.x+H.width+D),B=Math.min((C.x+C.width-H.x-H.width-D)/2,p);I.push({type:"path",shape:{pathData:"M".concat(F," ").concat(q-B,"A").concat(B," ").concat(B," 0 0 0 ").concat(F+B," ").concat(q,"L").concat(F,",").concat(q+D,"L").concat(F,",").concat(q-B,"Z")}})}}I.push({type:"rect",shape:{x:H.x+H.width+D,y:j+V,width:C.x-H.x-H.width-2*D,height:-V}})}}u.push({type:"compoundPath",shape:{paths:I},style:{fill:Z,opacity:P},silent:!0})}}return{type:"group",children:u}},index={install:function(t){t.registerCustomSeries("stage",renderItem)}};export{index as default};
+//# sourceMappingURL=index.esm.min.mjs.map

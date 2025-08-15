@@ -1,37 +1,85 @@
-# stage
+# @echarts-x/custom-stage
 
 `stage` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the data with various stages, like sleeping stages.
 
-![stage](../../screenshots/stage.svg)
+![stage](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/stage/screenshots/stage.svg)
+
+[Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/stage)
 
 ## Usage
 
-Import the custom series JavaScript file and ECharts, then use `echarts.use` to install it.
+### Browser Environment
+
+For browser usage, use the auto-registration version that automatically installs the custom series when loaded:
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./dist/index.js"></script>
+<script src="./node_modules/@echarts-x/custom-stage/dist/index.auto.js"></script>
 <script>
-  echarts.use(window.stageCustomSeriesInstaller);
+  // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: 'stage',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
 
-Or, if using module bundler, install the package from npm and import it.
+See [examples](./examples) for more details.
+
+### UMD (Universal Module Definition)
+
+For environments that need manual registration or when using AMD/CommonJS loaders:
+
+```js
+// CommonJS
+const echarts = require('echarts');
+const stageInstaller = require('@echarts-x/custom-stage');
+echarts.use(stageInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'stage',
+    // ...
+  }]
+}
+chart.setOption(option);
+```
+
+See [examples](./examples) for more details.
+
+### ESM (ES Modules)
+
+For modern module bundlers or native ES module environments:
 
 ```bash
-npm install @echarts/custom-stage
+npm install @echarts-x/custom-stage
 ```
 
 ```js
-import echarts from 'echarts';
-import stageCustomSeriesInstaller from '@echarts/custom-stage';
+import * as echarts from 'echarts';
+import stageCustomSeriesInstaller from '@echarts-x/custom-stage';
 
 echarts.use(stageCustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'stage',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
-See [test](./test/index.html) for more details.
+See [examples](./examples) for more details.
 
 ## API
 

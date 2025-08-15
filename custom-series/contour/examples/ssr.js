@@ -51,6 +51,10 @@ for (let i = 0; i < cnt; i++) {
 }
 
 option = {
+  animation: false,
+  tooltip: {
+    show: false,
+  },
   xAxis: {},
   yAxis: {},
   series: [

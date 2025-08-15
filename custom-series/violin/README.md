@@ -18,9 +18,18 @@ For browser usage, use the auto-registration version that automatically installs
 <script>
   // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: 'violin',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
+
+See [examples](./examples) for more details.
 
 ### UMD (Universal Module Definition)
 
@@ -32,13 +41,18 @@ const echarts = require('echarts');
 const violinInstaller = require('@echarts-x/custom-violin');
 echarts.use(violinInstaller);
 const chart = echarts.init(...);
-// ...
 
-// AMD
-require(['echarts', '@echarts-x/custom-violin'], function(echarts, violinInstaller) {
-  echarts.use(violinInstaller);
-});
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'violin',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
+
+See [examples](./examples) for more details.
 
 ### ESM (ES Modules)
 
@@ -53,6 +67,16 @@ import * as echarts from 'echarts';
 import violinCustomSeriesInstaller from '@echarts-x/custom-violin';
 
 echarts.use(violinCustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'violin',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
 See [examples](./examples) for more details.

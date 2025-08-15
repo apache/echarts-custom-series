@@ -139,11 +139,6 @@ if (names.length === 0) {
 }
 
 console.log(
-  chalk.yellow(
-    `Note: before the official release of ECharts v6, you need to clone the "apache/echarts" repo and build it locally, and then use "npm run link echarts" to link the local echarts to the custom series`
-  )
-);
-console.log(
   chalk.cyan(
     `Run "npm run serve <custom-series-name>" to start the local development server`
   )

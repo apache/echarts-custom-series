@@ -17,14 +17,17 @@
  * under the License.
  */
 
-import echarts, { zrUtil } from 'echarts';
+import * as echarts from 'echarts';
 import type {
-  CustomElementOption,
   CustomRootElementOption,
   CustomSeriesRenderItem,
+  CustomElementOption,
 } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
-import type { EChartsExtensionInstallRegisters } from 'echarts/src/extension.ts';
-import type { Path } from 'echarts/src/util/graphic.ts';
+import type {
+  EChartsExtensionInstallRegisters,
+  EChartsExtension,
+} from 'echarts/types/src/extension.d.ts';
+import { zrUtil } from 'echarts';
 
 interface Envelope {
   show?: boolean;
@@ -155,7 +158,7 @@ const renderItem = (
 
     const envelope: Envelope = itemPayload.envelope || {};
     if (envelope.show !== false && boxes.length > 1) {
-      const envelopePaths: Path[] = [];
+      const envelopePaths: any[] = [];
       const margin = echarts.zrUtil.retrieve2(envelope.margin as number, 2);
 
       // Sort boxes by x, then by y
@@ -328,4 +331,4 @@ export default {
       renderItem as unknown as CustomSeriesRenderItem
     );
   },
-};
+} as EChartsExtension;

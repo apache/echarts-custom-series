@@ -1,4 +1,4 @@
-# @echarts-x/custom-barRange
+# @echarts-x/custom-bar-range
 
 `barRange` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display the range of data using bars.
 
@@ -18,9 +18,18 @@ For browser usage, use the auto-registration version that automatically installs
 <script>
   // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);
-  // ...
+  const option = {
+    series: [{
+      type: 'custom',
+      renderItem: 'barRange',
+      // ...
+    }]
+  }
+  chart.setOption(option);
 </script>
 ```
+
+See [examples](./examples) for more details.
 
 ### UMD (Universal Module Definition)
 
@@ -32,13 +41,18 @@ const echarts = require('echarts');
 const barRangeInstaller = require('@echarts-x/custom-bar-range');
 echarts.use(barRangeInstaller);
 const chart = echarts.init(...);
-// ...
 
-// AMD
-require(['echarts', '@echarts-x/custom-bar-range'], function(echarts, barRangeInstaller) {
-  echarts.use(barRangeInstaller);
-});
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: '$CUSTOM_SERIES_NAME$',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
+
+See [examples](./examples) for more details.
 
 ### ESM (ES Modules)
 
@@ -53,6 +67,16 @@ import * as echarts from 'echarts';
 import barRangeCustomSeriesInstaller from '@echarts-x/custom-bar-range';
 
 echarts.use(barRangeCustomSeriesInstaller);
+const chart = echarts.init(...);
+
+const option = {
+  series: [{
+    type: 'custom',
+    renderItem: 'violin',
+    // ...
+  }]
+}
+chart.setOption(option);
 ```
 
 See [examples](./examples) for more details.

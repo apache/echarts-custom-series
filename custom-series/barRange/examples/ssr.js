@@ -47,6 +47,10 @@ const data = [
 ];
 
 option = {
+  animation: false,
+  tooltip: {
+    show: false,
+  },
   xAxis: {
     data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     type: 'category',
