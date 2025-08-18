@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-stage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom stage series for Apache ECharts",
   "main": "dist/index.js",
   "module": "dist/index.esm.mjs",
@@ -21,7 +21,7 @@
   ],
   "author": "",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/stage",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apache/echarts-custom-series.git"

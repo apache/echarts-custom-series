@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-contour",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Custom contour series for Apache ECharts",
   "main": "dist/index.js",
   "module": "dist/index.esm.mjs",
@@ -21,7 +21,7 @@
   ],
   "author": "",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/contour",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apache/echarts-custom-series.git"
