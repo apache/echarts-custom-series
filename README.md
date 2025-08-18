@@ -6,9 +6,9 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 
 | | |
 |-|-|
-| [violin](custom-series/violin) <br> ![violin](custom-series/violin/screenshots/violin.svg) | [contour](custom-series/contour) <br> ![contour](custom-series/contour/screenshots/contour.svg) |
-| [stage](custom-series/stage) <br> ![stage](custom-series/stage/screenshots/stage.svg) | [segmentedDoughnut](custom-series/segmentedDoughnut) <br> ![segmentedDoughnut](custom-series/segmentedDoughnut/screenshots/segmentedDoughnut.svg) |
-| [barRange](custom-series/barRange) <br> ![barRange](custom-series/barRange/screenshots/barRange.svg) | [lineRange](custom-series/lineRange) <br> ![lineRange](custom-series/lineRange/screenshots/lineRange.svg) |
+| `@echarts-x/custom-violin`<br> [doc](custom-series/violin) [npm](https://www.npmjs.com/package/@echarts-x/custom-violin) <br> ![violin](custom-series/violin/screenshots/violin.svg) | `@echarts-x/custom-contour`<br> [doc](custom-series/contour) [npm](https://www.npmjs.com/package/@echarts-x/custom-contour) <br> ![contour](custom-series/contour/screenshots/contour.svg) |
+| `@echarts-x/custom-stage`<br> [doc](custom-series/stage) [npm](https://www.npmjs.com/package/@echarts-x/custom-stage) <br> ![stage](custom-series/stage/screenshots/stage.svg) | `@echarts-x/custom-segmented-doughnut`<br> [doc](custom-series/segmentedDoughnut) [npm](https://www.npmjs.com/package/@echarts-x/custom-segmented-doughnut) <br> ![segmentedDoughnut](custom-series/segmentedDoughnut/screenshots/segmentedDoughnut.svg) |
+| `@echarts-x/custom-bar-range`<br> [doc](custom-series/barRange) [npm](https://www.npmjs.com/package/@echarts-x/custom-bar-range) <br> ![barRange](custom-series/barRange/screenshots/barRange.svg) | `@echarts-x/custom-line-range`<br> [doc](custom-series/lineRange) [npm](https://www.npmjs.com/package/@echarts-x/custom-line-range) <br> ![lineRange](custom-series/lineRange/screenshots/lineRange.svg) |
 
 See the README in the above links about how to install and use.
 
