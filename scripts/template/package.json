@@ -21,7 +21,7 @@
   ],
   "author": "",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/$CUSTOM_SERIES_NAME$",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apache/echarts-custom-series.git"
