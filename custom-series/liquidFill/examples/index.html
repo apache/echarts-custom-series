@@ -36,12 +36,42 @@
       echarts.use(window.liquidFillCustomSeriesInstaller);
       const chart = echarts.init(document.getElementById('main'));
 
-      option = {
+      const option = {
+        title: {
+          text: 'Liquid Fill Custom Series',
+          left: 'center',
+        },
         series: {
           type: 'custom',
           renderItem: 'liquidFill',
           coordinateSystem: 'none',
-          itemPayload: {},
+          data: [0.6],
+          color: ['#294D99', '#156ACF', '#1598ED', '#45BDFF'],
+          itemPayload: {
+            radius: '80%',
+            center: ['50%', '50%'],
+            outline: {
+              show: true,
+              borderDistance: 8,
+              itemStyle: {
+                borderWidth: 5,
+                borderColor: '#156ACF',
+                shadowBlur: 20,
+                shadowColor: 'rgba(0, 0, 0, 0.25)',
+              },
+            },
+            backgroundStyle: {
+              color: '#E3F7FF',
+            },
+            itemStyle: {
+              opacity: 0.6,
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.25)',
+            },
+            waveAnimation: true,
+            amplitude: 20,
+            waveLength: '80%',
+          },
         },
       };
 
