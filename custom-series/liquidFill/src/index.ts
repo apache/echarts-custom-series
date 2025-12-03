@@ -33,7 +33,7 @@ interface LiquidFillItemPayload {
   center?: (string | number)[];
   amplitude?: number;
   waveLength?: string | number;
-  phase?: number;
+  phase?: number | 'auto';
   period?: number | 'auto' | ((value: number, index: number) => number);
   direction?: 'right' | 'left' | 'none';
   shape?:
@@ -114,49 +114,37 @@ function getWaterPositions(
 }
 
 function createWavePath(
-  radius: number,
+  left: number,
+  totalWaveWidth: number,
   waterLevel: number,
   amplitude: number,
   waveLength: number,
-  phase: number,
-  cx: number,
+  radius: number,
   cy: number
 ): string {
-  const curves = Math.max(Math.ceil(((2 * radius) / waveLength) * 4) * 2, 8);
-
-  // map phase to [-Math.PI * 2, 0]
-  while (phase < -Math.PI * 2) {
-    phase += Math.PI * 2;
-  }
-  while (phase > 0) {
-    phase -= Math.PI * 2;
-  }
-  const phaseOffset = (phase / Math.PI / 2) * waveLength;
-  const left = cx - radius + phaseOffset - radius * 2;
+  const safeWaveLength = waveLength || 1;
+  const cycleCount = Math.max(1, Math.ceil(totalWaveWidth / safeWaveLength));
+  const curves = cycleCount * 4;
 
   let path = `M ${left} ${waterLevel}`;
 
-  let waveRight = 0;
   for (let c = 0; c < curves; ++c) {
     const stage = c % 4;
     const pos = getWaterPositions(
-      (c * waveLength) / 4,
+      (c * safeWaveLength) / 4,
       stage,
-      waveLength,
+      safeWaveLength,
       amplitude
     );
     path +=
       ` C ${pos[0][0] + left} ${-pos[0][1] + waterLevel}` +
       ` ${pos[1][0] + left} ${-pos[1][1] + waterLevel}` +
       ` ${pos[2][0] + left} ${-pos[2][1] + waterLevel}`;
-
-    if (c === curves - 1) {
-      waveRight = pos[2][0];
-    }
   }
 
-  // Close path
-  path += ` L ${waveRight + left} ${cy + radius}`;
+  const waveRight = left + cycleCount * safeWaveLength;
+
+  path += ` L ${waveRight} ${cy + radius}`;
   path += ` L ${left} ${cy + radius}`;
   path += ` L ${left} ${waterLevel}`;
   path += ' Z';
@@ -219,106 +207,116 @@ const renderItem = (
 
   // 2. Waves
   const cnt = params.dataInsideLength;
-  // We render all waves in the last iteration to handle layering correctly if needed,
-  // but custom series renders per data item.
-  // However, liquid fill usually has multiple values for one "series" (multiple waves).
-  // In custom series, usually data is [val1, val2...].
-  // If we want multiple waves, we iterate through all data items here if we are at the last one?
-  // Or simply render one wave per data item.
-  // Let's assume standard custom series behavior: renderItem is called for each data item.
-  // But liquid fill waves overlap.
-
-  // To mimic liquid fill, we need the context of all data items to determine opacity/layering,
-  // but renderItem is isolated.
-  // We can just render the wave for the current data item.
+  // renderItem is called once per data entry, so we draw one wave here.
+  // Overlapping waves rely on their own z ordering; no need to inspect siblings.
 
   const value = api.value(0) as number;
-  // Normalize value to 0-1 if it isn't? Liquid fill usually expects 0-1 for percentage.
-  // If user passes raw values, they might need to handle normalization or we assume 0-1.
 
   const waterLevel = cyVal + innerRadius - value * innerRadius * 2;
   const amplitude = itemPayload.amplitude || (8 * size) / 500; // Rough default scaling
-  const waveLength =
+  let waveLength =
     typeof itemPayload.waveLength === 'string'
       ? (parseFloat(itemPayload.waveLength) / 100) * innerRadius * 2
       : itemPayload.waveLength || innerRadius * 1.6;
+  if (!isFinite(waveLength) || waveLength <= 0) {
+    waveLength = innerRadius || 1;
+  }
+  const safeWaveLength = waveLength || 1;
 
-  const phase = (itemPayload.phase || 0) + (params.dataIndex * Math.PI) / 4;
+  const phaseSetting =
+    itemPayload.phase === undefined ? 'auto' : itemPayload.phase;
+  const phaseValue: number =
+    phaseSetting === 'auto' ? (params.dataIndex * Math.PI) / 4 : phaseSetting;
+  const normalizedPhase =
+    ((phaseValue % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+  const phaseRatio = normalizedPhase / (Math.PI * 2);
+  const phaseOffsetPx = phaseRatio * safeWaveLength;
 
-  // Animation state
-  // We use a custom property to animate phase
-  // In custom series, we can't easily run a continuous loop without external triggers or using the `transition` feature effectively.
-  // However, we can try to use the `enterFrom` / `updateFrom` for basic transitions,
-  // but continuous wave animation (moving left/right) is tricky in pure custom series without a loop.
-  // We will render a static wave for now, or a wave that transitions to a new phase if data updates.
+  const direction = itemPayload.direction ?? 'right';
+  const directionSign =
+    direction === 'left' ? 1 : direction === 'right' ? -1 : 0;
 
-  // To achieve the "flowing" effect, we would typically use the `keyframeAnimation`.
-  // Since we are in a custom series, let's use a large phase shift for animation if possible.
+  const extraLeftMargin = directionSign === 1 ? safeWaveLength : 0;
+  const extraRightMargin = directionSign === -1 ? safeWaveLength : 0;
+  const requiredWaveWidth =
+    innerRadius * 2 + extraLeftMargin + extraRightMargin;
+  const waveCount = Math.max(1, Math.ceil(requiredWaveWidth / safeWaveLength));
+  const totalWaveWidth = waveCount * safeWaveLength;
+  const waveLeft = cxVal - innerRadius - extraLeftMargin;
 
   const wavePath = createWavePath(
-    innerRadius,
+    waveLeft,
+    totalWaveWidth,
     waterLevel,
     amplitude,
-    waveLength,
-    phase,
-    cxVal,
+    safeWaveLength,
+    innerRadius,
     cyVal
   );
 
-  // Since keyframe animation of path string calculation isn't supported directly,
-  // we use a Group with translation for the wave effect.
-  // The wave path is generated much wider than the container.
+  const periodSetting = itemPayload.period ?? 'auto';
+  let periodMs: number;
+  if (periodSetting === 'auto') {
+    const dataCount = Math.max(cnt, 1);
+    const base = 5000;
+    const weight =
+      cnt === 0 ? 1 : 0.2 + ((cnt - params.dataIndex) / dataCount) * 0.8;
+    periodMs = base * weight;
+  } else if (typeof periodSetting === 'function') {
+    periodMs = periodSetting(value, params.dataIndex);
+  } else {
+    periodMs = periodSetting;
+  }
+  if (!isFinite(periodMs) || periodMs <= 0) {
+    periodMs = 2000;
+  }
 
-  const groupChildren: CustomElementOption[] = [];
+  const initialOffsetX = -phaseOffsetPx;
+  const waveSpeed = periodMs === 0 ? 0 : safeWaveLength / periodMs;
+  const animationDuration =
+    waveSpeed === 0 ? periodMs : safeWaveLength / waveSpeed;
+  const animationDelay =
+    directionSign === 0 || waveSpeed === 0 ? 0 : -phaseOffsetPx / waveSpeed;
 
-  // Re-generate path to be very wide for translation animation
-  // We need it to repeat.
-  // Simplified approach: Just render the static shape for this demo,
-  // or use the `transition` on a custom attribute if we were updating frequently.
-  // For a true liquid fill wave animation in custom series, we'd need to register a timer in the main app
-  // or use a custom shader/graphic element which is out of scope for standard `renderItem`.
-  // However, we can simulate it by rendering a very long wave and animating x.
+  const wavePathElement: CustomElementOption = {
+    type: 'path',
+    shape: {
+      pathData: wavePath,
+    },
+    style: {
+      fill: api.visual('color'),
+      opacity: itemPayload.itemStyle?.opacity || 0.95,
+    },
+    z2: 10 + params.dataIndex,
+  };
 
   const waveGroup: CustomElementOption = {
     type: 'group',
-    x: 0,
+    x: initialOffsetX,
     y: 0,
-    children: [
-      {
-        type: 'path',
-        shape: {
-          pathData: wavePath,
-        },
-        style: {
-          fill: api.visual('color'),
-          opacity: itemPayload.itemStyle?.opacity || 0.95,
-        },
-        // Use keyframe animation to move the wave horizontally
-        keyframeAnimation:
-          itemPayload.waveAnimation !== false
-            ? {
-                duration: 2000,
-                loop: true,
-                keyframes: [
-                  {
-                    percent: 1,
-                    x: waveLength, // Move by one wavelength
-                  },
-                ],
-              }
-            : undefined,
-      } as CustomElementOption,
-    ],
-    // clipPath: {
-    //   type: 'circle',
-    //   shape: {
-    //       cx: cxVal,
-    //       cy: cyVal,
-    //       r: innerRadius
-    //   }
-    // },
-    // z2: 10
+    children: [wavePathElement],
   };
+
+  if (
+    itemPayload.waveAnimation !== false &&
+    directionSign !== 0 &&
+    safeWaveLength > 0 &&
+    animationDuration > 0 &&
+    waveSpeed > 0
+  ) {
+    waveGroup.keyframeAnimation = {
+      duration: animationDuration,
+      loop: true,
+      delay: animationDelay,
+      keyframes: [
+        { percent: 0, x: initialOffsetX },
+        {
+          percent: 1,
+          x: initialOffsetX + directionSign * safeWaveLength,
+        },
+      ],
+    };
+  }
 
   children.push(waveGroup);
   return {
