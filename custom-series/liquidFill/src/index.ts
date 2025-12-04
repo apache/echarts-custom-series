@@ -283,6 +283,7 @@ const renderItem = (
     shape: {
       pathData: wavePath,
     },
+    x: initialOffsetX,
     style: {
       fill: api.visual('color'),
       opacity: itemPayload.itemStyle?.opacity || 0.95,
@@ -292,8 +293,15 @@ const renderItem = (
 
   const waveGroup: CustomElementOption = {
     type: 'group',
-    x: initialOffsetX,
     y: 0,
+    clipPath: {
+      type: 'circle',
+      shape: {
+        cx: cxVal,
+        cy: cyVal,
+        r: innerRadius,
+      },
+    },
     children: [wavePathElement],
   };
 
@@ -304,18 +312,23 @@ const renderItem = (
     animationDuration > 0 &&
     waveSpeed > 0
   ) {
-    waveGroup.keyframeAnimation = {
+    (
+      wavePathElement as CustomElementOption & { keyframeAnimation?: any }
+    ).keyframeAnimation = {
       duration: animationDuration,
       loop: true,
       delay: animationDelay,
       keyframes: [
-        { percent: 0, x: initialOffsetX },
+        {
+          percent: 0,
+          x: initialOffsetX,
+        },
         {
           percent: 1,
           x: initialOffsetX + directionSign * safeWaveLength,
         },
       ],
-    };
+    } as CustomElementOption['keyframeAnimation'];
   }
 
   children.push(waveGroup);
