@@ -36,41 +36,47 @@
       echarts.use(window.liquidFillCustomSeriesInstaller);
       const chart = echarts.init(document.getElementById('main'));
 
+      const bgColor = '#E3F7FF';
       const option = {
-        title: {
-          text: 'Liquid Fill Custom Series',
-          left: 'center',
-        },
+        color: ['#294D99', '#156ACF', '#1598ED', '#45BDFF'],
         series: {
           type: 'custom',
           renderItem: 'liquidFill',
           coordinateSystem: 'none',
-          data: [0.6],
-          color: ['#294D99', '#156ACF', '#1598ED', '#45BDFF'],
+          colorBy: 'item',
+          data: [0.6, 0.5, 0.4, 0.3],
           itemPayload: {
             radius: '80%',
             center: ['50%', '50%'],
             outline: {
-              show: true,
-              borderDistance: 8,
-              itemStyle: {
-                borderWidth: 5,
-                borderColor: '#156ACF',
-                shadowBlur: 20,
-                shadowColor: 'rgba(0, 0, 0, 0.25)',
-              },
+              show: false,
             },
             backgroundStyle: {
-              color: '#E3F7FF',
+              borderColor: '#156ACF',
+              borderWidth: 1,
+              color: bgColor,
+              shadowColor: 'rgba(0, 0, 0, 0.4)',
+              shadowBlur: 20,
             },
             itemStyle: {
-              opacity: 0.6,
-              shadowBlur: 10,
+              opacity: 0.75,
+              shadowBlur: 18,
               shadowColor: 'rgba(0, 0, 0, 0.25)',
             },
+            label: {
+              show: true,
+              position: ['50%', '40%'],
+              formatter: function () {
+                return 'ECharts\nLiquid Fill';
+              },
+              fontSize: 50,
+              fontWeight: 'bold',
+              color: '#294D99',
+              insideColor: bgColor,
+            },
             waveAnimation: true,
-            amplitude: 20,
-            waveLength: '80%',
+            amplitude: 18,
+            waveLength: '60%',
           },
         },
       };
