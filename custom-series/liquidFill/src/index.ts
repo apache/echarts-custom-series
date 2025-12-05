@@ -27,6 +27,8 @@ import type {
   EChartsExtensionInstallRegisters,
   EChartsExtension,
 } from 'echarts/types/src/extension.d.ts';
+import { createLabelGroup } from './label';
+import type { LiquidFillLabelOption } from './label';
 
 interface LiquidFillItemPayload {
   radius?: string | number;
@@ -36,6 +38,7 @@ interface LiquidFillItemPayload {
   phase?: number | 'auto';
   period?: number | 'auto' | ((value: number, index: number) => number);
   direction?: 'right' | 'left' | 'none';
+  label?: LiquidFillLabelOption;
   shape?:
     | 'circle'
     | 'rect'
@@ -278,6 +281,8 @@ const renderItem = (
   const animationDelay =
     directionSign === 0 || waveSpeed === 0 ? 0 : -phaseOffsetPx / waveSpeed;
 
+  let waveAnimationOption: CustomElementOption['keyframeAnimation'];
+
   const wavePathElement: CustomElementOption = {
     type: 'path',
     shape: {
@@ -312,9 +317,7 @@ const renderItem = (
     animationDuration > 0 &&
     waveSpeed > 0
   ) {
-    (
-      wavePathElement as CustomElementOption & { keyframeAnimation?: any }
-    ).keyframeAnimation = {
+    waveAnimationOption = {
       duration: animationDuration,
       loop: true,
       delay: animationDelay,
@@ -331,7 +334,36 @@ const renderItem = (
     } as CustomElementOption['keyframeAnimation'];
   }
 
+  if (waveAnimationOption) {
+    (
+      wavePathElement as CustomElementOption & { keyframeAnimation?: any }
+    ).keyframeAnimation = waveAnimationOption;
+  }
+
   children.push(waveGroup);
+
+  if (params.dataIndex === 0) {
+    const labelGroup = createLabelGroup({
+      labelOption: itemPayload.label,
+      value,
+      dataIndex: params.dataIndex,
+      cx: cxVal,
+      cy: cyVal,
+      innerRadius,
+      boundingLeft: cxVal - innerRadius,
+      boundingTop: cyVal - innerRadius,
+      boundingWidth: innerRadius * 2,
+      boundingHeight: innerRadius * 2,
+      wavePathData: wavePath,
+      waveInitialX: initialOffsetX,
+      waveAnimation: waveAnimationOption,
+      defaultColor: api.visual('color') as string,
+    });
+
+    if (labelGroup) {
+      children.push(labelGroup);
+    }
+  }
   return {
     type: 'group',
     children,
