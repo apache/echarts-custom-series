@@ -27,8 +27,7 @@ import type {
   EChartsExtensionInstallRegisters,
   EChartsExtension,
 } from 'echarts/types/src/extension.d.ts';
-import { createLabelGroup } from './label';
-import type { LiquidFillLabelOption } from './label';
+import { createLabelGroup, type RenderItemStyle } from './label';
 
 interface LiquidFillItemPayload {
   radius?: string | number;
@@ -38,7 +37,6 @@ interface LiquidFillItemPayload {
   phase?: number | 'auto';
   period?: number | 'auto' | ((value: number, index: number) => number);
   direction?: 'right' | 'left' | 'none';
-  label?: LiquidFillLabelOption;
   shape?:
     | 'circle'
     | 'rect'
@@ -70,6 +68,7 @@ interface LiquidFillItemPayload {
     shadowBlur?: number;
     shadowColor?: string;
   };
+  labelInsideColor?: string;
 }
 
 /**
@@ -163,6 +162,8 @@ const renderItem = (
   const width = api.getWidth();
   const height = api.getHeight();
   const size = Math.min(width, height);
+  const elementStyle = api.style() as RenderItemStyle;
+  const styleAny = elementStyle as Record<string, any>;
 
   const center = itemPayload.center || ['50%', '50%'];
   const cxVal =
@@ -283,6 +284,19 @@ const renderItem = (
 
   let waveAnimationOption: CustomElementOption['keyframeAnimation'];
 
+  const waveFill =
+    (styleAny.fill as string | undefined) || (api.visual('color') as string);
+  const waveOpacity =
+    styleAny.opacity != null
+      ? Number(styleAny.opacity)
+      : itemPayload.itemStyle?.opacity ?? 0.95;
+  const waveShadowBlur =
+    (styleAny.shadowBlur as number | undefined) ??
+    itemPayload.itemStyle?.shadowBlur;
+  const waveShadowColor =
+    (styleAny.shadowColor as string | undefined) ??
+    itemPayload.itemStyle?.shadowColor;
+
   const wavePathElement: CustomElementOption = {
     type: 'path',
     shape: {
@@ -290,8 +304,10 @@ const renderItem = (
     },
     x: initialOffsetX,
     style: {
-      fill: api.visual('color'),
-      opacity: itemPayload.itemStyle?.opacity || 0.95,
+      fill: waveFill,
+      opacity: waveOpacity,
+      shadowBlur: waveShadowBlur,
+      shadowColor: waveShadowColor,
     },
     z2: 10 + params.dataIndex,
   };
@@ -343,10 +359,13 @@ const renderItem = (
   children.push(waveGroup);
 
   if (params.dataIndex === 0) {
+    const defaultLabelColor =
+      (styleAny.textFill as string | undefined) ??
+      (styleAny.fill as string | undefined) ??
+      waveFill;
+
     const labelGroup = createLabelGroup({
-      labelOption: itemPayload.label,
-      value,
-      dataIndex: params.dataIndex,
+      style: elementStyle,
       cx: cxVal,
       cy: cyVal,
       innerRadius,
@@ -357,7 +376,8 @@ const renderItem = (
       wavePathData: wavePath,
       waveInitialX: initialOffsetX,
       waveAnimation: waveAnimationOption,
-      defaultColor: api.visual('color') as string,
+      defaultColor: defaultLabelColor,
+      insideColorOverride: itemPayload.labelInsideColor,
     });
 
     if (labelGroup) {

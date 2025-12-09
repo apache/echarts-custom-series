@@ -1,38 +1,12 @@
-import type { CustomElementOption } from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
+import type {
+  CustomElementOption,
+  CustomSeriesRenderItemAPI,
+} from 'echarts/types/src/chart/custom/CustomSeries.d.ts';
 
-export type LiquidFillLabelFormatter =
-  | string
-  | ((params: { value: number; percent: number; index: number }) => string);
-
-export interface LiquidFillLabelOption {
-  show?: boolean;
-  formatter?: LiquidFillLabelFormatter;
-  position?: (number | string)[] | string;
-  color?: string;
-  insideColor?: string;
-  fontSize?: number;
-  fontFamily?: string;
-  fontWeight?: string;
-  fontStyle?: string;
-  lineHeight?: number;
-  align?: 'left' | 'center' | 'right';
-  verticalAlign?: 'top' | 'middle' | 'bottom';
-  rich?: Record<string, unknown>;
-  backgroundColor?: string | Record<string, unknown>;
-  borderColor?: string;
-  borderWidth?: number;
-  borderRadius?: number | number[];
-  padding?: number | number[];
-  shadowBlur?: number;
-  shadowColor?: string;
-  shadowOffsetX?: number;
-  shadowOffsetY?: number;
-}
+export type RenderItemStyle = ReturnType<CustomSeriesRenderItemAPI['style']>;
 
 interface CreateLabelParams {
-  labelOption?: LiquidFillLabelOption;
-  value: number;
-  dataIndex: number;
+  style?: RenderItemStyle;
   cx: number;
   cy: number;
   innerRadius: number;
@@ -44,12 +18,11 @@ interface CreateLabelParams {
   waveInitialX: number;
   waveAnimation?: CustomElementOption['keyframeAnimation'];
   defaultColor: string;
+  insideColorOverride?: string;
 }
 
 export function createLabelGroup({
-  labelOption,
-  value,
-  dataIndex,
+  style,
   cx,
   cy,
   innerRadius,
@@ -61,18 +34,20 @@ export function createLabelGroup({
   waveInitialX,
   waveAnimation,
   defaultColor,
+  insideColorOverride,
 }: CreateLabelParams): CustomElementOption | undefined {
-  if (!labelOption || labelOption.show === false) {
+  if (!style) {
     return undefined;
   }
 
-  const textContent = formatLabelText(labelOption.formatter, value, dataIndex);
-  if (!textContent) {
+  const styleAny = style as Record<string, any>;
+  const textContent = styleAny.text;
+  if (textContent == null || `${textContent}` === '') {
     return undefined;
   }
 
   const position = resolvePosition(
-    labelOption.position,
+    styleAny.textPosition,
     cx,
     cy,
     innerRadius,
@@ -82,37 +57,49 @@ export function createLabelGroup({
     boundingHeight
   );
 
-  const baseStyle = buildBaseTextStyle(labelOption, position.x, position.y);
-  const resolvedAlign = labelOption.align ?? position.align;
+  const baseStyle = buildBaseTextStyle(styleAny, position.x, position.y);
+  const resolvedAlign =
+    (styleAny.textAlign ?? styleAny.align ?? position.align) as
+      | 'left'
+      | 'center'
+      | 'right';
   const resolvedVerticalAlign =
-    labelOption.verticalAlign ?? position.verticalAlign;
+    (resolveVerticalAlign(styleAny) ?? position.verticalAlign) as
+      | 'top'
+      | 'middle'
+      | 'bottom';
   baseStyle.align = resolvedAlign;
   baseStyle.textAlign = resolvedAlign;
   baseStyle.verticalAlign = resolvedVerticalAlign;
   baseStyle.textVerticalAlign = resolvedVerticalAlign;
-  baseStyle.text = textContent;
+  baseStyle.text = String(textContent);
 
-  const outsideFill = labelOption.color || defaultColor;
-  const insideFill = labelOption.insideColor || outsideFill;
+  const outsideFill =
+    (styleAny.textFill as string | undefined) ??
+    (styleAny.fill as string | undefined) ??
+    defaultColor;
 
-  const outsideTextStyle = Object.assign({}, baseStyle, { fill: outsideFill });
-  const insideTextStyle = Object.assign({}, baseStyle, { fill: insideFill });
+  const insideFill =
+    insideColorOverride ??
+    (styleAny.textInsideColor as string | undefined) ??
+    (styleAny.insideColor as string | undefined) ??
+    outsideFill;
 
   const outsideText: CustomElementOption = {
     type: 'text',
     silent: true,
     z2: 40,
-    style: outsideTextStyle,
+    style: Object.assign({}, baseStyle, { fill: outsideFill }),
   };
 
   const insideText: CustomElementOption = {
     type: 'text',
     silent: true,
     z2: 41,
-    style: insideTextStyle,
+    style: Object.assign({}, baseStyle, { fill: insideFill }),
   };
 
-  const waveClipPath: any = {
+  const waveClipPath: CustomElementOption = {
     type: 'path',
     shape: {
       pathData: wavePathData,
@@ -126,10 +113,10 @@ export function createLabelGroup({
         r: innerRadius,
       },
     },
-  } as CustomElementOption;
+  };
 
   if (waveAnimation) {
-    waveClipPath.keyframeAnimation = cloneAnimation(waveAnimation);
+    (waveClipPath as any).keyframeAnimation = cloneAnimation(waveAnimation);
   }
 
   (insideText as any).clipPath = waveClipPath;
@@ -141,58 +128,86 @@ export function createLabelGroup({
   };
 }
 
-function formatLabelText(
-  formatter: LiquidFillLabelFormatter | undefined,
-  value: number,
-  dataIndex: number
-): string {
-  const percent = isFinite(value) ? value * 100 : NaN;
-
-  if (typeof formatter === 'function') {
-    return formatter({ value, percent, index: dataIndex }) ?? '';
-  }
-
-  if (typeof formatter === 'string') {
-    return formatter
-      .replace('{value}', formatNumber(value))
-      .replace('{percent}', formatNumber(percent));
-  }
-
-  if (isFinite(percent)) {
-    return `${formatNumber(percent)}%`;
-  }
-
-  return formatNumber(value);
-}
-
 function buildBaseTextStyle(
-  labelOption: LiquidFillLabelOption,
+  styleAny: Record<string, any>,
   x: number,
   y: number
 ) {
-  return {
+  const result: Record<string, unknown> = {
     x,
     y,
-    fontSize: labelOption.fontSize,
-    fontFamily: labelOption.fontFamily,
-    fontWeight: labelOption.fontWeight,
-    fontStyle: labelOption.fontStyle,
-    lineHeight: labelOption.lineHeight,
-    rich: labelOption.rich,
-    backgroundColor: labelOption.backgroundColor,
-    borderColor: labelOption.borderColor,
-    borderWidth: labelOption.borderWidth,
-    borderRadius: labelOption.borderRadius,
-    padding: labelOption.padding,
-    shadowBlur: labelOption.shadowBlur,
-    shadowColor: labelOption.shadowColor,
-    shadowOffsetX: labelOption.shadowOffsetX,
-    shadowOffsetY: labelOption.shadowOffsetY,
-  } as Record<string, unknown>;
+  };
+
+  assignIfDefined(result, 'fontSize', styleAny.fontSize);
+  assignIfDefined(result, 'fontFamily', styleAny.fontFamily);
+  assignIfDefined(result, 'fontWeight', styleAny.fontWeight);
+  assignIfDefined(result, 'fontStyle', styleAny.fontStyle);
+  assignIfDefined(result, 'lineHeight', styleAny.lineHeight);
+  assignIfDefined(result, 'rich', styleAny.rich);
+  assignIfDefined(result, 'backgroundColor', styleAny.backgroundColor);
+  assignIfDefined(result, 'borderColor', styleAny.borderColor);
+  assignIfDefined(result, 'borderWidth', styleAny.borderWidth);
+  assignIfDefined(result, 'borderRadius', styleAny.borderRadius);
+  assignIfDefined(result, 'padding', styleAny.padding);
+
+  const shadowBlur =
+    styleAny.textShadowBlur != null ? styleAny.textShadowBlur : styleAny.shadowBlur;
+  const shadowColor =
+    styleAny.textShadowColor != null
+      ? styleAny.textShadowColor
+      : styleAny.shadowColor;
+  const shadowOffsetX =
+    styleAny.textShadowOffsetX != null
+      ? styleAny.textShadowOffsetX
+      : styleAny.shadowOffsetX;
+  const shadowOffsetY =
+    styleAny.textShadowOffsetY != null
+      ? styleAny.textShadowOffsetY
+      : styleAny.shadowOffsetY;
+
+  assignIfDefined(result, 'shadowBlur', shadowBlur);
+  assignIfDefined(result, 'shadowColor', shadowColor);
+  assignIfDefined(result, 'shadowOffsetX', shadowOffsetX);
+  assignIfDefined(result, 'shadowOffsetY', shadowOffsetY);
+
+  const stroke =
+    styleAny.textStroke != null ? styleAny.textStroke : styleAny.stroke;
+  const strokeWidth =
+    styleAny.textStrokeWidth != null
+      ? styleAny.textStrokeWidth
+      : styleAny.lineWidth ?? styleAny.strokeWidth;
+
+  assignIfDefined(result, 'stroke', stroke);
+  assignIfDefined(result, 'lineWidth', strokeWidth);
+
+  return result;
+}
+
+function resolveVerticalAlign(style: Record<string, any>) {
+  const direct = style.textVerticalAlign ?? style.verticalAlign;
+  if (direct === 'top' || direct === 'middle' || direct === 'bottom') {
+    return direct;
+  }
+  if (direct === 'center') {
+    return 'middle';
+  }
+
+  const baseline = style.textBaseline ?? style.baseline;
+  if (baseline === 'top') {
+    return 'top';
+  }
+  if (baseline === 'middle' || baseline === 'center') {
+    return 'middle';
+  }
+  if (baseline === 'bottom' || baseline === 'baseline') {
+    return 'bottom';
+  }
+
+  return undefined;
 }
 
 function resolvePosition(
-  position: LiquidFillLabelOption['position'],
+  position: unknown,
   cx: number,
   cy: number,
   radius: number,
@@ -201,7 +216,6 @@ function resolvePosition(
   width: number,
   height: number
 ) {
-  console.log(cx, cy);
   if (Array.isArray(position)) {
     return {
       x: parseCoordinate(position[0], width, cx - left) + left,
@@ -212,6 +226,13 @@ function resolvePosition(
   }
 
   switch (position) {
+    case 'inside':
+      return {
+        x: cx,
+        y: cy,
+        align: 'center' as const,
+        verticalAlign: 'middle' as const,
+      };
     case 'left':
     case 'insideLeft':
       return {
@@ -254,11 +275,7 @@ function resolvePosition(
   }
 }
 
-function parseCoordinate(
-  value: string | number | undefined,
-  size: number,
-  fallback: number
-) {
+function parseCoordinate(value: unknown, size: number, fallback: number) {
   if (typeof value === 'number' && isFinite(value)) {
     return value;
   }
@@ -283,15 +300,14 @@ function parsePercent(value: string): number | null {
   return parseFloat(match[1]) / 100;
 }
 
-function formatNumber(num: number): string {
-  if (!isFinite(num)) {
-    return '';
+function assignIfDefined(
+  target: Record<string, unknown>,
+  key: string,
+  value: unknown
+) {
+  if (value !== undefined && value !== null) {
+    target[key] = value;
   }
-  const abs = Math.abs(num);
-  if (abs === 0 || abs >= 1) {
-    return Math.round(num).toString();
-  }
-  return num.toFixed(2);
 }
 
 function cloneAnimation(
@@ -307,7 +323,7 @@ function cloneAnimation(
   const cloned: Record<string, unknown> = {};
   for (const key in animation) {
     if (Object.prototype.hasOwnProperty.call(animation, key)) {
-      (cloned as any)[key] = (animation as any)[key];
+      cloned[key] = (animation as Record<string, unknown>)[key];
     }
   }
 
