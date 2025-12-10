@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const liquidFillInstaller = require('../dist/index.js');
+const liquidFillInstaller = require('../dist/liquid-fill.js');
 
 echarts.use(liquidFillInstaller);
 
@@ -35,28 +35,51 @@ const myRandom = new seedrandom('echarts-random');
 Math.random = function () {
   return myRandom();
 };
-
-// Sample data generation - customize this for your specific chart type
-const sampleData = [];
-// TODO: Generate appropriate sample data for liquidFill
-
+const bgColor = '#E3F7FF';
 const option = {
-  animation: false,
-  tooltip: {
-    show: false,
-  },
-  // TODO: Configure axes and other options specific to liquidFill
-  series: [
-    {
-      type: 'custom',
-      renderItem: 'liquidFill',
-      data: sampleData,
-      silent: true,
-      itemPayload: {
-        // TODO: Add specific itemPayload properties for liquidFill
+  color: ['#294D99', '#156ACF', '#1598ED', '#45BDFF'],
+  series: {
+    type: 'custom',
+    renderItem: 'liquidFill',
+    coordinateSystem: 'none',
+    colorBy: 'item',
+    data: [0.6, 0.5, 0.4, 0.3],
+    label: {
+      show: true,
+      position: ['50%', '40%'],
+      formatter: function () {
+        return 'ECharts\nLiquid Fill';
       },
+      fontSize: 50,
+      fontWeight: 'bold',
+      color: '#294D99',
+      align: 'center',
+      verticalAlign: 'middle',
     },
-  ],
+    itemPayload: {
+      radius: '80%',
+      center: ['50%', '50%'],
+      outline: {
+        show: false,
+      },
+      backgroundStyle: {
+        borderColor: '#156ACF',
+        borderWidth: 1,
+        color: bgColor,
+        shadowColor: 'rgba(0, 0, 0, 0.4)',
+        shadowBlur: 20,
+      },
+      itemStyle: {
+        opacity: 0.75,
+        shadowBlur: 18,
+        shadowColor: 'rgba(0, 0, 0, 0.25)',
+      },
+      labelInsideColor: '#fff',
+      waveAnimation: true,
+      amplitude: 18,
+      waveLength: '60%',
+    },
+  },
 };
 
 chart.setOption(option);

@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const violinInstaller = require('../dist/index.js');
+const violinInstaller = require('../dist/violin.js');
 
 echarts.use(violinInstaller);
 

@@ -58,16 +58,11 @@ export function createLabelGroup({
   );
 
   const baseStyle = buildBaseTextStyle(styleAny, position.x, position.y);
-  const resolvedAlign =
-    (styleAny.textAlign ?? styleAny.align ?? position.align) as
-      | 'left'
-      | 'center'
-      | 'right';
-  const resolvedVerticalAlign =
-    (resolveVerticalAlign(styleAny) ?? position.verticalAlign) as
-      | 'top'
-      | 'middle'
-      | 'bottom';
+  const resolvedAlign = (styleAny.textAlign ??
+    styleAny.align ??
+    position.align) as 'left' | 'center' | 'right';
+  const resolvedVerticalAlign = (resolveVerticalAlign(styleAny) ??
+    position.verticalAlign) as 'top' | 'middle' | 'bottom';
   baseStyle.align = resolvedAlign;
   baseStyle.textAlign = resolvedAlign;
   baseStyle.verticalAlign = resolvedVerticalAlign;
@@ -151,7 +146,9 @@ function buildBaseTextStyle(
   assignIfDefined(result, 'padding', styleAny.padding);
 
   const shadowBlur =
-    styleAny.textShadowBlur != null ? styleAny.textShadowBlur : styleAny.shadowBlur;
+    styleAny.textShadowBlur != null
+      ? styleAny.textShadowBlur
+      : styleAny.shadowBlur;
   const shadowColor =
     styleAny.textShadowColor != null
       ? styleAny.textShadowColor

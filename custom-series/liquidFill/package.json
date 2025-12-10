@@ -2,16 +2,16 @@
   "name": "@echarts-x/custom-liquid-fill",
   "version": "1.0.0-beta.0",
   "description": "Custom liquidFill series for Apache ECharts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/liquid-fill.js",
+  "module": "dist/liquid-fill.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/liquid-fill.d.ts",
+      "import": "./dist/liquid-fill.esm.mjs",
+      "require": "./dist/liquid-fill.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/liquid-fill.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",
