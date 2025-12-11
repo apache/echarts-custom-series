@@ -2,16 +2,16 @@
   "name": "@echarts-x/custom-violin",
   "version": "1.0.1",
   "description": "Custom violin series for Apache ECharts",
-  "main": "dist/violin.js",
-  "module": "dist/violin.esm.mjs",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/violin.d.ts",
-      "import": "./dist/violin.esm.mjs",
-      "require": "./dist/violin.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.mjs",
+      "require": "./dist/index.js"
     }
   },
-  "types": "dist/violin.d.ts",
+  "types": "dist/index.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",
