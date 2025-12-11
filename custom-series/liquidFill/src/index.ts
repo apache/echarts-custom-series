@@ -46,6 +46,8 @@ interface LiquidFillItemPayload {
     | 'pin'
     | 'arrow';
   waveAnimation?: boolean;
+  animationDuration?: number;
+  animationEasing?: string;
   outline?: {
     show?: boolean;
     borderDistance?: number;
@@ -276,11 +278,27 @@ const renderItem = (
   }
 
   const initialOffsetX = -phaseOffsetPx;
-  const waveSpeed = periodMs === 0 ? 0 : safeWaveLength / periodMs;
-  const animationDuration =
-    waveSpeed === 0 ? periodMs : safeWaveLength / waveSpeed;
+  let animationDuration = periodMs;
+  const customAnimationDuration = itemPayload.animationDuration;
+  if (
+    customAnimationDuration != null &&
+    isFinite(customAnimationDuration) &&
+    customAnimationDuration > 0
+  ) {
+    animationDuration = customAnimationDuration;
+  }
+  if (!isFinite(animationDuration) || animationDuration <= 0) {
+    animationDuration = 0;
+  }
+  const effectiveWaveSpeed =
+    animationDuration > 0 && safeWaveLength > 0
+      ? safeWaveLength / animationDuration
+      : 0;
   const animationDelay =
-    directionSign === 0 || waveSpeed === 0 ? 0 : -phaseOffsetPx / waveSpeed;
+    directionSign === 0 || effectiveWaveSpeed === 0
+      ? 0
+      : -phaseOffsetPx / effectiveWaveSpeed;
+  const animationEasing = itemPayload.animationEasing;
 
   let waveAnimationOption: CustomElementOption['keyframeAnimation'];
 
@@ -331,9 +349,11 @@ const renderItem = (
     directionSign !== 0 &&
     safeWaveLength > 0 &&
     animationDuration > 0 &&
-    waveSpeed > 0
+    effectiveWaveSpeed > 0
   ) {
-    waveAnimationOption = {
+    const keyframeAnimation: CustomElementOption['keyframeAnimation'] & {
+      easing?: string;
+    } = {
       duration: animationDuration,
       loop: true,
       delay: animationDelay,
@@ -347,7 +367,11 @@ const renderItem = (
           x: initialOffsetX + directionSign * safeWaveLength,
         },
       ],
-    } as CustomElementOption['keyframeAnimation'];
+    };
+    if (animationEasing) {
+      keyframeAnimation.easing = animationEasing as any;
+    }
+    waveAnimationOption = keyframeAnimation;
   }
 
   if (waveAnimationOption) {
