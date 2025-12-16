@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const contourInstaller = require('../dist/index.js');
+const contourInstaller = require('../dist/contour.js');
 
 echarts.use(contourInstaller);
 
