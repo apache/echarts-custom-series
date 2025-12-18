@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-liquid-fill",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "Custom liquidFill series for Apache ECharts",
   "main": "dist/liquid-fill.js",
   "module": "dist/liquid-fill.esm.mjs",
