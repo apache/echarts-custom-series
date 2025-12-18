@@ -1,6 +1,6 @@
 # @echarts-x/custom-liquid-fill
 
-`liquidFill` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
+`liquidFill` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to represent percentage values, capacity levels, or progress in a visually appealing way.
 
 ![liquidFill](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/liquidFill/screenshots/liquidFill.svg)
 
@@ -85,10 +85,10 @@ See [examples](./examples) for more details.
 
 ### series.data
 
-The data of the series is an array of arrays. Each sub-array represents ...
+The data of the series is an array of numbers. Each value represents the liquid fill level for one item, typically in the range from `0` (empty) to `1` (full).
 
 ```js
-const data = [];
+const data = [0.6, 0.5, 0.4, 0.3];
 ```
 
 ### series.itemPayload

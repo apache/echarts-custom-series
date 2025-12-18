@@ -9,7 +9,7 @@ This repo provides some custom series for [Apache ECharts](https://github.com/ap
 | `@echarts-x/custom-violin`<br> [doc](custom-series/violin) [npm](https://www.npmjs.com/package/@echarts-x/custom-violin) <br> ![violin](custom-series/violin/screenshots/violin.svg) | `@echarts-x/custom-contour`<br> [doc](custom-series/contour) [npm](https://www.npmjs.com/package/@echarts-x/custom-contour) <br> ![contour](custom-series/contour/screenshots/contour.svg) |
 | `@echarts-x/custom-stage`<br> [doc](custom-series/stage) [npm](https://www.npmjs.com/package/@echarts-x/custom-stage) <br> ![stage](custom-series/stage/screenshots/stage.svg) | `@echarts-x/custom-segmented-doughnut`<br> [doc](custom-series/segmentedDoughnut) [npm](https://www.npmjs.com/package/@echarts-x/custom-segmented-doughnut) <br> ![segmentedDoughnut](custom-series/segmentedDoughnut/screenshots/segmentedDoughnut.svg) |
 | `@echarts-x/custom-bar-range`<br> [doc](custom-series/barRange) [npm](https://www.npmjs.com/package/@echarts-x/custom-bar-range) <br> ![barRange](custom-series/barRange/screenshots/barRange.svg) | `@echarts-x/custom-line-range`<br> [doc](custom-series/lineRange) [npm](https://www.npmjs.com/package/@echarts-x/custom-line-range) <br> ![lineRange](custom-series/lineRange/screenshots/lineRange.svg) |
-| `@echarts-x/custom-liquid-fill`<br> [doc](custom-series/liquidFill) [npm](https://www.npmjs.com/package/@echarts-x/liquid-fill) <br> ![liquidFill](custom-series/liquidFill/screenshots/liquidFill.svg) | |
+| `@echarts-x/custom-liquid-fill`<br> [doc](custom-series/liquidFill) [npm](https://www.npmjs.com/package/@echarts-x/custom-liquid-fill) <br> ![liquidFill](custom-series/liquidFill/screenshots/liquidFill.svg) | |
 
 See the README in the above links about how to install and use.
 
@@ -70,7 +70,7 @@ npm install # to update the version in package-lock.json
 npm login
 npm version prerelease --preid=beta
 npm publish --tag beta --dry-run
-# if the outpuf is ok
+# if the output is ok
 npm publish --tag beta
 ```
 
