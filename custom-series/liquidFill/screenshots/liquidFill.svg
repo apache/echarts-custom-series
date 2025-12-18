@@ -1,0 +1,128 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" viewBox="0 0 600 400">
+<rect width="600" height="400" x="0" y="0" fill="none"></rect>
+<circle cx="300" cy="200" r="160" fill="#E3F7FF" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-0"></circle>
+<g clip-path="url(#zr0-c0)">
+<path d="M140 168C155.3 159 170.6 150 188 150C205.4 150 220.7 159 236 168C251.3 177 266.6 186 284 186C301.4 186 316.7 177 332 168C347.3 159 362.6 150 380 150C397.4 150 412.7 159 428 168C443.3 177 458.6 186 476 186C493.4 186 508.7 177 524 168C539.3 159 554.6 150 572 150C589.4 150 604.7 159 620 168C635.3 177 650.6 186 668 186C685.4 186 700.7 177 716 168L716 360L140 360L140 168Z" fill="#294D99" fill-opacity="0.75" filter="url(#zr0-s0)" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-2 zr0-cls-3"></path>
+</g>
+<g clip-path="url(#zr0-c1)">
+<path d="M140 200C155.3 191 170.6 182 188 182C205.4 182 220.7 191 236 200C251.3 209 266.6 218 284 218C301.4 218 316.7 209 332 200C347.3 191 362.6 182 380 182C397.4 182 412.7 191 428 200C443.3 209 458.6 218 476 218C493.4 218 508.7 209 524 200C539.3 191 554.6 182 572 182C589.4 182 604.7 191 620 200C635.3 209 650.6 218 668 218C685.4 218 700.7 209 716 200L716 360L140 360L140 200Z" transform="translate(-24 0)" fill="#156ACF" fill-opacity="0.75" filter="url(#zr0-s0)" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-4 zr0-cls-5"></path>
+</g>
+<g clip-path="url(#zr0-c2)">
+<path d="M140 232C155.3 223 170.6 214 188 214C205.4 214 220.7 223 236 232C251.3 241 266.6 250 284 250C301.4 250 316.7 241 332 232C347.3 223 362.6 214 380 214C397.4 214 412.7 223 428 232C443.3 241 458.6 250 476 250C493.4 250 508.7 241 524 232C539.3 223 554.6 214 572 214C589.4 214 604.7 223 620 232C635.3 241 650.6 250 668 250C685.4 250 700.7 241 716 232L716 360L140 360L140 232Z" transform="translate(-48 0)" fill="#1598ED" fill-opacity="0.75" filter="url(#zr0-s0)" ecmeta_series_index="0" ecmeta_data_index="2" ecmeta_ssr_type="chart" class="zr0-cls-6 zr0-cls-7"></path>
+</g>
+<g clip-path="url(#zr0-c3)">
+<path d="M140 264C155.3 255 170.6 246 188 246C205.4 246 220.7 255 236 264C251.3 273 266.6 282 284 282C301.4 282 316.7 273 332 264C347.3 255 362.6 246 380 246C397.4 246 412.7 255 428 264C443.3 273 458.6 282 476 282C493.4 282 508.7 273 524 264C539.3 255 554.6 246 572 246C589.4 246 604.7 255 620 264C635.3 273 650.6 282 668 282C685.4 282 700.7 273 716 264L716 360L140 360L140 264Z" transform="translate(-72 0)" fill="#45BDFF" fill-opacity="0.75" filter="url(#zr0-s0)" ecmeta_series_index="0" ecmeta_data_index="3" ecmeta_ssr_type="chart" class="zr0-cls-8 zr0-cls-9"></path>
+</g>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:50px;font-family:sans-serif;font-weight:bold;" x="300" y="143" fill="#294D99">ECharts</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:50px;font-family:sans-serif;font-weight:bold;" xml:space="preserve" x="300" y="193" fill="#294D99">Liquid Fill</text>
+<g clip-path="url(#zr0-c4)">
+<text dominant-baseline="central" text-anchor="middle" style="font-size:50px;font-family:sans-serif;font-weight:bold;" x="300" y="143" fill="#fff">ECharts</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:50px;font-family:sans-serif;font-weight:bold;" xml:space="preserve" x="300" y="193" fill="#fff">Liquid Fill</text>
+</g>
+<defs >
+<clipPath id="zr0-c0">
+<circle cx="300" cy="200" r="160" fill="#000" class="zr0-cls-1"></circle>
+</clipPath>
+<filter id="zr0-s0" x="-100%" y="-100%" width="300%" height="300%">
+<feDropShadow dx="0" dy="0" stdDeviation="9 9" flood-color="rgb(0,0,0)" flood-opacity="0.25"></feDropShadow>
+</filter>
+<clipPath id="zr0-c1">
+<circle cx="300" cy="200" r="160" fill="#000" class="zr0-cls-1"></circle>
+</clipPath>
+<clipPath id="zr0-c2">
+<circle cx="300" cy="200" r="160" fill="#000" class="zr0-cls-1"></circle>
+</clipPath>
+<clipPath id="zr0-c3">
+<circle cx="300" cy="200" r="160" fill="#000" class="zr0-cls-1"></circle>
+</clipPath>
+<clipPath id="zr0-c4">
+<path d="M140 168C155.3 159 170.6 150 188 150C205.4 150 220.7 159 236 168C251.3 177 266.6 186 284 186C301.4 186 316.7 177 332 168C347.3 159 362.6 150 380 150C397.4 150 412.7 159 428 168C443.3 177 458.6 186 476 186C493.4 186 508.7 177 524 168C539.3 159 554.6 150 572 150C589.4 150 604.7 159 620 168C635.3 177 650.6 186 668 186C685.4 186 700.7 177 716 168L716 360L140 360L140 168Z" fill="#000" class="zr0-cls-10 zr0-cls-11"></path>
+</clipPath>
+</defs>
+<style ><![CDATA[
+.zr0-cls-0:hover {
+cursor:pointer;
+fill:rgba(249,255,255,1);
+}
+.zr0-cls-1:hover {
+cursor:pointer;
+fill:rgba(0,0,0,1);
+}
+.zr0-cls-2 {
+animation:zr0-ani-0 5s linear infinite both;
+}
+.zr0-cls-3:hover {
+cursor:pointer;
+fill:rgba(45,84,168,1);
+}
+.zr0-cls-4 {
+animation:zr0-ani-1 4s linear -0.5s infinite both;
+}
+.zr0-cls-5:hover {
+cursor:pointer;
+fill:rgba(23,116,227,1);
+}
+.zr0-cls-6 {
+animation:zr0-ani-2 3.0000000000000004s linear -0.7500000000000001s infinite both;
+}
+.zr0-cls-7:hover {
+cursor:pointer;
+fill:rgba(23,167,255,1);
+}
+.zr0-cls-8 {
+animation:zr0-ani-3 2s linear -0.7499999999999997s infinite both;
+}
+.zr0-cls-9:hover {
+cursor:pointer;
+fill:rgba(75,207,255,1);
+}
+.zr0-cls-10 {
+animation:zr0-ani-4 5s linear infinite both;
+}
+.zr0-cls-11:hover {
+pointer-events:none;
+}
+@keyframes zr0-ani-0 {
+0% {
+
+}
+100% {
+transform:translate(-192px,0px);
+}
+}
+@keyframes zr0-ani-1 {
+0% {
+transform:translate(-24px,0px);
+}
+100% {
+transform:translate(-216px,0px);
+}
+}
+@keyframes zr0-ani-2 {
+0% {
+transform:translate(-48px,0px);
+}
+100% {
+transform:translate(-240px,0px);
+}
+}
+@keyframes zr0-ani-3 {
+0% {
+transform:translate(-71.99999999999997px,0px);
+}
+100% {
+transform:translate(-264px,0px);
+}
+}
+@keyframes zr0-ani-4 {
+0% {
+
+}
+100% {
+transform:translate(-192px,0px);
+}
+}
+]]>
+
+</style>
+</svg>

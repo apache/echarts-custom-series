@@ -59,9 +59,9 @@ const renderItem = (
   params: echarts.CustomSeriesRenderItemParams,
   api: echarts.CustomSeriesRenderItemAPI
 ) => {
-  const start = api.value(0);
-  const end = api.value(1);
-  const stageIndex = api.value(2);
+  const start = api.value(0) as number;
+  const end = api.value(1) as number;
+  const stageIndex = api.value(2) as number;
 
   const startCoord = api.coord([start, stageIndex]);
   const endCoord = api.coord([end, stageIndex]);
