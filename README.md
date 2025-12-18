@@ -65,10 +65,8 @@ npm run thumbnail <series-name>
 npm run build [customSeriesName]
 
 # cd to the directory of a custom series
-# change the version in package.json with -beta.0
-npm install # to update the version in package-lock.json
-npm login
 npm version prerelease --preid=beta
+npm login
 npm publish --tag beta --dry-run
 # if the output is ok
 npm publish --tag beta
@@ -80,8 +78,7 @@ npm publish --tag beta
 npm run build [customSeriesName]
 
 # cd to the directory of a custom series
-# change the version in package.json
-npm install # to update the version in package-lock.json
+npm version patch   # or minor/major
 npm login
 npm publish --dry-run
 # if the outpuf is ok

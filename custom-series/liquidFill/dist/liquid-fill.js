@@ -396,9 +396,23 @@
             periodMs = 2000;
         }
         var initialOffsetX = -phaseOffsetPx;
-        var waveSpeed = periodMs === 0 ? 0 : safeWaveLength / periodMs;
-        var animationDuration = waveSpeed === 0 ? periodMs : safeWaveLength / waveSpeed;
-        var animationDelay = directionSign === 0 || waveSpeed === 0 ? 0 : -phaseOffsetPx / waveSpeed;
+        var animationDuration = periodMs;
+        var customAnimationDuration = itemPayload.animationDuration;
+        if (customAnimationDuration != null &&
+            isFinite(customAnimationDuration) &&
+            customAnimationDuration > 0) {
+            animationDuration = customAnimationDuration;
+        }
+        if (!isFinite(animationDuration) || animationDuration <= 0) {
+            animationDuration = 0;
+        }
+        var effectiveWaveSpeed = animationDuration > 0 && safeWaveLength > 0
+            ? safeWaveLength / animationDuration
+            : 0;
+        var animationDelay = directionSign === 0 || effectiveWaveSpeed === 0
+            ? 0
+            : -phaseOffsetPx / effectiveWaveSpeed;
+        var animationEasing = itemPayload.animationEasing;
         var waveAnimationOption;
         var waveFill = styleAny.fill || api.visual('color');
         var waveOpacity = styleAny.opacity != null
@@ -437,8 +451,8 @@
             directionSign !== 0 &&
             safeWaveLength > 0 &&
             animationDuration > 0 &&
-            waveSpeed > 0) {
-            waveAnimationOption = {
+            effectiveWaveSpeed > 0) {
+            var keyframeAnimation = {
                 duration: animationDuration,
                 loop: true,
                 delay: animationDelay,
@@ -453,6 +467,10 @@
                     },
                 ],
             };
+            if (animationEasing) {
+                keyframeAnimation.easing = animationEasing;
+            }
+            waveAnimationOption = keyframeAnimation;
         }
         if (waveAnimationOption) {
             wavePathElement.keyframeAnimation = waveAnimationOption;
