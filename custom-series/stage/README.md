@@ -14,7 +14,7 @@ For browser usage, use the auto-registration version that automatically installs
 
 ```html
 <script src="./node_modules/echarts/dist/echarts.js"></script>
-<script src="./node_modules/@echarts-x/custom-stage/dist/index.auto.js"></script>
+<script src="./node_modules/@echarts-x/custom-stage/dist/stage.auto.js"></script>
 <script>
   // No need to call echarts.use(), automatically registered
   const chart = echarts.init(...);

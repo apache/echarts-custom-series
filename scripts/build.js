@@ -105,7 +105,6 @@ function compileTypeScript(seriesPath, dirName) {
     console.error(
       chalk.red(`Error compiling TypeScript for custom series ${dirName}:`)
     );
-    console.error(e);
     process.exit(1);
   }
   console.log(`Compiled TypeScript for custom series ${dirName}`);
@@ -117,10 +116,9 @@ function bundleWithRollup(seriesPath, dirName) {
   const distPath = path.join(seriesPath, 'dist');
   const fileBaseName = toFileBaseName(dirName);
 
-  // Create dist directory if it doesn't exist
-  if (!fs.existsSync(distPath)) {
-    fs.mkdirSync(distPath, { recursive: true });
-  }
+  // Re-create dist directory
+  fs.rmSync(distPath, { recursive: true, force: true });
+  fs.mkdirSync(distPath, { recursive: true });
 
   try {
     // 通过环境变量传递自定义系列名称和路径

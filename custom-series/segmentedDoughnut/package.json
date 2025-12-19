@@ -2,16 +2,16 @@
   "name": "@echarts-x/custom-segmented-doughnut",
   "version": "1.0.1",
   "description": "Custom segmentedDoughnut series for Apache ECharts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/segmented-doughnut.js",
+  "module": "dist/segmented-doughnut.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/segmented-doughnut.d.ts",
+      "import": "./dist/segmented-doughnut.esm.mjs",
+      "require": "./dist/segmented-doughnut.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/segmented-doughnut.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",
