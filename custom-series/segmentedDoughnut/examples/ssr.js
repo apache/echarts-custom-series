@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const segmentedDoughnutInstaller = require('../dist/index.js');
+const segmentedDoughnutInstaller = require('../dist/segmented-doughnut.js');
 
 echarts.use(segmentedDoughnutInstaller);
 

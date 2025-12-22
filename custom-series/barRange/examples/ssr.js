@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const barRangeInstaller = require('../dist/index.js');
+const barRangeInstaller = require('../dist/bar-range.js');
 
 echarts.use(barRangeInstaller);
 

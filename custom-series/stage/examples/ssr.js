@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const stageInstaller = require('../dist/index.js');
+const stageInstaller = require('../dist/stage.js');
 
 echarts.use(stageInstaller);
 

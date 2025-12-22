@@ -1,17 +1,17 @@
 {
   "name": "@echarts-x/custom-stage",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Custom stage series for Apache ECharts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/stage.js",
+  "module": "dist/stage.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/stage.d.ts",
+      "import": "./dist/stage.esm.mjs",
+      "require": "./dist/stage.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/stage.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",

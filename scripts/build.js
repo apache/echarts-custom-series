@@ -22,6 +22,13 @@ const path = require('path');
 const { execSync } = require('child_process');
 const chalk = require('chalk');
 
+function toFileBaseName(name) {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[_\s]+/g, '-')
+    .toLowerCase();
+}
+
 /**
  * Install dependencies before build if needed.
  * If no `node_modules` directory, run `npm install`
@@ -98,7 +105,6 @@ function compileTypeScript(seriesPath, dirName) {
     console.error(
       chalk.red(`Error compiling TypeScript for custom series ${dirName}:`)
     );
-    console.error(e);
     process.exit(1);
   }
   console.log(`Compiled TypeScript for custom series ${dirName}`);
@@ -108,11 +114,11 @@ function bundleWithRollup(seriesPath, dirName) {
   const rollupPath = path.join(__dirname, '../node_modules/.bin/rollup');
   const configPath = path.join(__dirname, 'rollup.config.js');
   const distPath = path.join(seriesPath, 'dist');
+  const fileBaseName = toFileBaseName(dirName);
 
-  // Create dist directory if it doesn't exist
-  if (!fs.existsSync(distPath)) {
-    fs.mkdirSync(distPath, { recursive: true });
-  }
+  // Re-create dist directory
+  fs.rmSync(distPath, { recursive: true, force: true });
+  fs.mkdirSync(distPath, { recursive: true });
 
   try {
     // 通过环境变量传递自定义系列名称和路径
@@ -120,6 +126,7 @@ function bundleWithRollup(seriesPath, dirName) {
       ...process.env,
       CUSTOM_SERIES_NAME: dirName,
       CUSTOM_SERIES_PATH: seriesPath,
+      CUSTOM_SERIES_FILE_BASENAME: fileBaseName,
     };
 
     execSync(`${rollupPath} -c ${configPath}`, {
@@ -132,7 +139,7 @@ function bundleWithRollup(seriesPath, dirName) {
     console.log(`Rollup bundling and minification completed for ${dirName}`);
 
     // Create fixed type definition file in dist directory
-    const distTypesPath = path.join(seriesPath, 'dist', 'index.d.ts');
+    const distTypesPath = path.join(seriesPath, 'dist', `${fileBaseName}.d.ts`);
     const fixedTypeDefinition = `// Tricky: use1 and use2 are incompatible.
 import type {use as use1} from 'echarts/core';
 import type {use as use2} from 'echarts';
@@ -144,13 +151,13 @@ export default _default;
 
     // Check if the output files were created
     const expectedFiles = [
-      'index.js',
-      'index.min.js',
-      'index.auto.js',
-      'index.auto.min.js',
-      'index.esm.mjs',
-      'index.esm.min.mjs',
-      'index.d.ts',
+      `${fileBaseName}.js`,
+      `${fileBaseName}.min.js`,
+      `${fileBaseName}.auto.js`,
+      `${fileBaseName}.auto.min.js`,
+      `${fileBaseName}.esm.mjs`,
+      `${fileBaseName}.esm.min.mjs`,
+      `${fileBaseName}.d.ts`,
     ];
 
     for (const file of expectedFiles) {

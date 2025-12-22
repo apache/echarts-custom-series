@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const lineRangeInstaller = require('../dist/index.js');
+const lineRangeInstaller = require('../dist/line-range.js');
 
 echarts.use(lineRangeInstaller);
 

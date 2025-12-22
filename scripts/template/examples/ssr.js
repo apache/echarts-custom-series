@@ -18,7 +18,7 @@
  */
 
 const echarts = require('echarts');
-const $CUSTOM_SERIES_NAME$Installer = require('../dist/index.js');
+const $CUSTOM_SERIES_NAME$Installer = require('../dist/$CUSTOM_SERIES_KEBAB_NAME$.js');
 
 echarts.use($CUSTOM_SERIES_NAME$Installer);
 

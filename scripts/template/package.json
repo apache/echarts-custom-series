@@ -2,16 +2,16 @@
   "name": "@echarts-x/custom-$CUSTOM_SERIES_KEBAB_NAME$",
   "version": "1.0.0-beta.0",
   "description": "Custom $CUSTOM_SERIES_NAME$ series for Apache ECharts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/$CUSTOM_SERIES_KEBAB_NAME$.js",
+  "module": "dist/$CUSTOM_SERIES_KEBAB_NAME$.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/$CUSTOM_SERIES_KEBAB_NAME$.d.ts",
+      "import": "./dist/$CUSTOM_SERIES_KEBAB_NAME$.esm.mjs",
+      "require": "./dist/$CUSTOM_SERIES_KEBAB_NAME$.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/$CUSTOM_SERIES_KEBAB_NAME$.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",

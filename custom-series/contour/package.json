@@ -1,17 +1,17 @@
 {
   "name": "@echarts-x/custom-contour",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "Custom contour series for Apache ECharts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
+  "main": "dist/contour.js",
+  "module": "dist/contour.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/contour.d.ts",
+      "import": "./dist/contour.esm.mjs",
+      "require": "./dist/contour.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/contour.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",

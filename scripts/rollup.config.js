@@ -30,6 +30,16 @@ if (fs.existsSync(seriesConfigPath)) {
   seriesRollupConfig = require(seriesConfigPath);
 }
 
+function toFileBaseName(name) {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[_\s]+/g, '-')
+    .toLowerCase();
+}
+
+const fileBaseName =
+  process.env.CUSTOM_SERIES_FILE_BASENAME || toFileBaseName(seriesName);
+
 const licenseHeader = `/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -138,7 +148,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.js'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.js`),
       format: 'umd',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
@@ -152,7 +162,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.min.js'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.min.js`),
       format: 'umd',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
@@ -167,7 +177,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.auto.js'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.auto.js`),
       format: 'iife',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
@@ -181,7 +191,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.auto.min.js'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.auto.min.js`),
       format: 'iife',
       name: `${seriesName}CustomSeriesInstaller`,
       extend: true,
@@ -196,7 +206,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.esm.mjs'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.esm.mjs`),
       format: 'esm',
     },
     plugins: [licensePlugin],
@@ -207,7 +217,7 @@ module.exports = [
     ...baseConfig,
     external: getUMDExternals(),
     output: {
-      file: path.join(seriesPath, 'dist/index.esm.min.mjs'),
+      file: path.join(seriesPath, `dist/${fileBaseName}.esm.min.mjs`),
       format: 'esm',
       sourcemap: true,
     },
