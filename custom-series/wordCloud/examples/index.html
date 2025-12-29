@@ -380,7 +380,7 @@
       for (const name in keywords) {
         data.push({
           name: name,
-          value: Math.sqrt(keywords[name]),
+          value: [name, Math.sqrt(keywords[name])],
           itemStyle: {
             color:
               'rgb(' +

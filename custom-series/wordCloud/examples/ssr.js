@@ -381,7 +381,7 @@ const sampleData = [];
 for (const name in keywords) {
   sampleData.push({
     name: name,
-    value: Math.sqrt(keywords[name]),
+    value: [name, Math.sqrt(keywords[name])],
     itemStyle: {
       color:
         'rgb(' +

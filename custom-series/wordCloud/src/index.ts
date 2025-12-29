@@ -27,6 +27,7 @@ import type {
   EChartsExtensionInstallRegisters,
   EChartsExtension,
 } from 'echarts/types/src/extension.d.ts';
+import WordCloud from './layout';
 
 type WordCloudItemPayload = {
   gridSize?: number;
@@ -35,6 +36,9 @@ type WordCloudItemPayload = {
   rotationStep?: number;
   maskImage?: HTMLImageElement | HTMLCanvasElement;
   keepAspect?: boolean;
+  shape?: string;
+  shrinkToFit?: boolean;
+  drawOutOfBound?: boolean;
 };
 
 interface LayoutResult {
@@ -75,28 +79,90 @@ const renderItem = (
   } as CustomRootElementOption;
 };
 
+function updateCanvasMask(maskCanvas: HTMLCanvasElement) {
+  var ctx = maskCanvas.getContext('2d')!;
+  var imageData = ctx.getImageData(0, 0, maskCanvas.width, maskCanvas.height);
+  var newImageData = ctx.createImageData(imageData);
+
+  var toneSum = 0;
+  var toneCnt = 0;
+  for (var i = 0; i < imageData.data.length; i += 4) {
+    var alpha = imageData.data[i + 3];
+    if (alpha > 128) {
+      var tone =
+        imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2];
+      toneSum += tone;
+      ++toneCnt;
+    }
+  }
+  var threshold = toneSum / toneCnt;
+
+  for (var i = 0; i < imageData.data.length; i += 4) {
+    var tone =
+      imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2];
+    var alpha = imageData.data[i + 3];
+
+    if (alpha < 128 || tone > threshold) {
+      // Area not to draw
+      newImageData.data[i] = 0;
+      newImageData.data[i + 1] = 0;
+      newImageData.data[i + 2] = 0;
+      newImageData.data[i + 3] = 0;
+    } else {
+      // Area to draw
+      // The color must be same with backgroundColor
+      newImageData.data[i] = 255;
+      newImageData.data[i + 1] = 255;
+      newImageData.data[i + 2] = 255;
+      newImageData.data[i + 3] = 255;
+    }
+  }
+
+  ctx.putImageData(newImageData, 0, 0);
+}
+
+function adjustRectAspect(gridRect: any, aspect: number) {
+  var width = gridRect.width;
+  var height = gridRect.height;
+  if (width > height * aspect) {
+    gridRect.x += (width - height * aspect) / 2;
+    gridRect.width = height * aspect;
+  } else {
+    gridRect.y += (height - width / aspect) / 2;
+    gridRect.height = width / aspect;
+  }
+}
+
 function performLayout(
   params: CustomSeriesRenderItemParams,
   api: CustomSeriesRenderItemAPI,
   payload: WordCloudItemPayload
 ): (LayoutResult | null)[] {
-  let width = api.getWidth();
-  let height = api.getHeight();
-  let offsetX = 0;
-  let offsetY = 0;
+  const width = api.getWidth();
+  const height = api.getHeight();
 
-  if (payload.keepAspect && payload.maskImage) {
-    const maskRatio = payload.maskImage.width / payload.maskImage.height;
-    const canvasRatio = width / height;
-    if (canvasRatio > maskRatio) {
-      const newWidth = height * maskRatio;
-      offsetX = (width - newWidth) / 2;
-      width = newWidth;
-    } else {
-      const newHeight = width / maskRatio;
-      offsetY = (height - newHeight) / 2;
-      height = newHeight;
-    }
+  const gridRect = {
+    x: 0,
+    y: 0,
+    width: width,
+    height: height,
+  };
+
+  const keepAspect = payload.keepAspect;
+  const maskImage = payload.maskImage;
+  if (keepAspect && maskImage) {
+    const ratio = maskImage.width / maskImage.height;
+    adjustRectAspect(gridRect, ratio);
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = gridRect.width;
+  canvas.height = gridRect.height;
+
+  if (maskImage) {
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(maskImage, 0, 0, canvas.width, canvas.height);
+    updateCanvasMask(canvas);
   }
 
   const gridSize = payload.gridSize || 8;
@@ -114,144 +180,59 @@ function performLayout(
     });
   }
 
-  data.sort((a, b) => b.value - a.value);
-
   const values = data.map((d) => d.value);
   const minVal = Math.min(...values);
   const maxVal = Math.max(...values);
 
-  const gridWidth = Math.ceil(width / gridSize);
-  const gridHeight = Math.ceil(height / gridSize);
-  const grid = new Uint8Array(gridWidth * gridHeight);
-
-  if (payload.maskImage) {
-    const maskCanvas = document.createElement('canvas');
-    maskCanvas.width = width;
-    maskCanvas.height = height;
-    const maskCtx = maskCanvas.getContext('2d')!;
-    maskCtx.drawImage(payload.maskImage, 0, 0, width, height);
-    const imageData = maskCtx.getImageData(0, 0, width, height).data;
-
-    for (let gy = 0; gy < gridHeight; gy++) {
-      for (let gx = 0; gx < gridWidth; gx++) {
-        const x = Math.min(Math.floor(gx * gridSize + gridSize / 2), width - 1);
-        const y = Math.min(Math.floor(gy * gridSize + gridSize / 2), height - 1);
-        const idx = (y * width + x) * 4;
-        const alpha = imageData[idx + 3];
-        const r = imageData[idx];
-        const g = imageData[idx + 1];
-        const b = imageData[idx + 2];
-        // If it's transparent or too bright, mark as occupied (don't draw)
-        if (alpha < 128 || (r + g + b) / 3 > 128) {
-          grid[gy * gridWidth + gx] = 1;
-        }
-      }
-    }
-  }
+  const list = data
+    .map((item) => {
+      const fontSize =
+        maxVal === minVal
+          ? sizeRange[0]
+          : ((item.value - minVal) / (maxVal - minVal)) *
+              (sizeRange[1] - sizeRange[0]) +
+            sizeRange[0];
+      return [item.name, fontSize, item.index];
+    })
+    .sort((a, b) => (b[1] as number) - (a[1] as number));
 
   const results: (LayoutResult | null)[] = new Array(count).fill(null);
 
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d')!;
-
-  data.forEach((item) => {
-    const fontSize =
-      maxVal === minVal
-        ? sizeRange[0]
-        : ((item.value - minVal) / (maxVal - minVal)) *
-            (sizeRange[1] - sizeRange[0]) +
-          sizeRange[0];
-
-    ctx.font = `${fontSize}px sans-serif`;
-    const metrics = ctx.measureText(item.name);
-    const textWidth = metrics.width;
-    const textHeight = fontSize;
-
-    const rotations = [];
-    for (
-      let r = rotationRange[0] * (Math.PI / 180);
-      r <= rotationRange[1] * (Math.PI / 180);
-      r += rotationStep
-    ) {
-      rotations.push(r);
+  const onWordCloudDrawn = (e: any) => {
+    const item = e.detail.item;
+    if (e.detail.drawn) {
+      results[item[2]] = {
+        x:
+          gridRect.x +
+          (e.detail.drawn.gx + e.detail.drawn.info.gw / 2) * gridSize,
+        y:
+          gridRect.y +
+          (e.detail.drawn.gy + e.detail.drawn.info.gh / 2) * gridSize,
+        fontSize: item[1],
+        rotation: e.detail.drawn.rot,
+      };
     }
-    const rotation = rotations[Math.floor(Math.random() * rotations.length)];
+  };
 
-    const cos = Math.abs(Math.cos(rotation));
-    const sin = Math.abs(Math.sin(rotation));
-    const bWidth = textWidth * cos + textHeight * sin;
-    const bHeight = textWidth * sin + textHeight * cos;
+  canvas.addEventListener('wordclouddrawn', onWordCloudDrawn);
 
-    const gw = Math.ceil(bWidth / gridSize);
-    const gh = Math.ceil(bHeight / gridSize);
-
-    let placed = false;
-    const maxRadius = Math.max(gridWidth, gridHeight);
-
-    for (let r = 0; r < maxRadius; r += 1) {
-      const steps = 8 * r || 1;
-      for (let s = 0; s < steps; s++) {
-        const theta = (s / steps) * 2 * Math.PI;
-        const gx = Math.floor(gridWidth / 2 + r * Math.cos(theta) - gw / 2);
-        const gy = Math.floor(gridHeight / 2 + r * Math.sin(theta) - gh / 2);
-
-        if (
-          gx >= 0 &&
-          gx + gw <= gridWidth &&
-          gy >= 0 &&
-          gy + gh <= gridHeight
-        ) {
-          if (!checkCollision(grid, gx, gy, gw, gh, gridWidth)) {
-            markGrid(grid, gx, gy, gw, gh, gridWidth);
-            results[item.index] = {
-              x: offsetX + (gx + gw / 2) * gridSize,
-              y: offsetY + (gy + gh / 2) * gridSize,
-              fontSize,
-              rotation: -rotation,
-            };
-            placed = true;
-            break;
-          }
-        }
-      }
-      if (placed) break;
-    }
+  WordCloud(canvas, {
+    list: list,
+    gridSize: gridSize,
+    ellipticity: gridRect.height / gridRect.width,
+    minRotation: rotationRange[0] * (Math.PI / 180),
+    maxRotation: rotationRange[1] * (Math.PI / 180),
+    rotationStep: rotationStep,
+    clearCanvas: !maskImage,
+    rotateRatio: 1,
+    layoutAnimation: false,
+    shuffle: false,
+    shape: payload.shape || 'circle',
+    shrinkToFit: payload.shrinkToFit,
+    drawOutOfBound: payload.drawOutOfBound,
   });
 
   return results;
-}
-
-function checkCollision(
-  grid: Uint8Array,
-  gx: number,
-  gy: number,
-  gw: number,
-  gh: number,
-  gridWidth: number
-): boolean {
-  for (let y = gy; y < gy + gh; y++) {
-    for (let x = gx; x < gx + gw; x++) {
-      if (grid[y * gridWidth + x]) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function markGrid(
-  grid: Uint8Array,
-  gx: number,
-  gy: number,
-  gw: number,
-  gh: number,
-  gridWidth: number
-) {
-  for (let y = gy; y < gy + gh; y++) {
-    for (let x = gx; x < gx + gw; x++) {
-      grid[y * gridWidth + x] = 1;
-    }
-  }
 }
 
 export default {
