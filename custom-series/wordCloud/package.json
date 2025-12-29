@@ -1,0 +1,48 @@
+{
+  "name": "@echarts-x/custom-word-cloud",
+  "version": "1.0.0-beta.0",
+  "description": "Custom wordCloud series for Apache ECharts",
+  "main": "dist/word-cloud.js",
+  "module": "dist/word-cloud.esm.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/word-cloud.d.ts",
+      "import": "./dist/word-cloud.esm.mjs",
+      "require": "./dist/word-cloud.js"
+    }
+  },
+  "types": "dist/word-cloud.d.ts",
+  "keywords": [
+    "echarts",
+    "apache-echarts",
+    "data-visualization",
+    "chart",
+    "dataviz"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/wordCloud",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/echarts-custom-series.git"
+  },
+  "scripts": {
+    "test:browser": "npx http-server . -p 8088 -o examples/index.html",
+    "test:ssr": "node examples/ssr.js",
+    "test": "npm run test:ssr"
+  },
+  "devDependencies": {
+    "echarts": "^6.0.0",
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "echarts": "^6.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
