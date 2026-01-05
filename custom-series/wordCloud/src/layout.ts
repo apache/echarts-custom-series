@@ -8,14 +8,16 @@
 
 'use strict';
 
+declare const window: any;
+
 // setImmediate
-if (!(window as any).setImmediate) {
-  (window as any).setImmediate = (function setupSetImmediate() {
+if (!window.setImmediate) {
+  window.setImmediate = (function setupSetImmediate() {
     return (
-      (window as any).msSetImmediate ||
-      (window as any).webkitSetImmediate ||
-      (window as any).mozSetImmediate ||
-      (window as any).oSetImmediate ||
+      window.msSetImmediate ||
+      window.webkitSetImmediate ||
+      window.mozSetImmediate ||
+      window.oSetImmediate ||
       (function setupSetZeroTimeout() {
         if (!window.postMessage || !window.addEventListener) {
           return null;
@@ -37,7 +39,7 @@ if (!(window as any).setImmediate) {
 
         window.addEventListener(
           'message',
-          function setZeroTimeoutMessage(evt) {
+          function setZeroTimeoutMessage(evt: MessageEvent) {
             // Skipping checking event source, retarded IE confused this window
             // object with another in the presence of iframe
             if (
@@ -51,18 +53,19 @@ if (!(window as any).setImmediate) {
             evt.stopImmediatePropagation();
 
             var id = parseInt(evt.data.substr(message.length), 36);
-            if (!callbacks[id]) {
+            var callback = callbacks[id];
+            if (!callback) {
               return;
             }
 
-            (callbacks[id] as Function)();
+            callback();
             callbacks[id] = undefined;
           },
           true
         );
 
         /* specify clearImmediate() here since we need the scope */
-        (window as any).clearImmediate = function clearZeroTimeout(id: number) {
+        window.clearImmediate = function clearZeroTimeout(id: number) {
           if (!callbacks[id]) {
             return;
           }
@@ -73,20 +76,20 @@ if (!(window as any).setImmediate) {
         return setZeroTimeout;
       })() ||
       // fallback
-      function setImmediateFallback(fn: Function) {
+      function setImmediateFallback(fn: TimerHandler) {
         window.setTimeout(fn, 0);
       }
     );
   })();
 }
 
-if (!(window as any).clearImmediate) {
-  (window as any).clearImmediate = (function setupClearImmediate() {
+if (!window.clearImmediate) {
+  window.clearImmediate = (function setupClearImmediate() {
     return (
-      (window as any).msClearImmediate ||
-      (window as any).webkitClearImmediate ||
-      (window as any).mozClearImmediate ||
-      (window as any).oClearImmediate ||
+      window.msClearImmediate ||
+      window.webkitClearImmediate ||
+      window.mozClearImmediate ||
+      window.oClearImmediate ||
       // "clearZeroTimeout" is implement on the previous block ||
       // fallback
       function clearImmediateFallback(timer: number) {
@@ -131,19 +134,22 @@ var minFontSize = (function getMinFontSize() {
     return;
   }
 
-  var ctx = document.createElement('canvas').getContext('2d')!;
+  var ctx = document.createElement('canvas').getContext('2d');
+  if (!ctx) {
+    return 0;
+  }
 
   // start from 20
   var size = 20;
 
   // two sizes to measure
-  var hanWidth: number, mWidth: number;
+  var hanWidth: number | undefined, mWidth: number | undefined;
 
   while (size) {
     ctx.font = size.toString(10) + 'px sans-serif';
     if (
-      ctx.measureText('\uFF37').width === hanWidth! &&
-      ctx.measureText('m').width === mWidth!
+      ctx.measureText('\uFF37').width === hanWidth &&
+      ctx.measureText('m').width === mWidth
     ) {
       return size + 1;
     }
@@ -179,8 +185,61 @@ var shuffleArray = function shuffleArray(arr: any[]) {
   return arr;
 };
 
-var timer: { [key: string]: any } = {};
-var WordCloud = function WordCloud(elements: any, options: any) {
+interface WordCloudOptions {
+  list?: any[];
+  fontFamily?: string;
+  fontWeight?:
+    | string
+    | number
+    | ((word: string, weight: number, fontSize: number) => string | number);
+  color?:
+    | string
+    | ((
+        word: string,
+        weight: number,
+        fontSize: number,
+        distance: number,
+        theta: number
+      ) => string);
+  minSize?: number;
+  weightFactor?: number | ((size: number) => number);
+  clearCanvas?: boolean;
+  backgroundColor?: string;
+  gridSize?: number;
+  drawOutOfBound?: boolean;
+  shrinkToFit?: boolean;
+  origin?: [number, number] | null;
+  drawMask?: boolean;
+  maskColor?: string;
+  maskGapWidth?: number;
+  layoutAnimation?: boolean;
+  wait?: number;
+  abortThreshold?: number;
+  abort?: () => void;
+  minRotation?: number;
+  maxRotation?: number;
+  rotationStep?: number;
+  shuffle?: boolean;
+  rotateRatio?: number;
+  shape?: string | ((theta: number) => number);
+  ellipticity?: number;
+  classes?:
+    | string
+    | ((word: string, weight: number, fontSize: number) => string)
+    | null;
+  hover?:
+    | ((item: any, dimension: any, event: MouseEvent | TouchEvent) => void)
+    | null;
+  click?:
+    | ((item: any, dimension: any, event: MouseEvent | TouchEvent) => void)
+    | null;
+}
+
+var timer: any = {};
+var WordCloud = function WordCloud(
+  elements: HTMLElement | HTMLElement[] | string | string[],
+  options: WordCloudOptions
+) {
   if (!isSupported) {
     return;
   }
@@ -188,13 +247,13 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   var timerId = Math.floor(Math.random() * Date.now());
 
   if (!Array.isArray(elements)) {
-    elements = [elements];
+    elements = [elements] as any[];
   }
 
-  elements.forEach(function (el: any, i: number) {
+  (elements as any[]).forEach(function (el, i) {
     if (typeof el === 'string') {
-      elements[i] = document.getElementById(el);
-      if (!elements[i]) {
+      (elements as any[])[i] = document.getElementById(el);
+      if (!(elements as any[])[i]) {
         throw new Error('The element id specified is not found.');
       }
     } else if (!el.tagName && !el.appendChild) {
@@ -205,22 +264,39 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   });
 
   /* Default values to be overwritten by options object */
-  var settings: any = {
-    list: [],
+  var settings = {
+    list: [] as any[],
     fontFamily:
       '"Trebuchet MS", "Heiti TC", "微軟正黑體", ' +
       '"Arial Unicode MS", "Droid Fallback Sans", sans-serif',
-    fontWeight: 'normal',
-    color: 'random-dark',
+    fontWeight: 'normal' as
+      | string
+      | number
+      | ((
+          word: string,
+          weight: number,
+          fontSize: number,
+          extraDataArray?: any[]
+        ) => string | number),
+    color: 'random-dark' as
+      | string
+      | ((
+          word: string,
+          weight: number,
+          fontSize: number,
+          distance: number,
+          theta: number,
+          extraDataArray?: any[]
+        ) => string),
     minSize: 0, // 0 to disable
-    weightFactor: 1,
+    weightFactor: 1 as number | ((size: number) => number),
     clearCanvas: true,
     backgroundColor: '#fff', // opaque white = rgba(255, 255, 255, 1)
 
     gridSize: 8,
     drawOutOfBound: false,
     shrinkToFit: false,
-    origin: null,
+    origin: null as [number, number] | null,
 
     drawMask: false,
     maskColor: 'rgba(255,0,0,0.3)',
@@ -239,26 +315,38 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     shuffle: true,
     rotateRatio: 0.1,
 
-    shape: 'circle',
+    shape: 'circle' as string | ((theta: number) => number),
     ellipticity: 0.65,
 
-    classes: null,
+    classes: null as
+      | string
+      | ((
+          word: string,
+          weight: number,
+          fontSize: number,
+          extraDataArray?: any[]
+        ) => string)
+      | null,
 
-    hover: null,
-    click: null,
+    hover: null as
+      | ((item: any, dimension: any, event: MouseEvent | TouchEvent) => void)
+      | null,
+    click: null as
+      | ((item: any, dimension: any, event: MouseEvent | TouchEvent) => void)
+      | null,
   };
 
   if (options) {
     for (var key in options) {
       if (key in settings) {
-        settings[key] = options[key];
+        (settings as any)[key] = (options as any)[key];
       }
     }
   }
 
   /* Convert weightFactor into a function */
   if (typeof settings.weightFactor !== 'function') {
-    var factor = settings.weightFactor;
+    var factor = settings.weightFactor as number;
     settings.weightFactor = function weightFactor(pt: number) {
       return pt * factor; // in px
     };
@@ -375,14 +463,14 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   var grid: boolean[][], // 2d array containing filling information
     ngx: number,
     ngy: number, // width and height of the grid
-    center: number[], // position of the center of the cloud
+    center: [number, number], // position of the center of the cloud
     maxRadius: number;
 
   /* timestamp for measuring each putWord() action */
   var escapeTime: number;
 
   /* function for getting the color of the text */
-  var getTextColor: Function;
+  var getTextColor: any;
   function randomHslColor(min: number, max: number) {
     return (
       'hsl(' +
@@ -415,13 +503,13 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   }
 
   /* function for getting the font-weight of the text */
-  var getTextFontWeight: Function;
+  var getTextFontWeight: any;
   if (typeof settings.fontWeight === 'function') {
     getTextFontWeight = settings.fontWeight;
   }
 
   /* function for getting the classes of the text */
-  var getTextClasses: Function | null = null;
+  var getTextClasses: any = null;
   if (typeof settings.classes === 'function') {
     getTextClasses = settings.classes;
   }
@@ -434,10 +522,10 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   var getInfoGridFromMouseTouchEvent = function getInfoGridFromMouseTouchEvent(
     evt: any
   ) {
-    var canvas = evt.currentTarget;
+    var canvas = evt.currentTarget as HTMLCanvasElement;
     var rect = canvas.getBoundingClientRect();
-    var clientX;
-    var clientY;
+    var clientX: number;
+    var clientY: number;
     /** Detect if touches are available */
     if (evt.touches) {
       clientX = evt.touches[0].clientX;
@@ -459,7 +547,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     return infoGrid[x][y];
   };
 
-  var wordcloudhover = function wordcloudhover(evt: any) {
+  var wordcloudhover = function wordcloudhover(evt: MouseEvent | TouchEvent) {
     var info = getInfoGridFromMouseTouchEvent(evt);
 
     if (hovered === info) {
@@ -468,26 +556,32 @@ var WordCloud = function WordCloud(elements: any, options: any) {
 
     hovered = info;
     if (!info) {
-      settings.hover(undefined, undefined, evt);
+      if (settings.hover) {
+        settings.hover(undefined, undefined, evt);
+      }
 
       return;
     }
 
-    settings.hover(info.item, info.dimension, evt);
+    if (settings.hover) {
+      settings.hover(info.item, info.dimension, evt);
+    }
   };
 
-  var wordcloudclick = function wordcloudclick(evt: any) {
+  var wordcloudclick = function wordcloudclick(evt: MouseEvent | TouchEvent) {
     var info = getInfoGridFromMouseTouchEvent(evt);
     if (!info) {
       return;
     }
 
-    settings.click(info.item, info.dimension, evt);
+    if (settings.click) {
+      settings.click(info.item, info.dimension, evt);
+    }
     evt.preventDefault();
   };
 
   /* Get points on the grid for a given radius away from the center */
-  var pointsAtRadius: any[] = [];
+  var pointsAtRadius: [number, number, number][][] = [];
   var getPointsAtRadius = function getPointsAtRadius(radius: number) {
     if (pointsAtRadius[radius]) {
       return pointsAtRadius[radius];
@@ -498,7 +592,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
 
     // Getting all the points at this radius
     var t = T;
-    var points = [];
+    var points: [number, number, number][] = [];
 
     if (radius === 0) {
       points.push([center[0], center[1], 0]);
@@ -507,7 +601,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     while (t--) {
       // distort the radius to put the cloud in shape
       var rx = 1;
-      if (settings.shape !== 'circle') {
+      if (typeof settings.shape === 'function') {
         rx = settings.shape((t / T) * 2 * Math.PI); // 0 to 1
       }
 
@@ -562,7 +656,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     // fontSize === 0 means weightFactor function wants the text skipped,
     // and size < minSize means we cannot draw the text.
     var debug = false;
-    var fontSize = settings.weightFactor(weight);
+    var fontSize = (settings.weightFactor as Function)(weight);
     if (fontSize <= settings.minSize) {
       return false;
     }
@@ -571,10 +665,10 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     // the minium font size set by browser.
     // It will always be 1 or 2n.
     var mu = 1;
-    if (fontSize < minFontSize!) {
+    if (fontSize < (minFontSize || 0)) {
       mu = (function calculateScaleFactor() {
         var mu = 2;
-        while (mu * fontSize < minFontSize!) {
+        while (mu * fontSize < (minFontSize || 0)) {
           mu += 2;
         }
         return mu;
@@ -590,7 +684,10 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     }
 
     var fcanvas = document.createElement('canvas');
-    var fctx = fcanvas.getContext('2d', { willReadFrequently: true })!;
+    var fctx = fcanvas.getContext('2d', { willReadFrequently: true });
+    if (!fctx) {
+      return false;
+    }
 
     fctx.font =
       fontWeight +
@@ -693,7 +790,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     }
 
     // Read the pixels and save the information to the occupied array
-    var occupied = [];
+    var occupied: [number, number][] = [];
     var gx = cgw;
     var gy, x, y;
     var bounds = [cgh / 2, cgw / 2, cgh / 2, cgw / 2];
@@ -767,7 +864,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     gy: number,
     gw: number,
     gh: number,
-    occupied: any[]
+    occupied: [number, number][]
   ) {
     // Go through the occupied points,
     // return false if the space is not available.
@@ -804,7 +901,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     extraDataArray: any[]
   ) {
     var fontSize = info.fontSize;
-    var color: any;
+    var color: string;
     if (getTextColor) {
       color = getTextColor(
         word,
@@ -815,25 +912,25 @@ var WordCloud = function WordCloud(elements: any, options: any) {
         extraDataArray
       );
     } else {
-      color = settings.color;
+      color = settings.color as string;
     }
 
     // get fontWeight that will be used to set ctx.font and font style rule
-    var fontWeight: any;
+    var fontWeight: string | number;
     if (getTextFontWeight) {
       fontWeight = getTextFontWeight(word, weight, fontSize, extraDataArray);
     } else {
-      fontWeight = settings.fontWeight;
+      fontWeight = settings.fontWeight as string | number;
     }
 
-    var classes: any;
+    var classes: string | null;
     if (getTextClasses) {
       classes = getTextClasses(word, weight, fontSize, extraDataArray);
     } else {
-      classes = settings.classes;
+      classes = settings.classes as string | null;
     }
 
-    elements.forEach(function (el: any) {
+    (elements as any[]).forEach(function (el: any) {
       if (el.getContext) {
         var ctx = el.getContext('2d');
         var mu = info.mu;
@@ -945,7 +1042,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     grid[x][y] = false;
 
     if (drawMask) {
-      var ctx = elements[0].getContext('2d');
+      var ctx = (elements as any[])[0].getContext('2d');
       ctx.fillRect(x * g, y * g, maskRectWidth, maskRectWidth);
     }
 
@@ -968,7 +1065,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     var drawMask = settings.drawMask;
     var ctx;
     if (drawMask) {
-      ctx = elements[0].getContext('2d');
+      ctx = (elements as any[])[0].getContext('2d');
       ctx.save();
       ctx.fillStyle = settings.maskColor;
     }
@@ -1004,12 +1101,12 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   /* putWord() processes each item on the list,
        calculate it's size and determine it's position, and actually
        put it on the canvas. */
-  var putWord = function putWord(item: any, loopIndex: number): any {
+  var putWord = function putWord(item: any, loopIndex: number) {
     if (loopIndex > 20) {
       return null;
     }
 
-    var word: any, weight: any, attributes: any;
+    var word: string, weight: number, attributes: any;
     if (Array.isArray(item)) {
       word = item[0];
       weight = item[1];
@@ -1023,7 +1120,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     var extraDataArray = getItemExtraData(item);
 
     // get info needed to put the text onto the canvas
-    var info: any = getTextInfo(word, weight, rotateDeg, extraDataArray);
+    var info = getTextInfo(word, weight, rotateDeg, extraDataArray);
 
     // not getting the info means we shouldn't be drawing this one.
     if (!info) {
@@ -1048,15 +1145,15 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     // start looking for the nearest points
     var r = maxRadius + 1;
 
-    var tryToPutWordAtPoint = function (gxy: number[]) {
-      var gx = Math.floor(gxy[0] - info.gw / 2);
-      var gy = Math.floor(gxy[1] - info.gh / 2);
-      var gw = info.gw;
-      var gh = info.gh;
+    var tryToPutWordAtPoint = function (gxy: [number, number, number]) {
+      var gx = Math.floor(gxy[0] - (info as any).gw / 2);
+      var gy = Math.floor(gxy[1] - (info as any).gh / 2);
+      var gw = (info as any).gw;
+      var gh = (info as any).gh;
 
       // If we cannot fit the text at this position, return false
       // and go to the next position.
-      if (!canFitText(gx, gy, gw, gh, info.occupied)) {
+      if (!canFitText(gx, gy, gw, gh, (info as any).occupied)) {
         return false;
       }
 
@@ -1089,7 +1186,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
       var points = getPointsAtRadius(maxRadius - r);
 
       if (settings.shuffle) {
-        points = [].concat(points);
+        points = ([] as [number, number, number][]).concat(points);
         shuffleArray(points);
       }
 
@@ -1131,16 +1228,18 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     details?: any
   ) {
     if (cancelable) {
-      return !elements.some(function (el: any) {
+      return !(elements as any[]).some(function (el: any) {
         var event = new CustomEvent(type, {
           detail: details || {},
+          cancelable: cancelable,
         });
         return !el.dispatchEvent(event);
       });
     } else {
-      elements.forEach(function (el: any) {
+      (elements as any[]).forEach(function (el: any) {
         var event = new CustomEvent(type, {
           detail: details || {},
+          cancelable: cancelable,
         });
         el.dispatchEvent(event);
       });
@@ -1151,7 +1250,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
   var start = function start() {
     // For dimensions, clearCanvas etc.,
     // we only care about the first element.
-    var canvas = elements[0];
+    var canvas = (elements as any[])[0];
 
     if (canvas.getContext) {
       ngx = Math.ceil(canvas.width / g);
@@ -1180,9 +1279,9 @@ var WordCloud = function WordCloud(elements: any, options: any) {
          if not, update the grid to the current canvas state */
     grid = [];
 
-    var gx, gy, i: any;
+    var gx: number, gy: number, i: number;
     if (!canvas.getContext || settings.clearCanvas) {
-      elements.forEach(function (el: any) {
+      (elements as any[]).forEach(function (el: any) {
         if (el.getContext) {
           var ctx = el.getContext('2d');
           ctx.fillStyle = settings.backgroundColor;
@@ -1207,7 +1306,10 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     } else {
       /* Determine bgPixel by creating
            another canvas and fill the specified background color. */
-      var bctx = document.createElement('canvas').getContext('2d')!;
+      var bctx = document.createElement('canvas').getContext('2d');
+      if (!bctx) {
+        return;
+      }
 
       bctx.fillStyle = settings.backgroundColor;
       bctx.fillRect(0, 0, 1, 1);
@@ -1249,7 +1351,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
         }
       }
 
-      imageData = bctx = bgPixel = undefined as any;
+      imageData = (bctx as any) = (bgPixel as any) = undefined;
     }
 
     // fill the infoGrid with empty state if we need it
@@ -1269,7 +1371,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
       if (settings.click) {
         canvas.addEventListener('click', wordcloudclick);
         canvas.addEventListener('touchstart', wordcloudclick);
-        canvas.addEventListener('touchend', function (e: any) {
+        canvas.addEventListener('touchend', function (e: TouchEvent) {
           e.preventDefault();
         });
         canvas.style.webkitTapHighlightColor = 'rgba(0, 0, 0, 0)';
@@ -1285,10 +1387,10 @@ var WordCloud = function WordCloud(elements: any, options: any) {
     }
 
     i = 0;
-    var loopingFunction: Function, stoppingFunction: Function;
+    var loopingFunction: any, stoppingFunction: any;
     var layouting = true;
     if (!settings.layoutAnimation) {
-      loopingFunction = function (cb: Function) {
+      loopingFunction = function (cb: any) {
         cb();
       };
       stoppingFunction = function () {
@@ -1298,24 +1400,24 @@ var WordCloud = function WordCloud(elements: any, options: any) {
       loopingFunction = window.setTimeout;
       stoppingFunction = window.clearTimeout;
     } else {
-      loopingFunction = (window as any).setImmediate;
-      stoppingFunction = (window as any).clearImmediate;
+      loopingFunction = window.setImmediate;
+      stoppingFunction = window.clearImmediate;
     }
 
     var addEventListener = function addEventListener(
       type: string,
-      listener: any
+      listener: EventListenerOrEventListenerObject
     ) {
-      elements.forEach(function (el: any) {
+      (elements as any[]).forEach(function (el: any) {
         el.addEventListener(type, listener);
       });
     };
 
     var removeEventListener = function removeEventListener(
       type: string,
-      listener: any
+      listener: EventListenerOrEventListenerObject
     ) {
-      elements.forEach(function (el: any) {
+      (elements as any[]).forEach(function (el: any) {
         el.removeEventListener(type, listener);
       });
     };
@@ -1327,8 +1429,19 @@ var WordCloud = function WordCloud(elements: any, options: any) {
 
     addEventListener('wordcloudstart', anotherWordCloudStart);
 
+    /**
+     * License Notice:
+     * ECharts WordCloud Custom Series changed the original `setTimeout` to
+     * an immediate function call when `layoutAnimation` is false.
+     */
     // At least wait the following code before call the first iteration.
-    var startLoop = function loop() {
+    timer[timerId] = (
+      settings.layoutAnimation
+        ? loopingFunction
+        : function (f: any) {
+            f();
+          }
+    )(function loop() {
       if (!layouting) {
         return;
       }
@@ -1355,16 +1468,7 @@ var WordCloud = function WordCloud(elements: any, options: any) {
       }
       i++;
       timer[timerId] = loopingFunction(loop, settings.wait);
-    };
-
-    if (settings.layoutAnimation) {
-      timer[timerId] = (settings.wait !== 0 ? setTimeout : loopingFunction)(
-        startLoop,
-        settings.wait
-      );
-    } else {
-      startLoop();
-    }
+    }, settings.wait);
   };
 
   // All set, start the drawing

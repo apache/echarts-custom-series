@@ -39,6 +39,7 @@ type WordCloudItemPayload = {
   shape?: string;
   shrinkToFit?: boolean;
   drawOutOfBound?: boolean;
+  layoutAnimation?: boolean;
 };
 
 interface LayoutResult {
@@ -59,9 +60,9 @@ const renderItem = (
     context.layoutResults = performLayout(params, api, itemPayload);
   }
 
-  const layout = context.layoutResults[params.dataIndex];
+  const layout = context.layoutResults[params.dataIndexInside];
   if (!layout) {
-    return;
+    return null;
   }
 
   return {
@@ -72,7 +73,7 @@ const renderItem = (
     style: {
       text: api.value(0) as string,
       fontSize: layout.fontSize,
-      fill: api.visual('color'),
+      fill: api.visual('color') || '#000',
       align: 'center',
       verticalAlign: 'middle',
     },
@@ -141,6 +142,10 @@ function performLayout(
   const width = api.getWidth();
   const height = api.getHeight();
 
+  if (width <= 0 || height <= 0) {
+    return [];
+  }
+
   const gridRect = {
     x: 0,
     y: 0,
@@ -165,7 +170,7 @@ function performLayout(
     updateCanvasMask(canvas);
   }
 
-  const gridSize = payload.gridSize || 8;
+  const gridSize = Math.max(Math.floor(payload.gridSize || 8), 4);
   const sizeRange = payload.sizeRange || [12, 60];
   const rotationRange = payload.rotationRange || [-90, 90];
   const rotationStep = (payload.rotationStep || 45) * (Math.PI / 180);
@@ -178,6 +183,10 @@ function performLayout(
       value: api.value(1, i) as number,
       index: i,
     });
+  }
+
+  if (data.length === 0) {
+    return [];
   }
 
   const values = data.map((d) => d.value);
@@ -225,11 +234,12 @@ function performLayout(
     rotationStep: rotationStep,
     clearCanvas: !maskImage,
     rotateRatio: 1,
-    layoutAnimation: false,
+    layoutAnimation: payload.layoutAnimation ?? false,
     shuffle: false,
     shape: payload.shape || 'circle',
     shrinkToFit: payload.shrinkToFit,
     drawOutOfBound: payload.drawOutOfBound,
+    abort: () => {},
   });
 
   return results;

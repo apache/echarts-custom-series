@@ -401,9 +401,9 @@
             type: 'custom',
             renderItem: 'wordCloud',
             coordinateSystem: 'none',
-            data: data.sort((a, b) => b.value - a.value),
+            data: data,
             itemPayload: {
-              gridSize: 4,
+              gridSize: 2,
               sizeRange: [4, 80],
               rotationRange: [0, 0],
               maskImage: maskImage,
