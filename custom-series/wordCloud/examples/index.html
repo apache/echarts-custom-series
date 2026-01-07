@@ -22,12 +22,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apache ECharts Custom Series Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Ubuntu+Condensed&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div
       id="main"
-      style="width: 1000px; height: 400px; border: 1px solid #ccc"
+      style="width: 600px; height: 400px; border: 1px solid #ccc"
     ></div>
 
     <script src="../node_modules/echarts/dist/echarts.js"></script>
@@ -396,22 +402,30 @@
 
       const maskImage = new Image();
       maskImage.onload = function () {
-        const option = {
-          series: {
-            type: 'custom',
-            renderItem: 'wordCloud',
-            coordinateSystem: 'none',
-            data: data,
-            itemPayload: {
-              gridSize: 2,
-              sizeRange: [4, 80],
-              rotationRange: [0, 0],
-              maskImage: maskImage,
-              keepAspect: true,
+        document.fonts.load('bold 12px Lato').then(function () {
+          const option = {
+            series: {
+              type: 'custom',
+              renderItem: 'wordCloud',
+              coordinateSystem: 'none',
+              data: data,
+              itemPayload: {
+                gridSize: 4,
+                sizeRange: [4, 110],
+                rotationRange: [0, 0],
+                maskImage: maskImage,
+                keepAspect: true,
+                top: 10,
+                bottom: 10,
+              },
+              label: {
+                fontFamily: 'Lato',
+                fontWeight: 'bold',
+              },
             },
-          },
-        };
-        chart.setOption(option);
+          };
+          chart.setOption(option);
+        });
       };
       maskImage.src = './logo.png';
 

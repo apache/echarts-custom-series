@@ -1,8 +1,8 @@
 # @echarts-x/custom-word-cloud
 
-`wordCloud` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to ...
+`wordCloud` is a custom series for [Apache ECharts](https://github.com/apache/echarts). It's typically used to display text data where the size of each word indicates its frequency or importance.
 
-![wordCloud](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/wordCloud/screenshots/wordCloud.svg)
+![wordCloud](https://raw.githubusercontent.com/apache/echarts-custom-series/main/custom-series/wordCloud/screenshots/wordCloud.png)
 
 [Source Code](https://github.com/apache/echarts-custom-series/tree/main/custom-series/wordCloud)
 
@@ -85,10 +85,15 @@ See [examples](./examples) for more details.
 
 ### series.data
 
-The data of the series is an array of arrays. Each sub-array represents ...
+The data of the series is an array of arrays. Each sub-array represents a word and its weight.
 
 ```js
-const data = [];
+const data = [
+  ['Visual Studio Code', 1000],
+  ['ECharts', 800],
+  ['TypeScript', 600],
+  // ...
+];
 ```
 
 ### series.itemPayload
@@ -97,15 +102,16 @@ The `itemPayload` is an object that contains the following properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-
-### series.encode
-
-To make sure the value axis and tooltip take the correct range, `encode` should be set as follows:
-
-```js
-encode: {
-    x: 0,
-    y: 1,
-    tooltip: 2
-}
-```
+| `left` | `number \| string` | `0` | Distance between word cloud component and the left side of the container. |
+| `top` | `number \| string` | `0` | Distance between word cloud component and the top side of the container. |
+| `right` | `number \| string` | `0` | Distance between word cloud component and the right side of the container. |
+| `bottom` | `number \| string` | `0` | Distance between word cloud component and the bottom side of the container. |
+| `gridSize` | `number` | `8` | Size of the grid in pixels for marking the availability of the canvas. The larger the grid size, the bigger the gap between words. |
+| `sizeRange` | `[number, number]` | `[12, 60]` | Size range which the text size will be mapped to. |
+| `rotationRange` | `[number, number]` | `[-90, 90]` | Text rotation range. |
+| `rotationStep` | `number` | `45` | The degree of rotation step. |
+| `maskImage` | `HTMLImageElement \| HTMLCanvasElement` | | The shape of the "cloud" to draw. White pixels will be ignored, and non-white pixels will be used as the area to draw text. |
+| `keepAspect` | `boolean` | `false` | Whether to keep the aspect ratio of `maskImage` or `1:1` for other shapes. |
+| `shape` | `string` | `'circle'` | The shape of the "cloud" to draw. Available presents are `circle` (default), `cardioid`, `diamond`, `triangle-forward`, `triangle`, `pentagon`, and `star`. |
+| `shrinkToFit` | `boolean` | `false` | Whether to shrink the text to fit the container. |
+| `drawOutOfBound` | `boolean` | `false` | Whether to allow the text to be drawn out of the container. |

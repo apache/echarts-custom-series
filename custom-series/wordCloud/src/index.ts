@@ -27,9 +27,16 @@ import type {
   EChartsExtensionInstallRegisters,
   EChartsExtension,
 } from 'echarts/types/src/extension.d.ts';
+import { number } from 'echarts';
 import WordCloud from './layout';
 
 type WordCloudItemPayload = {
+  left?: number | string;
+  top?: number | string;
+  right?: number | string;
+  bottom?: number | string;
+  width?: number | string;
+  height?: number | string;
   gridSize?: number;
   sizeRange?: [number, number];
   rotationRange?: [number, number];
@@ -39,7 +46,6 @@ type WordCloudItemPayload = {
   shape?: string;
   shrinkToFit?: boolean;
   drawOutOfBound?: boolean;
-  layoutAnimation?: boolean;
 };
 
 interface LayoutResult {
@@ -47,6 +53,10 @@ interface LayoutResult {
   y: number;
   fontSize: number;
   rotation: number;
+  scaleX: number;
+  scaleY: number;
+  textX: number;
+  textY: number;
 }
 
 const renderItem = (
@@ -65,16 +75,25 @@ const renderItem = (
     return null;
   }
 
+  const style = api.style() as any;
+
   return {
     type: 'text',
     x: layout.x,
     y: layout.y,
     rotation: layout.rotation,
+    scaleX: layout.scaleX,
+    scaleY: layout.scaleY,
     style: {
       text: api.value(0) as string,
+      x: layout.textX,
+      y: layout.textY,
       fontSize: layout.fontSize,
+      fontWeight: style.fontWeight,
+      fontFamily: style.fontFamily,
+      fontStyle: style.fontStyle,
       fill: api.visual('color') || '#000',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
     },
   } as CustomRootElementOption;
@@ -142,15 +161,23 @@ function performLayout(
   const width = api.getWidth();
   const height = api.getHeight();
 
-  if (width <= 0 || height <= 0) {
+  const left = number.parsePercent(payload.left || 0, width);
+  const right = number.parsePercent(payload.right || 0, width);
+  const top = number.parsePercent(payload.top || 0, height);
+  const bottom = number.parsePercent(payload.bottom || 0, height);
+
+  const boxWidth = width - left - right;
+  const boxHeight = height - top - bottom;
+
+  if (boxWidth <= 0 || boxHeight <= 0) {
     return [];
   }
 
   const gridRect = {
-    x: 0,
-    y: 0,
-    width: width,
-    height: height,
+    x: left,
+    y: top,
+    width: boxWidth,
+    height: boxHeight,
   };
 
   const keepAspect = payload.keepAspect;
@@ -210,31 +237,36 @@ function performLayout(
   const onWordCloudDrawn = (e: any) => {
     const item = e.detail.item;
     if (e.detail.drawn) {
+      const drawn = e.detail.drawn;
+      const info = drawn.info;
       results[item[2]] = {
-        x:
-          gridRect.x +
-          (e.detail.drawn.gx + e.detail.drawn.info.gw / 2) * gridSize,
-        y:
-          gridRect.y +
-          (e.detail.drawn.gy + e.detail.drawn.info.gh / 2) * gridSize,
+        x: gridRect.x + (drawn.gx + info.gw / 2) * gridSize,
+        y: gridRect.y + (drawn.gy + info.gh / 2) * gridSize,
         fontSize: item[1],
-        rotation: e.detail.drawn.rot,
+        rotation: drawn.rot,
+        scaleX: 1 / info.mu,
+        scaleY: 1 / info.mu,
+        textX: info.fillTextOffsetX,
+        textY: info.fillTextOffsetY + item[1] * 0.5,
       };
     }
   };
 
   canvas.addEventListener('wordclouddrawn', onWordCloudDrawn);
 
+  const style = api.style() as any;
   WordCloud(canvas, {
     list: list,
     gridSize: gridSize,
+    fontFamily: style.fontFamily,
+    fontWeight: style.fontWeight,
     ellipticity: gridRect.height / gridRect.width,
     minRotation: rotationRange[0] * (Math.PI / 180),
     maxRotation: rotationRange[1] * (Math.PI / 180),
     rotationStep: rotationStep,
     clearCanvas: !maskImage,
     rotateRatio: 1,
-    layoutAnimation: payload.layoutAnimation ?? false,
+    layoutAnimation: false,
     shuffle: false,
     shape: payload.shape || 'circle',
     shrinkToFit: payload.shrinkToFit,
