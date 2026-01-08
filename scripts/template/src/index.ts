@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import * as echarts from 'echarts';
+// import * as echarts from 'echarts';
 import type {
   CustomRootElementOption,
   CustomSeriesRenderItem,
