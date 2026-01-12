@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-word-cloud",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.1",
   "description": "Custom wordCloud series for Apache ECharts",
   "main": "dist/word-cloud.js",
   "module": "dist/word-cloud.esm.mjs",
@@ -17,7 +17,8 @@
     "apache-echarts",
     "data-visualization",
     "chart",
-    "dataviz"
+    "dataviz",
+    "word-cloud"
   ],
   "author": "",
   "license": "Apache-2.0",
@@ -40,7 +41,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "publishConfig": {
     "access": "public"
