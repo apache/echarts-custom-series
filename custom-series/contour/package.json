@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-contour",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Custom contour series for Apache ECharts",
   "main": "dist/contour.js",
   "module": "dist/contour.esm.mjs",
@@ -40,7 +40,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "publishConfig": {
     "access": "public"

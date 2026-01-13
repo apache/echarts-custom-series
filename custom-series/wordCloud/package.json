@@ -1,27 +1,28 @@
 {
-  "name": "@echarts-x/custom-violin",
-  "version": "1.1.1",
-  "description": "Custom violin series for Apache ECharts",
-  "main": "dist/violin.js",
-  "module": "dist/violin.esm.mjs",
+  "name": "@echarts-x/custom-word-cloud",
+  "version": "1.0.1",
+  "description": "Custom wordCloud series for Apache ECharts",
+  "main": "dist/word-cloud.js",
+  "module": "dist/word-cloud.esm.mjs",
   "exports": {
     ".": {
-      "types": "./dist/violin.d.ts",
-      "import": "./dist/violin.esm.mjs",
-      "require": "./dist/violin.js"
+      "types": "./dist/word-cloud.d.ts",
+      "import": "./dist/word-cloud.esm.mjs",
+      "require": "./dist/word-cloud.js"
     }
   },
-  "types": "dist/violin.d.ts",
+  "types": "dist/word-cloud.d.ts",
   "keywords": [
     "echarts",
     "apache-echarts",
     "data-visualization",
     "chart",
-    "dataviz"
+    "dataviz",
+    "word-cloud"
   ],
   "author": "",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/violin",
+  "homepage": "https://github.com/apache/echarts-custom-series/tree/main/custom-series/wordCloud",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apache/echarts-custom-series.git"
