@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-liquid-fill",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Custom liquidFill series for Apache ECharts",
   "main": "dist/liquid-fill.js",
   "module": "dist/liquid-fill.esm.mjs",
@@ -40,7 +40,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@echarts-x/custom-bar-range",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Custom barRange series for Apache ECharts",
   "main": "dist/bar-range.js",
   "module": "dist/bar-range.esm.mjs",
@@ -40,7 +40,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "publishConfig": {
     "access": "public"
