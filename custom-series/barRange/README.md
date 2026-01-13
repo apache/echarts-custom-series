@@ -72,7 +72,7 @@ const chart = echarts.init(...);
 const option = {
   series: [{
     type: 'custom',
-    renderItem: 'violin',
+    renderItem: 'barRange',
     // ...
   }]
 }

@@ -21,7 +21,7 @@ For browser usage, use the auto-registration version that automatically installs
   const option = {
     series: [{
       type: 'custom',
-      renderItem: 'violin',
+      renderItem: 'contour',
       // ...
     }]
   }
@@ -72,7 +72,7 @@ const chart = echarts.init(...);
 const option = {
   series: [{
     type: 'custom',
-    renderItem: 'violin',
+    renderItem: 'contour',
     // ...
   }]
 }
