@@ -68,6 +68,7 @@ option = {
     itemPayload: {
       barWidth: 10,
       borderRadius: 5,
+      valueFormatter: value => `${value} °F`
     },
     encode: {
       x: 0,
