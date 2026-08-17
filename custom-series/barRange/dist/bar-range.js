@@ -53,12 +53,13 @@
         };
         var marginRaw = params.itemPayload.margin;
         var margin = marginRaw == null ? 10 : marginRaw;
+        var valueFormatter = params.itemPayload.valueFormatter ?? (value => `${value}℃`);
         var textTop = {
             type: 'text',
             x: coordEnd[0],
             y: coordEnd[1] - margin,
             style: {
-                text: valueEnd.toString() + '℃',
+                text: valueFormatter(valueEnd),
                 textAlign: 'center',
                 textVerticalAlign: 'bottom',
                 fill: '#333',
@@ -69,7 +70,7 @@
             x: coordStart[0],
             y: coordStart[1] + margin,
             style: {
-                text: valueStart.toString() + '℃',
+                text: valueFormatter(valueStart),
                 textAlign: 'center',
                 textVerticalAlign: 'top',
                 fill: '#333',
