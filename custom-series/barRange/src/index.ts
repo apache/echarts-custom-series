@@ -78,7 +78,8 @@ const renderItem = (
 
   const marginRaw = params.itemPayload.margin as number;
   const margin = marginRaw == null ? 10 : marginRaw;
-  var valueFormatter = params.itemPayload.valueFormatter ?? (value => `${value}℃`);
+  const defaultValueFormatter = (value: ParsedValue) => `${value}℃`;
+  const valueFormatter = params.itemPayload.valueFormatter ?? defaultValueFormatter;
   const textTop = {
     type: 'text',
     x: coordEnd[0],
