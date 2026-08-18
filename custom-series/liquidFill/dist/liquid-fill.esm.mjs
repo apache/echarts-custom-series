@@ -288,7 +288,7 @@ function getWaterPositions(x, stage, waveLength, amplitude) {
     }
 }
 function createWavePath(left, totalWaveWidth, waterLevel, amplitude, waveLength, radius, cy) {
-    var safeWaveLength = waveLength || 1;
+    var safeWaveLength = waveLength;
     var cycleCount = Math.max(1, Math.ceil(totalWaveWidth / safeWaveLength));
     var curves = cycleCount * 4;
     var path = "M ".concat(left, " ").concat(waterLevel);

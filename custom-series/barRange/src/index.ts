@@ -27,9 +27,22 @@ import type {
   EChartsExtensionInstallRegisters,
   EChartsExtension,
 } from 'echarts/types/src/extension.d.ts';
+import { ParsedValue } from 'echarts/types/src/util/types.js';
+
+interface BarRangeItemPayload {
+  barWidth?: number | string;
+  borderRadius?: number;
+  margin?: number;
+  valueFormatter?: (value: ParsedValue) => string;
+}
+
+type BarRangeRenderItemParams =
+  Omit<CustomSeriesRenderItemParams, 'itemPayload'> & {
+    itemPayload: BarRangeItemPayload;
+  };
 
 const renderItem = (
-  params: CustomSeriesRenderItemParams,
+  params: BarRangeRenderItemParams,
   api: CustomSeriesRenderItemAPI
 ) => {
   const x = api.value(0);
@@ -65,12 +78,14 @@ const renderItem = (
 
   const marginRaw = params.itemPayload.margin as number;
   const margin = marginRaw == null ? 10 : marginRaw;
+  const defaultValueFormatter = (value: ParsedValue) => `${value}℃`;
+  const valueFormatter = params.itemPayload.valueFormatter ?? defaultValueFormatter;
   const textTop = {
     type: 'text',
     x: coordEnd[0],
     y: coordEnd[1] - margin,
     style: {
-      text: valueEnd.toString() + '℃',
+      text: valueFormatter(valueEnd),
       textAlign: 'center',
       textVerticalAlign: 'bottom',
       fill: '#333',
@@ -82,7 +97,7 @@ const renderItem = (
     x: coordStart[0],
     y: coordStart[1] + margin,
     style: {
-      text: valueStart.toString() + '℃',
+      text: valueFormatter(valueStart),
       textAlign: 'center',
       textVerticalAlign: 'top',
       fill: '#333',

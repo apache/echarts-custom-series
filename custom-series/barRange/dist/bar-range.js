@@ -24,6 +24,7 @@
 })(this, (function () { 'use strict';
 
     var renderItem = function (params, api) {
+        var _a;
         var x = api.value(0);
         var valueStart = api.value(1);
         var coordStart = api.coord([x, valueStart]);
@@ -53,12 +54,14 @@
         };
         var marginRaw = params.itemPayload.margin;
         var margin = marginRaw == null ? 10 : marginRaw;
+        var defaultValueFormatter = function (value) { return "".concat(value, "\u2103"); };
+        var valueFormatter = (_a = params.itemPayload.valueFormatter) !== null && _a !== void 0 ? _a : defaultValueFormatter;
         var textTop = {
             type: 'text',
             x: coordEnd[0],
             y: coordEnd[1] - margin,
             style: {
-                text: valueEnd.toString() + '℃',
+                text: valueFormatter(valueEnd),
                 textAlign: 'center',
                 textVerticalAlign: 'bottom',
                 fill: '#333',
@@ -69,7 +72,7 @@
             x: coordStart[0],
             y: coordStart[1] + margin,
             style: {
-                text: valueStart.toString() + '℃',
+                text: valueFormatter(valueStart),
                 textAlign: 'center',
                 textVerticalAlign: 'top',
                 fill: '#333',
